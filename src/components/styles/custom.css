@@ -1,0 +1,28 @@
+.navbar-vertical.navbar-expand-xs .navbar-collapse {
+    height: unset !important;
+}
+
+body {
+    overflow-x: hidden !important;
+}
+
+footer {
+    background-color: white !important;
+}
+
+.custom-card-heading {
+    display: inline;
+}
+
+.custom-add-new-button {
+    right: 10px;
+    float: right;
+    position: relative;
+    top: -10px;
+    background-color: white;
+    color: black;
+}
+.custom-add-new-button:hover {
+    background-color: white;
+    color: black;
+}
