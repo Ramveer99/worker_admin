@@ -1,12 +1,11 @@
 import React from 'react';
 import { Modal,Button } from 'react-bootstrap';
 
-function DeleteConfirmation({modelTitle, showModalHandler, hideModalHandler, confirmModalHandler, actionButtonClass, message,actionType }) {
+function DeleteConfirmation({modelTitle,loadingConfirmButton,loadingConfirmButtonText, showModalHandler, hideModalHandler, confirmModalHandler, actionButtonClass, message,actionType }) {
     return (
         <>
             <Modal show={showModalHandler} onHide={hideModalHandler}>
                 <Modal.Header closeButton>
-                    {/* <Modal.Title>Delete Confirmation</Modal.Title> */}
                     <Modal.Title>{modelTitle}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body><div>{message}</div></Modal.Body>
@@ -14,8 +13,15 @@ function DeleteConfirmation({modelTitle, showModalHandler, hideModalHandler, con
                     <Button variant="default" onClick={hideModalHandler}>
                         Cancel
                     </Button>
-                    <Button variant={actionButtonClass} onClick={confirmModalHandler}>
-                        {actionType}
+                    <Button disabled={loadingConfirmButton} variant={actionButtonClass} onClick={confirmModalHandler}>
+                        {
+                            loadingConfirmButton ? (
+                              <>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span className="sr-only"></span>  {loadingConfirmButtonText}
+                              </>
+                            ) :  actionType
+                          }
                     </Button>
                 </Modal.Footer>
             </Modal>

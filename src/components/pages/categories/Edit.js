@@ -21,7 +21,6 @@ function EditCategory() {
         try {
             setLoading(true);
             let res = await axios.get(`admin/category?id=${id}`)
-            console.log(res);
             setCategoryData(res.data.result)
             setInitialValues({id:res.data.result._id,category_name:res.data.result.category_name,category_desc:res.data.result.category_desc})
             // formik.initialValues.category_name = res.data.result.category_name
@@ -44,14 +43,14 @@ function EditCategory() {
         const errors = {};
 
         if (!values.category_name) {
-            errors.category_name = 'Category name is Required';
+            errors.category_name = 'Category name is required';
         } else if (values.category_name.length < 3) {
             errors.category_name = 'Category name min legth is 3 characters';
         } else if (values.category_name.length > 50) {
             errors.category_name = 'Category name max legth is 50 characters';
         }
         if (!values.category_desc) {
-            errors.category_desc = 'Description is Required';
+            errors.category_desc = 'Description is required';
         } else if (values.category_desc.length < 20) {
             errors.category_desc = 'Description min legth is 20 characters';
         } else if (values.category_desc.length > 500) {
@@ -65,10 +64,9 @@ function EditCategory() {
         enableReinitialize: true,
         validate,
         onSubmit: async (values) => {
-            console.log(values);
             setDisabledSubmit(true)
             try {
-                await axios.post(`admin/categoryadds`, values)
+                await axios.post(`admin/categoryupdate`, values)
                 navigate('/categories')
             } catch (errors) {
                 toast(errors.response.data.message, {
@@ -97,7 +95,6 @@ function EditCategory() {
 
             <LayoutPage>
                 <div className="row">
-
                     <LoadingOverlay
                         active={loading}
                         spinner
@@ -120,7 +117,7 @@ function EditCategory() {
                                                     name='category_name'
                                                     className="form-control"
                                                     placeholder='Category Name'
-                                                    value={'' || categoryData.category_name || formik.values.category_name}
+                                                    value={formik.values.category_name}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
@@ -131,7 +128,7 @@ function EditCategory() {
                                                     placeholder='Description'
                                                     id='category_desc'
                                                     name='category_desc'
-                                                    value={'' || categoryData.category_desc || formik.values.category_desc}
+                                                    value={formik.values.category_desc}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
@@ -142,9 +139,9 @@ function EditCategory() {
                                                         disabledSubmit ? (
                                                             <div>
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                <span className="sr-only"></span>  Submitting
+                                                                <span className="sr-only"></span>  Updating
                                                             </div>
-                                                        ) : 'Submit'
+                                                        ) : 'Update'
                                                     }
                                                 </button>
                                             </div>

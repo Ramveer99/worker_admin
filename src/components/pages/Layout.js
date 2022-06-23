@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function LayoutPage(props) {
     const [username, setUsername] = useState(null)
@@ -42,7 +43,7 @@ function LayoutPage(props) {
                 <div className="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link to='/dashboard' className={`nav-link text-white ${location.pathname.includes('/dashboard')? "active bg-gradient-primary" : ""}`}>
+                            <Link to='/dashboard' className={`nav-link text-white ${location.pathname.includes('/dashboard') ? "active bg-gradient-primary" : ""}`}>
                                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                     <i className="material-icons opacity-10">dashboard</i>
                                 </div>
@@ -78,7 +79,9 @@ function LayoutPage(props) {
                             </div>
                             <ul className="navbar-nav  justify-content-end">
                                 <li className="nav-item px-3 d-flex align-items-center">
-                                    <button className='btn bg-gradient-primary' title='Logout' onClick={handleLogout}><i className="fa fa-power-off fixed-plugin-button-nav cursor-pointer"></i></button>
+                                    <button className='btn bg-gradient-primary' title='Logout' onClick={handleLogout}>
+                                        <i className="fa fa-lg fa-power-off fixed-plugin-button-nav cursor-pointer"></i>
+                                    </button>
                                 </li>
                             </ul>
                         </div>

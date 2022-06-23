@@ -13,6 +13,8 @@ function List() {
     const [categoryData, setCategoryData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
+    const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
+    const [loadingDeleteModelConfirmText, setLoadingDeleteModelConfirmText] = useState('Deleting');
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -41,22 +43,20 @@ function List() {
         {
             name: 'Created Date',
             selector: row => row.created_at,
-            sortable: true,
         },
-        {
-            name: 'Status',
-            selector: row => row.status,
-            sortable: true,
-            cell: row => (
-                row.status === "1" ?
-                    <span className='badge badge-sm bg-gradient-success'>Active</span> :
-                    <span className='badge badge-sm bg-gradient-secondary'>Inactive</span>
-            )
-        },
+        // {
+        //     name: 'Status',
+        //     selector: row => row.status,
+        //     sortable: true,
+        //     cell: row => (
+        //         row.status === "1" ?
+        //             <span className='badge badge-sm bg-gradient-success'>Active</span> :
+        //             <span className='badge badge-sm bg-gradient-secondary'>Inactive</span>
+        //     )
+        // },
         {
             name: 'Action',
             selector: row => row.id,
-            sortable: true,
             cell: row => (
                 <div>
                     <Link to={`/categories/edit/${row._id}`}>
@@ -65,7 +65,8 @@ function List() {
                     &nbsp;&nbsp;
                     <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
                 </div>
-            )
+            ),
+            center: true
         },
     ];
 
@@ -83,7 +84,61 @@ function List() {
 
     // Handle the actual deletion of the item
     const submitDelete = async () => {
-        console.log(deleteModelActionType, idBeingDeleting);
+        setLoadingDeleteModel(true)
+        // let confirmText = null
+        // let dataPayload = {}
+        // let apiEndpoint = 'admin/userstatus'
+        // if (deleteModelActionType === "Delete") {
+        //     confirmText = 'Deleting'
+        // } else if (deleteModelActionType === "Activate") {
+        //     apiEndpoint = ""
+        //     confirmText = 'Activating'
+        //     dataPayload = {
+        //         id: idBeingDeleting,
+        //         status: "1"
+        //     }
+        // } else if (deleteModelActionType === "Deactivate") {
+        //     apiEndpoint = ""
+        //     confirmText = 'Deactivating'
+        //     dataPayload = {
+        //         id: idBeingDeleting,
+        //         status: "0"
+        //     }
+        // }
+        setLoadingDeleteModelConfirmText('Deleting')
+        //  activate deactivate user
+        try {
+            let res = await axios.delete(`admin/categorydel/${idBeingDeleting}`)
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getCategoryList()
+        } catch (errors) {
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getCategoryList()
+        }
     };
 
 
@@ -91,7 +146,7 @@ function List() {
     const handleDeleteConfirm = (row, type) => {
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this user?`)
+        setDeleteModelMessage(`Are you sure want to ${type} this category?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }
@@ -123,7 +178,7 @@ function List() {
     };
 
     const handleSort = (column, sortDirection) => {
-        setSortField(column.name.toLowerCase())
+        setSortField(column.name.toLowerCase().replace(' ', '_'))
         setSortDirection(sortDirection)
     };
     const handlePerRowsChange = async (newPerPage, page) => {
@@ -192,6 +247,8 @@ function List() {
                                                 showModalHandler={showDeleteModal}
                                                 confirmModalHandler={submitDelete}
                                                 hideModalHandler={hideConfirmationModal}
+                                                loadingConfirmButton={loadingDeleteModel}
+                                                loadingConfirmButtonText={loadingDeleteModelConfirmText}
                                                 modelTitle={deleteModelTitle}
                                                 actionButtonClass={'primary'}
                                                 actionType={deleteModelActionType}

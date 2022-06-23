@@ -11,6 +11,8 @@ import DeleteConfirmation from '../shared/DeleteConfirmation';
 function Users() {
     const [userData, setUserData] = useState([])
     const [loading, setLoading] = useState(false);
+    const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
+    const [loadingDeleteModelConfirmText, setLoadingDeleteModelConfirmText] = useState('Deleting');
     const [totalRows, setTotalRows] = useState(0);
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState(null);
@@ -58,9 +60,10 @@ function Users() {
             sortable: true,
             cell: row => (
                 row.status === "1" ?
-                    <i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
-                    : <i title='Activate' style={{ cursor: 'pointer' }} className='fa fa-power-off text-success' onClick={() => handleDeleteConfirm(row, 'Activate')}></i>
-            )
+                    <i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
+                    : <i title='Activate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-success' onClick={() => handleDeleteConfirm(row, 'Activate')}></i>
+            ),
+            center: true
         },
     ];
 
@@ -74,11 +77,61 @@ function Users() {
     const hideConfirmationModal = () => {
         setShowDeleteConfirm(false)
         setIdBeingDeleting(null)
+        setLoadingDeleteModel(false)
     };
 
     // Handle the actual deletion of the item
     const submitDelete = async () => {
-        console.log(deleteModelActionType,idBeingDeleting);
+        // console.log(deleteModelActionType, idBeingDeleting);
+        setLoadingDeleteModel(true)
+        let confirmText = null
+        let activeInactiveStatus = null
+        if (deleteModelActionType === "Delete") {
+            confirmText = 'Deleting'
+        } else if (deleteModelActionType === "Activate") {
+            confirmText = 'Activating'
+            activeInactiveStatus = "1"
+        } else if (deleteModelActionType === "Deactivate") {
+            confirmText = 'Deactivating'
+            activeInactiveStatus = "0"
+        }
+        setLoadingDeleteModelConfirmText(confirmText)
+        //  activate deactivate user
+        try {
+            let res = await axios.post(`admin/userstatus`, {
+                id: idBeingDeleting,
+                status: activeInactiveStatus
+            })
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getUsersList()
+        } catch (errors) {
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getUsersList()
+        }
     };
 
 
@@ -94,11 +147,12 @@ function Users() {
     const getUsersList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/userlist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            let res = await axios.get(`admin/userlist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             setUserData(res.data.result.userdata)
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
+            // console.log(errors);
             toast(errors.response.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -118,7 +172,7 @@ function Users() {
     };
 
     const handleSort = (column, sortDirection) => {
-        setSortField(column.name.toLowerCase())
+        setSortField(column.name.toLowerCase().replace(' ', '_'))
         setSortDirection(sortDirection)
     };
     const handlePerRowsChange = async (newPerPage, page) => {
@@ -128,7 +182,7 @@ function Users() {
 
     const handleSearch = (event) => {
         if (event.key === "Enter") {
-            console.log(event.target.value);
+            // console.log(event.target.value);
             if (event.target.value.length >= 3) {
                 setSearchKeyword(event.target.value)
             }
@@ -186,6 +240,8 @@ function Users() {
                                         showDeleteConfirm && (
                                             <DeleteConfirmation
                                                 showModalHandler={showDeleteModal}
+                                                loadingConfirmButton={loadingDeleteModel}
+                                                loadingConfirmButtonText={loadingDeleteModelConfirmText}
                                                 confirmModalHandler={submitDelete}
                                                 hideModalHandler={hideConfirmationModal}
                                                 modelTitle={deleteModelTitle}
