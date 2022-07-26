@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 
 function List() {
-    const [categoryData, setCategoryData] = useState([])
+    const [skillData, setSkillData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
@@ -23,26 +23,12 @@ function List() {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [idBeingDeleting, setIdBeingDeleting] = useState(null);
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
-    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this category?');
+    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this skill?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
         {
-            name: '#',
-            selector: row => row.category_image,
-            cell: row => (
-                <img className='img img-circle' height={50} width={50} src={row.category_image} alt={row.category_image} />
-            ),
-            center:true
-        },
-        
-        {
-            name: 'Category Name',
-            selector: row => row.category_name,
-            sortable: true,
-        },
-        {
-            name: 'Description',
-            selector: row => row.category_desc,
+            name: 'Title',
+            selector: row => row.title,
             sortable: true,
         },
         {
@@ -54,7 +40,7 @@ function List() {
             selector: row => row.id,
             cell: row => (
                 <div>
-                    <Link to={`/categories/edit/${row._id}`}>
+                    <Link to={`/skills/edit/${row._id}`}>
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
                     &nbsp;&nbsp;
@@ -83,7 +69,7 @@ function List() {
         setLoadingDeleteModelConfirmText('Deleting')
         //  activate deactivate user
         try {
-            let res = await axios.delete(`admin/categorydel/${idBeingDeleting}`)
+            let res = await axios.delete(`admin/skilldel/${idBeingDeleting}`)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -97,7 +83,7 @@ function List() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getCategoryList()
+            getExperienceList()
         } catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
@@ -112,7 +98,7 @@ function List() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getCategoryList()
+            getExperienceList()
         }
     };
 
@@ -121,16 +107,16 @@ function List() {
     const handleDeleteConfirm = (row, type) => {
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this category?`)
+        setDeleteModelMessage(`Are you sure want to ${type} this skill?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }
 
-    const getCategoryList = useCallback(async () => {
+    const getExperienceList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/categorylist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            setCategoryData(res.data.result.categorydata)
+            let res = await axios.get(`admin/skilllist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            setSkillData(res.data.result.skilldata)
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
@@ -173,12 +159,13 @@ function List() {
     }
 
     useEffect(() => {
-        getCategoryList()
-    }, [getCategoryList, searchKeyWord, pageNumber, sortField, perPage])
+        getExperienceList()
+    }, [getExperienceList, searchKeyWord, pageNumber, sortField, perPage])
+
     return (
         <>
             <Helmet>
-                <title>Categories Management</title>
+                <title>Skills Management</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -187,8 +174,8 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Categories</h6>
-                                    <Link to="/categories/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Skills</h6>
+                                    <Link to="/skills/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -206,7 +193,7 @@ function List() {
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
-                                        data={categoryData}
+                                        data={skillData}
                                         progressPending={loading}
                                         pagination
                                         paginationServer

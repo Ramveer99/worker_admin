@@ -9,19 +9,30 @@ import { useNavigate } from 'react-router-dom';
 
 function AddNew() {
     const [disabledSubmit, setDisabledSubmit] = useState(false)
+    const [initialValues, setInitialValues] = useState({ category_name: '', category_desc: '', categoryfile: '' })
     const navigate = useNavigate()
+
+    // const handleFileChange = event => {
+    //     console.log(event.target.files[0]);
+
+    // }
     const validate = values => {
         const errors = {};
 
         if (!values.category_name) {
-            errors.category_name = 'Category name is Required';
+            errors.category_name = 'Category name is required';
         } else if (values.category_name.length < 3) {
             errors.category_name = 'Category name min legth is 3 characters';
         } else if (values.category_name.length > 50) {
             errors.category_name = 'Category name max legth is 50 characters';
         }
+
+        if (!values.categoryfile) {
+            errors.categoryfile = 'Category file is required';
+        }
+
         if (!values.category_desc) {
-            errors.category_desc = 'Description is Required';
+            errors.category_desc = 'Description is required';
         } else if (values.category_desc.length < 20) {
             errors.category_desc = 'Description min legth is 20 characters';
         } else if (values.category_desc.length > 500) {
@@ -31,15 +42,16 @@ function AddNew() {
         return errors;
     };
     const formik = useFormik({
-        initialValues: {
-            category_name: '',
-            category_desc: '',
-        },
+        initialValues: initialValues,
         validate,
         onSubmit: async (values) => {
+            let formData = new FormData()
+            formData.append("category_name",values.category_name)
+            formData.append("category_desc",values.category_desc)
+            formData.append("categoryfile",values.categoryfile)
             setDisabledSubmit(true)
             try {
-                await axios.post(`admin/categoryadd`, values)
+                await axios.post(`admin/categoryadd`, formData)
                 navigate('/categories')
             } catch (errors) {
                 toast(errors.response.data.message, {
@@ -86,6 +98,19 @@ function AddNew() {
                                             />
                                         </div>
                                         {formik.errors.category_name ? <div className='text-danger'>{formik.errors.category_name}</div> : null}
+                                        <div className="input-group input-group-outline mb-3">
+                                            <input
+                                                type="file"
+                                                id='categoryfile'
+                                                name='categoryfile'
+                                                className="form-control"
+                                                placeholder='Category Image'
+                                                onChange={(event) => {
+                                                    formik.setFieldValue("categoryfile", event.target.files[0]);
+                                                }}
+                                            />
+                                        </div>
+                                        {formik.errors.categoryfile ? <div className='text-danger'>{formik.errors.categoryfile}</div> : null}
                                         <div className="input-group input-group-outline mb-3">
                                             <textarea
                                                 className="form-control"

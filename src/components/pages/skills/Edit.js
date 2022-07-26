@@ -9,22 +9,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
 LoadingOverlay.propTypes = undefined
 
-function EditCategory() {
+function Edit() {
     const { id } = useParams()
     const [disabledSubmit, setDisabledSubmit] = useState(false)
-    const [categoryData, setCategoryData] = useState([])
     const [redirecting, setRedirecting] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [initialValues, setInitialValues] = useState({ id: '', category_name: '', category_desc: '', categoryfile: '' });
+    const [initialValues, setInitialValues] = useState({ id: '', title: '', });
     const navigate = useNavigate()
 
-    const getCategoryDetail = useCallback(async () => {
+    const experienceDetail = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/category?id=${id}`)
-            setCategoryData(res.data.result)
-            setInitialValues({ id: res.data.result._id, category_name: res.data.result.category_name, category_desc: res.data.result.category_desc })
-            // formik.initialValues.category_name = res.data.result.category_name
+            let res = await axios.get(`admin/skill?id=${id}`)
+            setInitialValues({ id: res.data.result._id, title: res.data.result.title })
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -38,24 +35,17 @@ function EditCategory() {
                 type: 'error'
             });
         }
-    }, [])
+    }, [id])
 
     const validate = values => {
         const errors = {};
 
-        if (!values.category_name) {
-            errors.category_name = 'Category name is required';
-        } else if (values.category_name.length < 3) {
-            errors.category_name = 'Category name min legth is 3 characters';
-        } else if (values.category_name.length > 50) {
-            errors.category_name = 'Category name max legth is 50 characters';
-        }
-        if (!values.category_desc) {
-            errors.category_desc = 'Description is required';
-        } else if (values.category_desc.length < 20) {
-            errors.category_desc = 'Description min legth is 20 characters';
-        } else if (values.category_desc.length > 500) {
-            errors.category_desc = 'Description max legth is 500 characters';
+        if (!values.title) {
+            errors.title = 'Title is required';
+        } else if (values.title.length < 3) {
+            errors.title = 'Title min legth is 3 characters';
+        } else if (values.title.length > 50) {
+            errors.title = 'Title max legth is 50 characters';
         }
 
         return errors;
@@ -67,14 +57,7 @@ function EditCategory() {
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                let formData = new FormData()
-                formData.append("id", values.id)
-                formData.append("category_name", values.category_name)
-                formData.append("category_desc", values.category_desc)
-                formData.append("categoryfile", values.categoryfile)
-
-                let res = await axios.post(`admin/categoryupdate`, formData)
-                // setDisabledSubmit(false)
+                let res = await axios.post(`admin/skillupdate/${values.id}`, {title:values.title})
                 setRedirecting(true)
                 toast(res.data.message, {
                     position: "top-right",
@@ -86,10 +69,9 @@ function EditCategory() {
                     progress: undefined,
                     type: 'success',
                     onClose: () => {
-                        navigate('/categories')
+                        navigate('/skills')
                     }
                 });
-                // navigate('/categories')
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",
@@ -107,12 +89,12 @@ function EditCategory() {
     });
 
     useEffect(() => {
-        getCategoryDetail()
-    }, [getCategoryDetail])
+        experienceDetail()
+    }, [experienceDetail])
     return (
         <>
             <Helmet>
-                <title>Edit Category</title>
+                <title>Edit Skill</title>
             </Helmet>
 
             <LayoutPage>
@@ -126,7 +108,7 @@ function EditCategory() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit Category</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Edit Skill</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
@@ -135,45 +117,22 @@ function EditCategory() {
                                             <div className="input-group input-group-outline mb-3">
                                                 <input
                                                     type="text"
-                                                    id='category_name'
-                                                    name='category_name'
+                                                    id='title'
+                                                    name='title'
                                                     className="form-control"
-                                                    placeholder='Category Name'
-                                                    value={formik.values.category_name}
+                                                    placeholder='Title'
+                                                    value={formik.values.title}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
-                                            {formik.errors.category_name ? <div className='text-danger'>{formik.errors.category_name}</div> : null}
-                                            <div className="input-group input-group-outline mb-3">
-                                                <input
-                                                    type="file"
-                                                    id='categoryfile'
-                                                    name='categoryfile'
-                                                    className="form-control"
-                                                    placeholder='Category Image'
-                                                    onChange={(event) => {
-                                                        formik.setFieldValue("categoryfile", event.target.files[0]);
-                                                    }}
-                                                />
-                                            </div>
-                                            <div className="input-group input-group-outline mb-3">
-                                                <textarea
-                                                    className="form-control"
-                                                    placeholder='Description'
-                                                    id='category_desc'
-                                                    name='category_desc'
-                                                    value={formik.values.category_desc}
-                                                    onChange={formik.handleChange}
-                                                />
-                                            </div>
-                                            {formik.errors.category_desc ? <div className='text-danger'>{formik.errors.category_desc}</div> : null}
+                                            {formik.errors.title ? <div className='text-danger'>{formik.errors.title}</div> : null}
                                             <div className="text-center">
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit || redirecting ? (
                                                             <div>
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                <span className="sr-only"></span>  {disabledSubmit && !redirecting?'Updating':'Redirecting'}
+                                                                <span className="sr-only"></span>  {disabledSubmit && !redirecting ? 'Updating' : 'Redirecting'}
                                                             </div>
                                                         ) : 'Update'
                                                     }
@@ -191,4 +150,4 @@ function EditCategory() {
     );
 }
 
-export default EditCategory;
+export default Edit;

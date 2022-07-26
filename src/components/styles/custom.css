@@ -6,10 +6,6 @@ body {
     overflow-x: hidden !important;
 }
 
-footer {
-    background-color: white !important;
-}
-
 .custom-card-heading {
     display: inline;
 }

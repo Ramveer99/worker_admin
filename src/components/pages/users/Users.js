@@ -26,10 +26,6 @@ function Users() {
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
         {
-            name: 'Id',
-            selector: row => row._id,
-        },
-        {
             name: 'Name',
             selector: row => row.name,
             sortable: true,
@@ -57,7 +53,6 @@ function Users() {
         {
             name: 'Action',
             selector: row => row.id,
-            sortable: true,
             cell: row => (
                 row.status === "1" ?
                     <i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
@@ -152,7 +147,7 @@ function Users() {
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
-            // console.log(errors);
+            // console.log('======>in catch block',errors);
             toast(errors.response.data.message, {
                 position: "top-right",
                 autoClose: 2000,

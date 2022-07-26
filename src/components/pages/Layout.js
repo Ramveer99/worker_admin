@@ -35,9 +35,12 @@ function LayoutPage(props) {
             <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
                 <div className="sidenav-header">
                     <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-                    <a className="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+                    {/* <a className="navbar-brand m-0" href="https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
                         <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
-                    </a>
+                    </a> */}
+                    <Link className="navbar-brand m-0" to={'/'}>
+                    <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
+                    </Link>
                 </div>
                 <hr className="horizontal light mt-0 mb-2" />
                 <div className="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
@@ -64,6 +67,30 @@ function LayoutPage(props) {
                                     <i className="fa fa-users"></i>
                                 </div>
                                 <span className="nav-link-text ms-1">Users Management</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/experience' className={`nav-link text-white ${location.pathname.includes('/experience') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-history"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Experience Management</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/salary' className={`nav-link text-white ${location.pathname.includes('/salary') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-money"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Salary Management</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/skills' className={`nav-link text-white ${location.pathname.includes('/skills') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-cogs"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Skills Management</span>
                             </Link>
                         </li>
 

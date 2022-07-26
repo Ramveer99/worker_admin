@@ -27,7 +27,8 @@
   --bs-gray-700: #495057;
   --bs-gray-800: #343a40;
   --bs-gray-900: #212529;
-  --bs-primary: #e91e63;
+  /* --bs-primary: #e91e63; */
+  --bs-primary: #e92222;
   --bs-secondary: #7b809a;
   --bs-success: #4CAF50;
   --bs-info: #1A73E8;
@@ -22524,7 +22525,7 @@ label,
 }
 
 .bg-gradient-primary {
-  background-image: linear-gradient(195deg, #EC407A 0%, #D81B60 100%);
+  background-image: linear-gradient(195deg, #e92222 0%, #e92222 100%);
 }
 
 .bg-gradient-secondary {

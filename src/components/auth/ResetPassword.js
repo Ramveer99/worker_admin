@@ -17,7 +17,7 @@ function Login() {
     const errors = {};
     let regex = /(?=(.*\d){2})(?=(.*[a-z]){2})(?=(.*[A-Z]){2})(?=(.*[!@#$%]){2})/
     if (!values.password) {
-      errors.password = 'Password is Required';
+      errors.password = 'Password is required';
     } else if (values.password.length < 8) {
       errors.password = 'Password should be 8 or more characters';
     } else if (values.password.length > 15) {
@@ -27,7 +27,7 @@ function Login() {
     }
 
     if (!values.confirmpassword) {
-      errors.confirmpassword = 'Confirm Password is Required';
+      errors.confirmpassword = 'Confirm password is required';
     } else if (values.password !== values.confirmpassword) {
       errors.confirmpassword = 'Password and confirm password must be same';
     }

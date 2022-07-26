@@ -8,7 +8,7 @@ function DeleteConfirmation({modelTitle,loadingConfirmButton,loadingConfirmButto
                 <Modal.Header closeButton>
                     <Modal.Title>{modelTitle}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><div>{message}</div></Modal.Body>
+                <Modal.Body><div>{message.toLowerCase()}</div></Modal.Body>
                 <Modal.Footer>
                     <Button variant="default" onClick={hideModalHandler}>
                         Cancel

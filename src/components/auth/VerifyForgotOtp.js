@@ -47,7 +47,7 @@ function VerifyForgotOtp() {
     const errors = {};
 
     if (!values.otp.length) {
-      errors.otp = 'OTP is Required';
+      errors.otp = 'OTP is required';
     }
     else if (isNaN(values.otp) || values.otp.length < 4 || values.otp.length > 4) {
       errors.otp = 'OTP must be 4 digts long and contain numbers only'
