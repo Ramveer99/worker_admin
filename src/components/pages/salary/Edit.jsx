@@ -12,7 +12,6 @@ LoadingOverlay.propTypes = undefined
 function Edit() {
     const { id } = useParams()
     const [disabledSubmit, setDisabledSubmit] = useState(false)
-    const [redirecting, setRedirecting] = useState(false)
     const [loading, setLoading] = useState(false);
     const [initialValues, setInitialValues] = useState({ id: '', title: '', });
     const navigate = useNavigate()
@@ -20,7 +19,7 @@ function Edit() {
     const experienceDetail = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/experience?id=${id}`)
+            let res = await axios.get(`admin/salary?id=${id}`)
             setInitialValues({ id: res.data.result._id, title: res.data.result.title })
             setLoading(false);
         } catch (errors) {
@@ -41,11 +40,11 @@ function Edit() {
         const errors = {};
 
         if (!values.title) {
-            errors.title = 'Experience title is required';
+            errors.title = 'Salary title is required';
         } else if (values.title.length < 3) {
-            errors.title = 'Experience title min legth is 3 characters';
+            errors.title = 'Salary title min legth is 3 characters';
         } else if (values.title.length > 50) {
-            errors.title = 'Experience title max legth is 50 characters';
+            errors.title = 'Salary title max legth is 50 characters';
         }
 
         return errors;
@@ -57,22 +56,8 @@ function Edit() {
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                let res = await axios.post(`admin/experienceupdate/${values.id}`, {title:values.title})
-                setRedirecting(true)
-                toast(res.data.message, {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    type: 'success',
-                    onClose: () => {
-                        navigate('/experience')
-                    }
-                });
-                // navigate('/experience',{ state:{message:res.data.message}})
+                let res = await axios.post(`admin/salaryupdate/${values.id}`, { title: values.title })
+                navigate('/salary', { state: { message: res.data.message } })
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",
@@ -95,7 +80,7 @@ function Edit() {
     return (
         <>
             <Helmet>
-                <title>Edit Experience</title>
+                <title>Edit Salary</title>
             </Helmet>
 
             <LayoutPage>
@@ -109,7 +94,7 @@ function Edit() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit Experience</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Edit Salary</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
@@ -130,10 +115,10 @@ function Edit() {
                                             <div className="text-center">
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
-                                                        disabledSubmit || redirecting ? (
+                                                        disabledSubmit? (
                                                             <div>
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                <span className="sr-only"></span>  {disabledSubmit && !redirecting ? 'Updating' : 'Redirecting'}
+                                                                <span className="sr-only"></span>  {disabledSubmit? 'Updating' : 'Redirecting'}
                                                             </div>
                                                         ) : 'Update'
                                                     }

@@ -93,6 +93,22 @@ function LayoutPage(props) {
                                 <span className="nav-link-text ms-1">Skills Management</span>
                             </Link>
                         </li>
+                        <li className="nav-item">
+                            <Link to='/job-types' className={`nav-link text-white ${location.pathname.includes('/job-types') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-tasks"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Job Types Management</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/applied-jobs' className={`nav-link text-white ${location.pathname.includes('/applied-jobs') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-cogs"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Applied Jobs</span>
+                            </Link>
+                        </li>
 
                     </ul>
                 </div>

@@ -74,22 +74,8 @@ function EditCategory() {
                 formData.append("categoryfile", values.categoryfile)
 
                 let res = await axios.post(`admin/categoryupdate`, formData)
-                // setDisabledSubmit(false)
-                setRedirecting(true)
-                toast(res.data.message, {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    type: 'success',
-                    onClose: () => {
-                        navigate('/categories')
-                    }
-                });
-                // navigate('/categories')
+                
+                navigate('/categories',{state:{message:res.data.message}})
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",

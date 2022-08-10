@@ -32,9 +32,18 @@ const SkillList = loadable(() => import('./components/pages/skills/List'))
 const AddNewSkill = loadable(() => import('./components/pages/skills/AddNew'))
 const EditSkill = loadable(() => import('./components/pages/skills/Edit'))
 
+// job types import
+const JobTypesList = loadable(() => import('./components/pages/jobtypes/List'))
+const AddNewJobType = loadable(() => import('./components/pages/jobtypes/AddNew'))
+const EditJobType = loadable(() => import('./components/pages/jobtypes/Edit'))
+
+// applied jobs import
+const AppliedJobList = loadable(() => import('./components/pages/applied-jobs/List'))
+
 let navigate = null
 
-axios.defaults.baseURL = 'http://webmobrildemo.com:9600/';
+// axios.defaults.baseURL = 'http://webmobrildemo.com:9600/';
+axios.defaults.baseURL = 'http://localhost:9600/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
   let bearertoken = localStorage.getItem('transact_auth_back')
@@ -111,6 +120,16 @@ root.render(
         <Route path="/skills/addnew" element={<AddNewSkill />} />
         <Route path="/skills/edit/:id" element={<EditSkill />} />
         {/* skill End*/}
+       
+        {/* job types Start*/}
+        <Route path="/job-types" element={<JobTypesList />} />
+        <Route path="/job-types/addnew" element={<AddNewJobType />} />
+        <Route path="/job-types/edit/:id" element={<EditJobType />} />
+        {/* job types End*/}
+        
+        {/* applied jobs Start*/}
+        <Route path="/applied-jobs" element={<AppliedJobList />} />
+        {/* applied jobs End*/}
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -3662,7 +3662,7 @@ fieldset:disabled .btn {
 
 .btn-primary {
   --bs-btn-color: #000;
-  --bs-btn-bg: #e91e63;
+  --bs-btn-bg: #e92222;
   --bs-btn-border-color: #e91e63;
   --bs-btn-hover-color: #000;
   --bs-btn-hover-bg: #ec407a;

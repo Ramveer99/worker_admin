@@ -46,13 +46,13 @@ function AddNew() {
         validate,
         onSubmit: async (values) => {
             let formData = new FormData()
-            formData.append("category_name",values.category_name)
-            formData.append("category_desc",values.category_desc)
-            formData.append("categoryfile",values.categoryfile)
+            formData.append("category_name", values.category_name)
+            formData.append("category_desc", values.category_desc)
+            formData.append("categoryfile", values.categoryfile)
             setDisabledSubmit(true)
             try {
-                await axios.post(`admin/categoryadd`, formData)
-                navigate('/categories')
+                let res = await axios.post(`admin/categoryadd`, formData)
+                navigate('/categories', { state: { message: res.data.message } })
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",

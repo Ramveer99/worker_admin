@@ -5,71 +5,92 @@ import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import DeleteConfirmation from '../shared/DeleteConfirmation';
 import { Link } from 'react-router-dom';
+import moment from 'moment'
 
 
 function List() {
-    const [experienceData, setExperienceData] = useState([])
+    const [jobData, setJobData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
-    const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
-    const [loadingDeleteModelConfirmText, setLoadingDeleteModelConfirmText] = useState('Deleting');
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
+    const [pageNumber, setPageNumber] = useState(0);
     const [perPage, setperPage] = useState(10);
     const [searchKeyWord, setSearchKeyword] = useState('');
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [idBeingDeleting, setIdBeingDeleting] = useState(null);
-    const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
-    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this experience?');
-    const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+
     const columns = [
         {
-            name: 'Title',
-            selector: row => row.title,
+            name: 'Employee Name',
+            selector: row => row.user_data[0].name,
             sortable: true,
         },
         {
-            name: 'Created Date',
-            selector: row => row.created_at,
+            name: 'Applied Position',
+            selector: row => row.result_job[0].jobname,
+            sortable: true,
+        },
+        {
+            name: 'Applied Date',
+            selector: row => moment(row.created_at).format('DD MMMM, YYYY'),
+            sortable: true,
+        },
+        {
+            name: 'Employer Status',
+            selector: row => (
+                row.employer_approved !== "" ? row.employer_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
+            ),
+        },
+        {
+            name: 'Admin Status',
+            selector: row => (
+                row.admin_approved !== "" ? row.admin_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
+            ),
+        },
+        {
+            name: 'Skills Matched',
+            selector: row => row.id,
+            cell: row => (
+                <>
+                    {(() => {
+                        let matchedCount = 0
+                        if (row.user_data[0].skills) {
+                            let eachMatchIncrementV = 100 / row.result_job[0].skills.length
+                            row.result_job[0].skills.map((mapitem) => {
+                                if (row.user_data[0].skills.includes(mapitem)) {
+                                    return matchedCount += eachMatchIncrementV
+                                } else {
+                                    return false
+                                }
+                            })
+                            return `${matchedCount}% Matched`
+                        } else {
+                            return '0% Matched'
+                        }
+                    })()}
+                </>
+            ),
+            center: true
         },
         {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                <div>
-                    <Link to={`/experience/edit/${row._id}`}>
-                        <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
-                    </Link>
+                row.admin_approved === "" ? <div>
+                    <i title='Approve Application' onClick={() => handleApprove(row._id, "Yes")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
                     &nbsp;&nbsp;
-                    <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
-                </div>
+                    <i title='Reject Application' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleApprove(row._id, "Yes")}></i>
+                </div> : ""
+
             ),
             center: true
         },
     ];
 
-
-    // Handle the displaying of the modal based on type and id
-    const showDeleteModal = (type, id) => {
-        alert('show delete modal')
-    };
-
-    // Hide the modal
-    const hideConfirmationModal = () => {
-        setShowDeleteConfirm(false)
-        setIdBeingDeleting(null)
-    };
-
-    // Handle the actual deletion of the item
-    const submitDelete = async () => {
-        setLoadingDeleteModel(true)
-        setLoadingDeleteModelConfirmText('Deleting')
-        //  activate deactivate user
+    const handleApprove = async (job_id, job_status) => {
         try {
-            let res = await axios.delete(`admin/experiencedel/${idBeingDeleting}`)
+            setLoading(true)
+            let res = await axios.post(`employer/approve_job`, { job_id: job_id, status: job_status, admin_approve: true })
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -80,10 +101,7 @@ function List() {
                 progress: undefined,
                 type: 'success'
             });
-            setShowDeleteConfirm(false)
-            setLoadingDeleteModel(false)
-            setPageNumber(1)
-            getExperienceList()
+            getJobsList()
         } catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
@@ -95,29 +113,16 @@ function List() {
                 progress: undefined,
                 type: 'error'
             });
-            setShowDeleteConfirm(false)
-            setLoadingDeleteModel(false)
-            setPageNumber(1)
-            getExperienceList()
+            setLoading(false)
         }
-    };
-
-
-
-    const handleDeleteConfirm = (row, type) => {
-        setShowDeleteConfirm(true)
-        setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this category?`)
-        setDeleteModelActionType(type)
-        setIdBeingDeleting(row._id)
     }
-
-    const getExperienceList = useCallback(async () => {
+    const getJobsList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/experiencelist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            setExperienceData(res.data.result.experiencedata)
-            setTotalRows(res.data.result.total);
+            let res = await axios.get(`admin/applied_jobs?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            console.log(res.data);
+            setJobData(res.data.result.length?res.data.result[0].data:[])
+            setTotalRows(res.data.result.length?res.data.result[0].count:0);
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -143,7 +148,7 @@ function List() {
         setSortDirection(sortDirection)
     };
     const handlePerRowsChange = async (newPerPage, page) => {
-        setPageNumber(page)
+        setPageNumber(0)
         setperPage(newPerPage)
     };
 
@@ -159,13 +164,13 @@ function List() {
     }
 
     useEffect(() => {
-        getExperienceList()
-    }, [getExperienceList, searchKeyWord, pageNumber, sortField, perPage])
+        getJobsList()
+    }, [getJobsList, searchKeyWord, pageNumber, sortField, perPage])
 
     return (
         <>
             <Helmet>
-                <title>Experience Management</title>
+                <title>Applied Jobs</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -174,8 +179,8 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Experiences</h6>
-                                    <Link to="/experience/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Applied Jobs</h6>
+                                    {/* <Link to="/skills/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link> */}
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -193,7 +198,7 @@ function List() {
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
-                                        data={experienceData}
+                                        data={jobData}
                                         progressPending={loading}
                                         pagination
                                         paginationServer
@@ -203,21 +208,6 @@ function List() {
                                         sortServer
                                         onSort={handleSort}
                                     />
-                                    {
-                                        showDeleteConfirm && (
-                                            <DeleteConfirmation
-                                                showModalHandler={showDeleteModal}
-                                                confirmModalHandler={submitDelete}
-                                                hideModalHandler={hideConfirmationModal}
-                                                loadingConfirmButton={loadingDeleteModel}
-                                                loadingConfirmButtonText={loadingDeleteModelConfirmText}
-                                                modelTitle={deleteModelTitle}
-                                                actionButtonClass={'primary'}
-                                                actionType={deleteModelActionType}
-                                                message={deleteModelMessage} />
-                                        )
-                                    }
-
                                 </div>
                             </div>
                         </div>

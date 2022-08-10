@@ -14,11 +14,11 @@ function AddNew() {
         const errors = {};
 
         if (!values.title) {
-            errors.title = 'Salary title is required';
+            errors.title = 'Experience title is required';
         } else if (values.title.length < 3) {
-            errors.title = 'Salary title min legth is 3 characters';
+            errors.title = 'Experience title min legth is 3 characters';
         } else if (values.title.length > 50) {
-            errors.title = 'Salary title max legth is 50 characters';
+            errors.title = 'Experience title max legth is 50 characters';
         }
 
         
@@ -34,8 +34,8 @@ function AddNew() {
            
             setDisabledSubmit(true)
             try {
-                await axios.post(`admin/salaryadd`, values)
-                navigate('/salary')
+                let res=await axios.post(`admin/experienceadd`, values)
+                navigate('/experience',{state:{message:res.data.message}})
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",
@@ -54,7 +54,7 @@ function AddNew() {
     return (
         <>
             <Helmet>
-                <title>Add salary</title>
+                <title>Add experience</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -63,7 +63,7 @@ function AddNew() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Add New salary</h6>
+                                    <h6 className="text-white text-capitalize ps-3">Add New Experience</h6>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
