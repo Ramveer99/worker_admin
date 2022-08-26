@@ -24,7 +24,7 @@ function List() {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [idBeingDeleting, setIdBeingDeleting] = useState(null);
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
-    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this skill?');
+    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this jobtype?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
         {
@@ -108,7 +108,7 @@ function List() {
     const handleDeleteConfirm = (row, type) => {
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this skill?`)
+        setDeleteModelMessage(`Are you sure want to ${type} this jobtype?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }
@@ -189,7 +189,7 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Skills</h6>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Job Types</h6>
                                     <Link to="/job-types/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>

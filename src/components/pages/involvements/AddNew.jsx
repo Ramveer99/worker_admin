@@ -14,28 +14,28 @@ function AddNew() {
         const errors = {};
 
         if (!values.title) {
-            errors.title = 'Salary title is required';
+            errors.title = 'Title is required';
         } else if (values.title.length < 3) {
-            errors.title = 'Salary title min length is 3 characters';
+            errors.title = 'Title min legth is 3 characters';
         } else if (values.title.length > 50) {
-            errors.title = 'Salary title max length is 50 characters';
+            errors.title = 'Title max legth is 50 characters';
         }
 
-
+        
 
         return errors;
     };
     const formik = useFormik({
         initialValues: {
-            title: ''
+            title:''
         },
         validate,
         onSubmit: async (values) => {
-
+           
             setDisabledSubmit(true)
             try {
-                let res = await axios.post(`admin/salaryadd`, values)
-                navigate('/salary', { state: { message: res.data.message } })
+                let res=await axios.post(`admin/involvementadd`, values)
+                navigate('/involvements',{state:{message:res.data.message}})
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",
@@ -54,7 +54,7 @@ function AddNew() {
     return (
         <>
             <Helmet>
-                <title>Add salary</title>
+                <title>Add Involvement</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -63,7 +63,7 @@ function AddNew() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Add New salary</h6>
+                                    <h6 className="text-white text-capitalize ps-3">Add New Involvement</h6>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -81,7 +81,7 @@ function AddNew() {
                                             />
                                         </div>
                                         {formik.errors.title ? <div className='text-danger'>{formik.errors.title}</div> : null}
-
+                                        
                                         <div className="text-center">
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {

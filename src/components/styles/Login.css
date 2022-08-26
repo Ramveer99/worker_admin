@@ -1,0 +1,7 @@
+.pas-eye i {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    cursor: pointer;
+    z-index: 9;
+}

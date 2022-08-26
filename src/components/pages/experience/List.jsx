@@ -108,7 +108,7 @@ function List() {
     const handleDeleteConfirm = (row, type) => {
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this category?`)
+        setDeleteModelMessage(`Are you sure want to ${type} this experience?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }

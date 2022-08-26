@@ -7,11 +7,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
 import { Link, useLocation } from 'react-router-dom';
-
+import moment from 'moment';
 
 function List() {
     const location = useLocation()
-    const [categoryData, setCategoryData] = useState([])
+    const [blogData, setBlogData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
@@ -24,38 +24,38 @@ function List() {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [idBeingDeleting, setIdBeingDeleting] = useState(null);
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
-    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this category?');
+    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this blog?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
         {
-            name: 'Category Image',
-            selector: row => row.category_image,
+            name: 'Blog Image',
+            selector: row => row.blog_image,
             cell: row => (
-                <img className='img img-circle' height={50} width={50} src={row.category_image} alt={row.category_image} />
+                <img className='img img-circle' height={50} width={50} src={row.blog_image} alt={row.blog_image} />
             ),
             center: true
         },
 
         {
-            name: 'Category Name',
-            selector: row => row.category_name,
+            name: 'Blog Title',
+            selector: row => row.title,
             sortable: true,
         },
         {
-            name: 'Description',
-            selector: row => row.category_desc,
+            name: 'Short Description',
+            selector: row => row.short_description,
             sortable: true,
         },
         {
             name: 'Created Date',
-            selector: row => row.created_at,
+            selector: row => moment(row.created_at).format('YYYY-MM-DD hh:mm A'),
         },
         {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
                 <div>
-                    <Link to={`/categories/edit/${row._id}`}>
+                    <Link to={`/blogs/edit/${row._id}`}>
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
                     &nbsp;&nbsp;
@@ -84,7 +84,7 @@ function List() {
         setLoadingDeleteModelConfirmText('Deleting')
         //  activate deactivate user
         try {
-            let res = await axios.delete(`admin/categorydel/${idBeingDeleting}`)
+            let res = await axios.delete(`admin/blog_del/${idBeingDeleting}`)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -98,7 +98,7 @@ function List() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getCategoryList()
+            getBlogList()
         } catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
@@ -113,7 +113,7 @@ function List() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getCategoryList()
+            getBlogList()
         }
     };
 
@@ -122,16 +122,16 @@ function List() {
     const handleDeleteConfirm = (row, type) => {
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this category?`)
+        setDeleteModelMessage(`Are you sure want to ${type} this blog?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }
 
-    const getCategoryList = useCallback(async () => {
+    const getBlogList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/categorylist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            setCategoryData(res.data.result.categorydata)
+            let res = await axios.get(`admin/blog_list?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            setBlogData(res.data.result.blog_data)
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
@@ -174,7 +174,7 @@ function List() {
     }
 
     useEffect(() => {
-        getCategoryList()
+        getBlogList()
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
@@ -189,11 +189,11 @@ function List() {
                 type: 'success'
             });
         }
-    }, [getCategoryList, searchKeyWord, pageNumber, sortField, perPage, location])
+    }, [getBlogList, searchKeyWord, pageNumber, sortField, perPage, location])
     return (
         <>
             <Helmet>
-                <title>Categories Management</title>
+                <title>Blogs Management</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -202,8 +202,8 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Categories</h6>
-                                    <Link to="/categories/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Blogs</h6>
+                                    <Link to="/blogs/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -221,7 +221,7 @@ function List() {
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
-                                        data={categoryData}
+                                        data={blogData}
                                         progressPending={loading}
                                         pagination
                                         paginationServer

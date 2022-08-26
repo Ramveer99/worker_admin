@@ -38,7 +38,8 @@ function LayoutPage(props) {
                     {/* <a className="navbar-brand m-0" href="https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
                         <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
                     </a> */}
-                    <Link className="navbar-brand m-0" to={'/'}>
+                    <Link className="navbar-brand m-0 new-da" to={'/'}>
+                        <img src={`${process.env.PUBLIC_URL}/assets/img/final_logo.svg`} alt=""/>
                     <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
                     </Link>
                 </div>
@@ -54,13 +55,22 @@ function LayoutPage(props) {
                             </Link>
                         </li>
                         <li className="nav-item">
+                            <Link to='/change-password' className={`nav-link text-white ${location.pathname.includes('/change-password') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-user"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Profile</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
                             <Link to='/categories' className={`nav-link text-white ${location.pathname.includes('/categories') ? "active bg-gradient-primary" : ""}`}>
                                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                     <i className="fa fa-list"></i>
                                 </div>
-                                <span className="nav-link-text ms-1">Categories Management</span>
+                                <span className="nav-link-text ms-1">Categories</span>
                             </Link>
                         </li>
+                        
                         <li className="nav-item">
                             <Link to='/users' className={`nav-link text-white ${location.pathname.includes('/users') ? "active bg-gradient-primary" : ""}`}>
                                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -74,7 +84,31 @@ function LayoutPage(props) {
                                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                     <i className="fa fa-history"></i>
                                 </div>
-                                <span className="nav-link-text ms-1">Experience Management</span>
+                                <span className="nav-link-text ms-1">Experiences</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/responsibilities' className={`nav-link text-white ${location.pathname.includes('/responsibilities') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-history"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Responsibilities</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/involvements' className={`nav-link text-white ${location.pathname.includes('/involvements') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-history"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Involvements</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/blogs' className={`nav-link text-white ${location.pathname.includes('/blogs') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fab fa-blogger-b"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Blogs</span>
                             </Link>
                         </li>
                         <li className="nav-item">
@@ -99,6 +133,14 @@ function LayoutPage(props) {
                                     <i className="fa fa-tasks"></i>
                                 </div>
                                 <span className="nav-link-text ms-1">Job Types Management</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/content-pages' className={`nav-link text-white ${location.pathname.includes('/content-pages') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-globe"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">Content Management</span>
                             </Link>
                         </li>
                         <li className="nav-item">
