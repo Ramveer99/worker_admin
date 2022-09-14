@@ -60,6 +60,13 @@ const EditPage = loadable(() => import('./components/pages/static_pages/Edit'))
 
 // applied jobs import
 const AppliedJobList = loadable(() => import('./components/pages/applied-jobs/List'))
+// payments import
+const PaymentsList = loadable(() => import('./components/pages/payments/List'))
+
+// Subadmin import
+const SubadminAdd = loadable(() => import('./components/pages/subadmins/AddNew'))
+const SubadminList = loadable(() => import('./components/pages/subadmins/List'))
+const SubadminEdit = loadable(() => import('./components/pages/subadmins/Edit'))
 
 let navigate = null
 
@@ -121,6 +128,12 @@ root.render(
         <Route path="/categories/addnew" element={<AddNewCategory />} />
         <Route path="/categories/edit/:id" element={<EditCategory />} />
         {/* Categories End */}
+       
+        {/* Subadmin Start */}
+        <Route path="/subadmin" element={<SubadminList />} />
+        <Route path="/subadmin/addnew" element={<SubadminAdd />} />
+        <Route path="/subadmin/edit/:id" element={<SubadminEdit />} />
+        {/* Subadmin End */}
         
         {/* Blogs Start */}
         <Route path="/blogs" element={<BlogsList />} />
@@ -174,6 +187,10 @@ root.render(
         {/* applied jobs Start*/}
         <Route path="/applied-jobs" element={<AppliedJobList />} />
         {/* applied jobs End*/}
+        
+        {/* payments Start*/}
+        <Route path="/payments" element={<PaymentsList />} />
+        {/* payments End*/}
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

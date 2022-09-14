@@ -11,7 +11,6 @@ import '../styles/Login.css'
 
 function Login() {
   const location = useLocation()
-
   const [disabledSubmit, setDisabledSubmit] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [state, updateState] = useState({ name: '', email: '', social_id: '' })

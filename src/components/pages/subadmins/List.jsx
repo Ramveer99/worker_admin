@@ -6,14 +6,16 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
+import { Link, useLocation } from 'react-router-dom';
+import moment from 'moment'
 
-
-function Users() {
-    const [userData, setUserData] = useState([])
+function List() {
+    const location = useLocation()
+    const [subadminData, setSubadminData] = useState([])
     const [loading, setLoading] = useState(false);
+    const [totalRows, setTotalRows] = useState(0);
     const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
     const [loadingDeleteModelConfirmText, setLoadingDeleteModelConfirmText] = useState('Deleting');
-    const [totalRows, setTotalRows] = useState(0);
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -22,41 +24,36 @@ function Users() {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [idBeingDeleting, setIdBeingDeleting] = useState(null);
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
-    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this user?');
+    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this subadmin?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
         {
             name: 'Name',
-            selector: row => row.name,
+            selector: row => row.user_data[0].name,
+            center: true, 
             sortable: true,
         },
         {
             name: 'Email',
-            selector: row => row.email,
+            selector: row => row.user_data[0].email,
             sortable: true,
         },
         {
-            name: 'Mobile',
-            selector: row => row.mobile,
+            name: 'Created Date',
+            selector: row => moment(row.created_at).format('YYYY-MM-DD hh:mm A'),
             sortable: true,
-        },
-        {
-            name: 'Status',
-            selector: row => row.status,
-            sortable: true,
-            cell: row => (
-                !row.admin_inactive ?
-                    <span className='badge badge-sm bg-gradient-success'>Active</span> :
-                    <span className='badge badge-sm bg-gradient-secondary'>Inactive</span>
-            )
         },
         {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                !row.admin_inactive ?
-                    <i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
-                    : <i title='Activate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-success' onClick={() => handleDeleteConfirm(row, 'Activate')}></i>
+                <div>
+                    <Link to={`/subadmin/edit/${row._id}`}>
+                        <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
+                    </Link>
+                    &nbsp;&nbsp;
+                    <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                </div>
             ),
             center: true
         },
@@ -72,31 +69,15 @@ function Users() {
     const hideConfirmationModal = () => {
         setShowDeleteConfirm(false)
         setIdBeingDeleting(null)
-        setLoadingDeleteModel(false)
     };
 
     // Handle the actual deletion of the item
     const submitDelete = async () => {
-        // console.log(deleteModelActionType, idBeingDeleting);
         setLoadingDeleteModel(true)
-        let confirmText = null
-        let activeInactiveStatus = null
-        if (deleteModelActionType === "Delete") {
-            confirmText = 'Deleting'
-        } else if (deleteModelActionType === "Activate") {
-            confirmText = 'Activating'
-            activeInactiveStatus = "1"
-        } else if (deleteModelActionType === "Deactivate") {
-            confirmText = 'Deactivating'
-            activeInactiveStatus = "0"
-        }
-        setLoadingDeleteModelConfirmText(confirmText)
+        setLoadingDeleteModelConfirmText('Deleting')
         //  activate deactivate user
         try {
-            let res = await axios.post(`admin/userstatus`, {
-                id: idBeingDeleting,
-                status: activeInactiveStatus
-            })
+            let res = await axios.delete(`admin/subadmin_delete/${idBeingDeleting}`)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -110,7 +91,7 @@ function Users() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getUsersList()
+            getCategoryList()
         } catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
@@ -125,7 +106,7 @@ function Users() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getUsersList()
+            getCategoryList()
         }
     };
 
@@ -134,20 +115,19 @@ function Users() {
     const handleDeleteConfirm = (row, type) => {
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} this user?`)
+        setDeleteModelMessage(`Are you sure want to ${type} this subadmin?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }
 
-    const getUsersList = useCallback(async () => {
+    const getCategoryList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/userlist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            setUserData(res.data.result.userdata)
+            let res = await axios.get(`admin/subadmin_list?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            setSubadminData(res.data.result.data)
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
-            // console.log('======>in catch block',errors);
             toast(errors.response.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -177,7 +157,7 @@ function Users() {
 
     const handleSearch = (event) => {
         if (event.key === "Enter") {
-            // console.log(event.target.value);
+            console.log(event.target.value);
             if (event.target.value.length >= 3) {
                 setSearchKeyword(event.target.value)
             }
@@ -187,12 +167,26 @@ function Users() {
     }
 
     useEffect(() => {
-        getUsersList()
-    }, [getUsersList, searchKeyWord, pageNumber, sortField, perPage])
+        getCategoryList()
+        if (location.state) {
+            let msg = location.state.message
+            window.history.replaceState({}, document.title)
+            toast(msg, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+        }
+    }, [getCategoryList, searchKeyWord, pageNumber, sortField, perPage, location])
     return (
         <>
             <Helmet>
-                <title>Users Management</title>
+                <title>Subadmins</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -201,12 +195,12 @@ function Users() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Users</h6>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Subadmins</h6>
+                                    <Link to="/subadmin/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
                                 <div className="p-4">
-                                    {/* <form> */}
                                     <div className="input-group input-group-dynamic mb-4">
                                         <input
                                             type="text"
@@ -216,12 +210,11 @@ function Users() {
                                             onKeyUp={handleSearch}
                                             name='keyword' />
                                     </div>
-                                    {/* </form> */}
                                 </div>
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
-                                        data={userData}
+                                        data={subadminData}
                                         progressPending={loading}
                                         pagination
                                         paginationServer
@@ -235,10 +228,10 @@ function Users() {
                                         showDeleteConfirm && (
                                             <DeleteConfirmation
                                                 showModalHandler={showDeleteModal}
-                                                loadingConfirmButton={loadingDeleteModel}
-                                                loadingConfirmButtonText={loadingDeleteModelConfirmText}
                                                 confirmModalHandler={submitDelete}
                                                 hideModalHandler={hideConfirmationModal}
+                                                loadingConfirmButton={loadingDeleteModel}
+                                                loadingConfirmButtonText={loadingDeleteModelConfirmText}
                                                 modelTitle={deleteModelTitle}
                                                 actionButtonClass={'primary'}
                                                 actionType={deleteModelActionType}
@@ -256,4 +249,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default List;

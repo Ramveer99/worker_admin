@@ -9,10 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function LayoutPage(props) {
     const [username, setUsername] = useState(null)
+    const [userData, setUserData] = useState(null)
     const navigate = useNavigate()
     const location = useLocation()
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem('transact_auth_back'))
+        setUserData(user)
         setUsername(user.username)
     }, [username])
     const handleLogout = () => {
@@ -39,8 +41,8 @@ function LayoutPage(props) {
                         <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
                     </a> */}
                     <Link className="navbar-brand m-0 new-da" to={'/'}>
-                        <img src={`${process.env.PUBLIC_URL}/assets/img/final_logo.svg`} alt=""/>
-                    <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
+                        <img src={`${process.env.PUBLIC_URL}/assets/img/final_logo.svg`} alt="" />
+                        <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
                     </Link>
                 </div>
                 <hr className="horizontal light mt-0 mb-2" />
@@ -62,95 +64,178 @@ function LayoutPage(props) {
                                 <span className="nav-link-text ms-1">Profile</span>
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link to='/categories' className={`nav-link text-white ${location.pathname.includes('/categories') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-list"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Categories</span>
-                            </Link>
-                        </li>
-                        
-                        <li className="nav-item">
-                            <Link to='/users' className={`nav-link text-white ${location.pathname.includes('/users') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-users"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Users Management</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/experience' className={`nav-link text-white ${location.pathname.includes('/experience') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-history"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Experiences</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/responsibilities' className={`nav-link text-white ${location.pathname.includes('/responsibilities') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-history"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Responsibilities</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/involvements' className={`nav-link text-white ${location.pathname.includes('/involvements') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-history"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Involvements</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/blogs' className={`nav-link text-white ${location.pathname.includes('/blogs') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fab fa-blogger-b"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Blogs</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/salary' className={`nav-link text-white ${location.pathname.includes('/salary') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-money"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Salary Management</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/skills' className={`nav-link text-white ${location.pathname.includes('/skills') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-cogs"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Skills Management</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/job-types' className={`nav-link text-white ${location.pathname.includes('/job-types') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-tasks"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Job Types Management</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/content-pages' className={`nav-link text-white ${location.pathname.includes('/content-pages') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-globe"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Content Management</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/applied-jobs' className={`nav-link text-white ${location.pathname.includes('/applied-jobs') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-cogs"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Applied Jobs</span>
-                            </Link>
-                        </li>
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.category_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/categories' className={`nav-link text-white ${location.pathname.includes('/categories') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-list"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Categories</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.subadmin_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/subadmin' className={`nav-link text-white ${location.pathname.includes('/subadmin') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-users"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Subadmins</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.user_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/users' className={`nav-link text-white ${location.pathname.includes('/users') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-users"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Users Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.experience_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/experience' className={`nav-link text-white ${location.pathname.includes('/experience') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-history"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Experiences</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.responsibility_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/responsibilities' className={`nav-link text-white ${location.pathname.includes('/responsibilities') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-history"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Responsibilities</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.involvement_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/involvements' className={`nav-link text-white ${location.pathname.includes('/involvements') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-history"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Involvements</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.blogs_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/blogs' className={`nav-link text-white ${location.pathname.includes('/blogs') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fab fa-blogger-b"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Blogs</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.salary_access
+                                ) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/salary' className={`nav-link text-white ${location.pathname.includes('/salary') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-money"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Salary Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.skills_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/skills' className={`nav-link text-white ${location.pathname.includes('/skills') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-cogs"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Skills Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.jobtype_access
+                                ) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/job-types' className={`nav-link text-white ${location.pathname.includes('/job-types') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-tasks"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Job Types Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.content_management_access
+                                ) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/content-pages' className={`nav-link text-white ${location.pathname.includes('/content-pages') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-globe"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Content Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.payments_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/payments' className={`nav-link text-white ${location.pathname.includes('/payments') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-credit-card"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Payments</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.applied_jobs_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/applied-jobs' className={`nav-link text-white ${location.pathname.includes('/applied-jobs') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-cogs"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Applied Jobs</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+
 
                     </ul>
                 </div>
