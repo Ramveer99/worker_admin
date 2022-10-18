@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom
 import axios from 'axios';
 import loadable from '@loadable/component';
 import { useNavigate } from 'react-router-dom';
+import LayoutPage from './components/pages/shared/Layout';
 
 const NotFound = loadable(() => import('./components/Notfound'))
 const Login = loadable(() => import('./components/auth/Login'))
@@ -11,7 +12,11 @@ const ForgotPassword = loadable(() => import('./components/auth/ForgotPassword')
 const VerifyForgotPassword = loadable(() => import('./components/auth/VerifyForgotOtp'))
 const ResetPassword = loadable(() => import('./components/auth/ResetPassword'))
 const Dashboard = loadable(() => import('./components/pages/Dashboard'))
+
+//  users import
 const Users = loadable(() => import('./components/pages/users/Users'))
+const EditUser = loadable(() => import('./components/pages/users/Edit'))
+const AddNewUser = loadable(() => import('./components/pages/users/AddNew'))
 const ChangePassword = loadable(() => import('./components/auth/ChangePassword'))
 // Categories import
 const CategoriesList = loadable(() => import('./components/pages/categories/List'))
@@ -68,6 +73,11 @@ const SubadminAdd = loadable(() => import('./components/pages/subadmins/AddNew')
 const SubadminList = loadable(() => import('./components/pages/subadmins/List'))
 const SubadminEdit = loadable(() => import('./components/pages/subadmins/Edit'))
 
+// Communication import
+const SendNotification = loadable(() => import('./components/pages/communication/AddNew'))
+const CommunicationList = loadable(() => import('./components/pages/communication/List'))
+// const SubadminEdit = loadable(() => import('./components/pages/subadmins/Edit'))
+
 let navigate = null
 
 axios.defaults.baseURL = 'http://webmobrildemo.com:9600/';
@@ -121,20 +131,38 @@ root.render(
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/users" element={<Users />} />
         <Route path="/change-password" element={<ChangePassword />} />
+
+        {/* Users start */}
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/edit/:id" element={<EditUser />} />
+        <Route path="/users/addnew" element={<AddNewUser />} />
+        {/* Users ends */}
+
         {/* Categories Start */}
         <Route path="/categories" element={<CategoriesList />} />
         <Route path="/categories/addnew" element={<AddNewCategory />} />
         <Route path="/categories/edit/:id" element={<EditCategory />} />
+        
+        {/* <Route path="/categories" element={<LayoutPage />} >
+          <Route index element={<CategoriesList />} />
+          <Route path="addnew" element={<AddNewCategory />} />
+          <Route path="edit/:id" element={<EditCategory />} />
+        </Route> */}
         {/* Categories End */}
-       
+
         {/* Subadmin Start */}
         <Route path="/subadmin" element={<SubadminList />} />
         <Route path="/subadmin/addnew" element={<SubadminAdd />} />
         <Route path="/subadmin/edit/:id" element={<SubadminEdit />} />
         {/* Subadmin End */}
-        
+
+        {/* communication Start */}
+        <Route path="/communication" element={<CommunicationList />} />
+        <Route path="/communication/addnew" element={<SendNotification />} />
+        <Route path="/communication/edit/:id" element={<SubadminEdit />} />
+        {/* communication End */}
+
         {/* Blogs Start */}
         <Route path="/blogs" element={<BlogsList />} />
         <Route path="/blogs/addnew" element={<AddNewBlog />} />
@@ -146,13 +174,13 @@ root.render(
         <Route path="/experience/addnew" element={<AddNewExperience />} />
         <Route path="/experience/edit/:id" element={<EditExperience />} />
         {/* Experience End */}
-        
+
         {/* Responsibilities Start */}
         <Route path="/responsibilities" element={<ResponsibilitiesList />} />
         <Route path="/responsibilities/addnew" element={<AddNewResponsibility />} />
         <Route path="/responsibilities/edit/:id" element={<EditResponsibility />} />
         {/* Responsibilities End */}
-        
+
         {/* Involvements Start */}
         <Route path="/involvements" element={<InvolvementList />} />
         <Route path="/involvements/addnew" element={<AddNewInvolvement />} />
@@ -171,23 +199,23 @@ root.render(
         <Route path="/skills/addnew" element={<AddNewSkill />} />
         <Route path="/skills/edit/:id" element={<EditSkill />} />
         {/* skill End*/}
-       
+
         {/* job types Start*/}
         <Route path="/job-types" element={<JobTypesList />} />
         <Route path="/job-types/addnew" element={<AddNewJobType />} />
         <Route path="/job-types/edit/:id" element={<EditJobType />} />
         {/* job types End*/}
-       
+
         {/* content pages Start*/}
         <Route path="/content-pages" element={<PagesList />} />
         <Route path="/content-pages/addnew" element={<AddNewPage />} />
         <Route path="/content-pages/edit/:id" element={<EditPage />} />
         {/* content pages End*/}
-        
+
         {/* applied jobs Start*/}
         <Route path="/applied-jobs" element={<AppliedJobList />} />
         {/* applied jobs End*/}
-        
+
         {/* payments Start*/}
         <Route path="/payments" element={<PaymentsList />} />
         {/* payments End*/}

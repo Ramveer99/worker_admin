@@ -6,9 +6,11 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
-
+import { Link, useLocation } from 'react-router-dom';
+import { saveAs } from 'file-saver';
 
 function Users() {
+    const location = useLocation()
     const [userData, setUserData] = useState([])
     const [loading, setLoading] = useState(false);
     const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
@@ -24,6 +26,8 @@ function Users() {
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this user?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [samplePdf, setSamplePdf] = useState('');
     const columns = [
         {
             name: 'Name',
@@ -55,8 +59,17 @@ function Users() {
             selector: row => row.id,
             cell: row => (
                 !row.admin_inactive ?
-                    <i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
-                    : <i title='Activate' style={{ cursor: 'pointer' }} className='fa fa-2x fa-power-off text-success' onClick={() => handleDeleteConfirm(row, 'Activate')}></i>
+                    <>
+                        <Link to={`/users/edit/${row._id}`}><i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i></Link>
+                        &nbsp;&nbsp;<i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
+                        &nbsp;&nbsp;<i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                    </>
+                    :
+                    <>
+                     <Link to={`/users/edit/${row._id}`}><i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i></Link>
+                        &nbsp;&nbsp;<i title='Activate' style={{ cursor: 'pointer' }} className='fa fa-power-off text-success' onClick={() => handleDeleteConfirm(row, 'Activate')}></i>
+                        &nbsp;&nbsp;<i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                    </>
             ),
             center: true
         },
@@ -81,8 +94,10 @@ function Users() {
         setLoadingDeleteModel(true)
         let confirmText = null
         let activeInactiveStatus = null
+        let deleting = false
         if (deleteModelActionType === "Delete") {
             confirmText = 'Deleting'
+            deleting = true
         } else if (deleteModelActionType === "Activate") {
             confirmText = 'Activating'
             activeInactiveStatus = "1"
@@ -95,7 +110,8 @@ function Users() {
         try {
             let res = await axios.post(`admin/userstatus`, {
                 id: idBeingDeleting,
-                status: activeInactiveStatus
+                status: activeInactiveStatus,
+                deleting: deleting
             })
             toast(res.data.message, {
                 position: "top-right",
@@ -144,6 +160,7 @@ function Users() {
             setLoading(true);
             let res = await axios.get(`admin/userlist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             setUserData(res.data.result.userdata)
+            setSamplePdf(res.data.result.sample_pdf)
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
@@ -185,10 +202,118 @@ function Users() {
             setSearchKeyword('')
         }
     }
-
+    const handleRowChange = ({ selectedRows }) => {
+        // console.log(selectedRows);
+        setSelectedRows(selectedRows)
+    }
+    const handleSelected = async (operationType) => {
+        try {
+            let selectedids = []
+            selectedRows.map((item) => {
+                return selectedids.push(item._id)
+            })
+            let res = await axios.post(`admin/do_selected_opertion`, {
+                selectedUsers: selectedids,
+                actionType: operationType
+            })
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            setSelectedRows([])
+            setPageNumber(1)
+            getUsersList()
+        } catch (errors) {
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getUsersList()
+        }
+    }
+    const handleExcelImport = async (e) => {
+        try {
+            let formData = new FormData()
+            setLoading(true)
+            formData.append('excel_file', e.target.files[0])
+            let res = await axios.post(`admin/upload_excel_users`, formData)
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            let f = document.getElementById('excel_file_uploader')
+            f.value = null
+            setPageNumber(1)
+            getUsersList()
+        } catch (errors) {
+            if (errors.response.data.error) {
+                toast(errors.response.data.error.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'error'
+                });
+                setLoading(false)
+            } else {
+                let f = document.getElementById('excel_file_uploader')
+                f.value = null
+                toast(errors.response.data.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'error'
+                });
+                setPageNumber(1)
+                getUsersList()
+            }
+        }
+    }
     useEffect(() => {
         getUsersList()
-    }, [getUsersList, searchKeyWord, pageNumber, sortField, perPage])
+        if (location.state) {
+            let msg = location.state.message
+            window.history.replaceState({}, document.title)
+            toast(msg, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+        }
+    }, [getUsersList, searchKeyWord, pageNumber, sortField, perPage, location])
     return (
         <>
             <Helmet>
@@ -201,7 +326,8 @@ function Users() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Users</h6>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Users</h6>
+                                    <Link to="/users/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -216,12 +342,30 @@ function Users() {
                                             onKeyUp={handleSearch}
                                             name='keyword' />
                                     </div>
+                                    <div className="input-group input-group-dynamic">
+                                        {
+                                            selectedRows.length ? (
+                                                <>
+                                                    <button className='btn btn-danger' onClick={() => handleSelected('delete')}>({selectedRows.length})&nbsp;Delete Selected</button>
+                                                    &nbsp;<button className='btn btn-success' onClick={() => handleSelected('activate')}>({selectedRows.length})&nbsp;Activate Selected</button>
+                                                    &nbsp;<button className='btn btn-warning' onClick={() => handleSelected('deactivate')}>({selectedRows.length})&nbsp;Deactivate Selected</button>
+                                                </>
+                                            ) : ''
+                                        }
+                                        &nbsp;<button className='btn btn-info'>&nbsp;Upload Excel&nbsp;
+                                            <input type="file" id='excel_file_uploader' onChange={(e) => handleExcelImport(e)} />
+                                        </button>
+                                        &nbsp;
+                                    <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
+                                    </div>
                                     {/* </form> */}
                                 </div>
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
                                         data={userData}
+                                        selectableRows
+                                        onSelectedRowsChange={handleRowChange}
                                         progressPending={loading}
                                         pagination
                                         paginationServer

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/custom.css'
+import '../../styles/custom.css'
 import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Outlet} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,9 +37,6 @@ function LayoutPage(props) {
             <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
                 <div className="sidenav-header">
                     <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-                    {/* <a className="navbar-brand m-0" href="https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-                        <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
-                    </a> */}
                     <Link className="navbar-brand m-0 new-da" to={'/'}>
                         <img src={`${process.env.PUBLIC_URL}/assets/img/final_logo.svg`} alt="" />
                         <span style={{ color: 'white' }}>Welcome </span><span className="ms-1 font-weight-bold text-white"> {username ? username : ''}</span>
@@ -270,6 +267,10 @@ function LayoutPage(props) {
                         </div>
                     </div>
                 </nav>
+
+                        <Outlet/>
+
+
                 <div className="container-fluid py-4">
                     {props.children}
                     {

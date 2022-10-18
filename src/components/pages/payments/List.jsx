@@ -105,7 +105,7 @@ function List() {
     const getPaymentsList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/payments?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            let res = await axios.get(`admin/payments_list?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             // console.log(res.data);
             setPaymentData(res.data.result.length ? res.data.result[0].data : [])
             setTotalRows(res.data.result.length ? res.data.result[0].count : 0);

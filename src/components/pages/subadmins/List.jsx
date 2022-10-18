@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
 import { Link, useLocation } from 'react-router-dom';
 import moment from 'moment'
+import { saveAs } from 'file-saver';
 
 function List() {
     const location = useLocation()
@@ -26,11 +27,14 @@ function List() {
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this subadmin?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [samplePdf, setSamplePdf] = useState('');
+
     const columns = [
         {
             name: 'Name',
             selector: row => row.user_data[0].name,
-            center: true, 
+            center: true,
             sortable: true,
         },
         {
@@ -125,6 +129,7 @@ function List() {
             setLoading(true);
             let res = await axios.get(`admin/subadmin_list?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             setSubadminData(res.data.result.data)
+            setSamplePdf(res.data.result.sample_pdf)
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
@@ -165,7 +170,102 @@ function List() {
             setSearchKeyword('')
         }
     }
+    const handleRowChange = ({ selectedRows }) => {
+        setSelectedRows(selectedRows)
+    }
+    const handleSelected = async (operationType) => {
+        try {
+            let selectedids = []
+            selectedRows.map((item) => {
+                return selectedids.push(item._id)
+            })
+            let res = await axios.post(`admin/subadmin_do_selected_opertion`, {
+                selectedUsers: selectedids,
+                actionType: operationType
+            })
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            setSelectedRows([])
+            setPageNumber(1)
+            getCategoryList()
+        } catch (errors) {
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getCategoryList()
+        }
+    }
+    const handleExcelImport = async (e) => {
+        try {
+            let formData = new FormData()
+            setLoading(true)
+            formData.append('excel_file', e.target.files[0])
+            let res = await axios.post(`admin/subadmin_upload_excel_users`, formData)
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            let f = document.getElementById('excel_file_uploader')
+            f.value = null
+            setPageNumber(1)
+            getCategoryList()
+        } catch (errors) {
+            if (errors.response.data.error) {
+                toast(errors.response.data.error.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'error'
+                });
+                setLoading(false)
+            } else {
+                let f = document.getElementById('excel_file_uploader')
+                f.value = null
+                toast(errors.response.data.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'error'
+                });
+                setPageNumber(1)
+                getCategoryList()
+            }
 
+
+        }
+    }
     useEffect(() => {
         getCategoryList()
         if (location.state) {
@@ -211,10 +311,29 @@ function List() {
                                             name='keyword' />
                                     </div>
                                 </div>
+                                <div className="input-group input-group-dynamic">
+                                    {
+                                        selectedRows.length ? (
+                                            <>
+                                                <button className='btn btn-danger' onClick={() => handleSelected('delete')}>({selectedRows.length})&nbsp;Delete Selected</button>
+                                                {/* &nbsp;<button className='btn btn-success' onClick={() => handleSelected('activate')}>({selectedRows.length})&nbsp;Activate Selected</button> */}
+                                                {/* &nbsp;<button className='btn btn-warning' onClick={() => handleSelected('deactivate')}>({selectedRows.length})&nbsp;Deactivate Selected</button> */}
+                                            </>
+                                        ) : ''
+                                    }
+                                    &nbsp;<button className='btn btn-info'>&nbsp;Upload Excel&nbsp;
+                                        <input type="file" id='excel_file_uploader' onChange={(e) => handleExcelImport(e)} />
+                                    </button>
+                                    &nbsp;
+                                    <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
+
+                                </div>
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
                                         data={subadminData}
+                                        selectableRows
+                                        onSelectedRowsChange={handleRowChange}
                                         progressPending={loading}
                                         pagination
                                         paginationServer
