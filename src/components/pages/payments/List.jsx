@@ -7,10 +7,12 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import moment from 'moment'
 import { saveAs } from "file-saver";
-import { Link } from 'react-router-dom';
+import { Link,useLocation } from 'react-router-dom';
 
 
 function List() {
+    const location = useLocation()
+
     const [paymentData, setPaymentData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
@@ -55,18 +57,29 @@ function List() {
         {
             name: 'Refund Status',
             selector: row => (
-                row.refund_status === '' ? 'PENDING' : row.refund_status.toUpperCase()
+                row.refund_status === '' ? row.refund_requested ? 'PENDING' : 'REFUND NOT RAISED' : row.refund_status.toUpperCase()
+            ),
+        },
+        {
+            name: 'Approved Status',
+            selector: row => (
+                row.payment_approved ?'APPROVED':'PENDING'
             ),
         },
         {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                row.refund_requested && row.refund_status === '' ? <div>
-                    <i title='Accept Refund' onClick={() => handleRefund(row._id, "accepted")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
-                    &nbsp;&nbsp;
-                    <i title='Reject Refund' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleRefund(row._id, "rejected")}></i>
-                </div> : ""
+                !row.payment_approved ?
+                    <Link to={`/payments/approve/${row._id}`}>
+                        <i title='Approve Payment' style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
+                    </Link>
+                    :
+                    row.refund_requested && row.refund_status === '' ? <div>
+                        <i title='Accept Refund' onClick={() => handleRefund(row._id, "accepted")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
+                        &nbsp;&nbsp;
+                        <i title='Reject Refund' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleRefund(row._id, "rejected")}></i>
+                    </div> : ""
 
             ),
             center: true
@@ -151,7 +164,21 @@ function List() {
 
     useEffect(() => {
         getPaymentsList()
-    }, [getPaymentsList, searchKeyWord, pageNumber, sortField, perPage])
+        if (location.state) {
+            let msg = location.state.message
+            window.history.replaceState({}, document.title)
+            toast(msg, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+        }
+    }, [getPaymentsList, searchKeyWord, pageNumber, sortField, perPage,location])
 
     return (
         <>

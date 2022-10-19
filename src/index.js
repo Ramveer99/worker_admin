@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom
 import axios from 'axios';
 import loadable from '@loadable/component';
 import { useNavigate } from 'react-router-dom';
-import LayoutPage from './components/pages/shared/Layout';
+// import LayoutPage from './components/pages/shared/Layout';
 
 const NotFound = loadable(() => import('./components/Notfound'))
 const Login = loadable(() => import('./components/auth/Login'))
@@ -67,6 +67,7 @@ const EditPage = loadable(() => import('./components/pages/static_pages/Edit'))
 const AppliedJobList = loadable(() => import('./components/pages/applied-jobs/List'))
 // payments import
 const PaymentsList = loadable(() => import('./components/pages/payments/List'))
+const ApprovePayment = loadable(() => import('./components/pages/payments/ApprovePayment'))
 
 // Subadmin import
 const SubadminAdd = loadable(() => import('./components/pages/subadmins/AddNew'))
@@ -218,6 +219,7 @@ root.render(
 
         {/* payments Start*/}
         <Route path="/payments" element={<PaymentsList />} />
+        <Route path="/payments/approve/:id" element={<ApprovePayment />} />
         {/* payments End*/}
       </Route>
       <Route path="*" element={<NotFound />} />
