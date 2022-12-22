@@ -35,7 +35,7 @@ function List() {
         },
         {
             name: 'Amount',
-            selector: row => '$' + row.amount.toFixed(2),
+            selector: row => 'R' + row.amount.toFixed(2),
             sortable: true,
         },
         {
