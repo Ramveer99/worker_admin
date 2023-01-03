@@ -23,6 +23,11 @@ const CategoriesList = loadable(() => import('./components/pages/categories/List
 const AddNewCategory = loadable(() => import('./components/pages/categories/AddNew'))
 const EditCategory = loadable(() => import('./components/pages/categories/Edit'))
 
+// Categories import
+const NationalityList = loadable(() => import('./components/pages/nationality/List'))
+const AddNewNationality = loadable(() => import('./components/pages/nationality/AddNew'))
+const EditNationality = loadable(() => import('./components/pages/nationality/Edit'))
+
 // Blogs import
 const BlogsList = loadable(() => import('./components/pages/blogs/List'))
 const AddNewBlog = loadable(() => import('./components/pages/blogs/AddNew'))
@@ -81,8 +86,8 @@ const CommunicationList = loadable(() => import('./components/pages/communicatio
 
 let navigate = null
 
-axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-// axios.defaults.baseURL = 'http://localhost:9600/';
+// axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
+axios.defaults.baseURL = 'http://localhost:9600/';
 // axios.defaults.baseURL = 'http://3.211.103.52/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
@@ -141,11 +146,19 @@ root.render(
         <Route path="/users/addnew" element={<AddNewUser />} />
         {/* Users ends */}
 
+
+        {/* nationality Start */}
+        <Route path="/nationality" element={<NationalityList />} />
+        <Route path="/nationality/addnew" element={<AddNewNationality />} />
+        <Route path="/nationality/edit/:id" element={<EditNationality />} />
+        
         {/* Categories Start */}
         <Route path="/categories" element={<CategoriesList />} />
         <Route path="/categories/addnew" element={<AddNewCategory />} />
         <Route path="/categories/edit/:id" element={<EditCategory />} />
         
+      
+
         {/* <Route path="/categories" element={<LayoutPage />} >
           <Route index element={<CategoriesList />} />
           <Route path="addnew" element={<AddNewCategory />} />
