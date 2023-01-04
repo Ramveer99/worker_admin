@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
 import { Link, useLocation } from 'react-router-dom';
 import { saveAs } from 'file-saver';
+import './style.css'
 
 function Users() {
     const location = useLocation()
@@ -373,6 +374,7 @@ function Users() {
                                         onChangeRowsPerPage={handlePerRowsChange}
                                         onChangePage={handlePageChange}
                                         sortServer
+                                        sortIcon={<i className='fa fa-arrow-down'></i>}
                                         onSort={handleSort}
                                     />
                                     {
