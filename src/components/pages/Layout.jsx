@@ -80,6 +80,22 @@ function LayoutPage(props) {
                                 <span className="nav-link-text ms-1">Country</span>
                             </Link>
                         </li>
+                        <li className="nav-item">
+                            <Link to='/city' className={`nav-link text-white ${location.pathname.includes('/city') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-globe"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">City</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to='/subarea' className={`nav-link text-white ${location.pathname.includes('/subarea') ? "active bg-gradient-primary" : ""}`}>
+                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    <i className="fa fa-globe"></i>
+                                </div>
+                                <span className="nav-link-text ms-1">SubArea</span>
+                            </Link>
+                        </li>
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.category_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
