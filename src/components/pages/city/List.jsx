@@ -25,7 +25,7 @@ function List() {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [idBeingDeleting, setIdBeingDeleting] = useState(null);
     const [samplePdf, setSamplePdf] = useState('');
-    const [userData, setUserData] = useState([]);
+    // const [userData, setUserData] = useState([]);
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this city?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
@@ -38,7 +38,11 @@ function List() {
         //     ),
         //     center: true
         // },
-
+        
+        {
+            name: 'Country',
+            selector: row => row.country_id.country_name,
+        },
         {
             name: 'city',
             selector: row => row.city_name,
@@ -127,7 +131,7 @@ function List() {
             let formData = new FormData()
             setLoading(true)
             formData.append('excel_file', e.target.files[0])
-            let res = await axios.post(`admin/upload_excel_countries`, formData)
+            let res = await axios.post(`admin/upload_excel_city`, formData)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,

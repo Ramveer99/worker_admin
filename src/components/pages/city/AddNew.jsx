@@ -1,4 +1,4 @@
-import React ,{ useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import LayoutPage from '../Layout';
 import axios from 'axios';
@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 function AddNew() {
-    
-    const [ countriesData , setCountriesData ] = useState()
+
+    const [countriesData, setCountriesData] = useState()
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     // const [initialValues, setInitialValues] = useState({ category_name: '', category_desc: '', categoryfile: '' })
     // const [initialValues, setInitialValues] = useState({ nationality_name: ''})
@@ -21,34 +21,17 @@ function AddNew() {
     // }
 
 
-    
-    const getCountriesList = async()=>{
-        let res= await axios.get('/admin/getcountries')
+
+    const getCountriesList = async () => {
+        let res = await axios.get('/admin/getcountries')
         console.log(res.data.countries);
         setCountriesData(res.data.countries)
     }
 
 
-    useEffect(()=>{
+    useEffect(() => {
         getCountriesList()
-    },[])
-
-
-
-    function Dropdown({arr}){
-        return(
-            <>
-            {
-                arr.map(item=>{
-                    return(
-                    <option key='item._id'>
-                        {item?.country_name}
-                    </option>)
-                })
-            }
-            </>
-        )
-    }
+    }, [])
 
 
 
@@ -62,7 +45,9 @@ function AddNew() {
         } else if (values.city_name.length > 50) {
             errors.city_name = 'City name max length is 50 characters';
         }
-
+        if (!values.country_id) {
+            errors.country_id = 'Please choose a country';
+        }
         // if (!values.categoryfile) {
         //     errors.categoryfile = 'Category image is required';
         // }
@@ -78,19 +63,13 @@ function AddNew() {
         return errors;
     };
     const formik = useFormik({
-        initialValues: { city_name: '', country_id:''},
+        initialValues: { city_name: '', country_id: '' },
         validate,
         onSubmit: async (values) => {
-            console.log(values);
-            // var formData = new FormData()
-            // formData.append("nationality_name",values?.nationality_name)
-            // formData.append("category_desc", values.category_desc)
-            // formData.append("categoryfile", values.categoryfile)
-            setDisabledSubmit(true)
+            console.log('formmmmmmmmmmmmmmmmmmmmmmmm', values);
             try {
-                // console.log(formData);
+                setDisabledSubmit(true)
                 let res = await axios.post(`admin/cityadd`, values)
-                // console.log(res);
                 navigate('/city', { state: { message: res.data.message } })
             } catch (errors) {
                 if (errors.response.data.error) {
@@ -116,7 +95,6 @@ function AddNew() {
                         type: 'error'
                     });
                 }
-
                 setDisabledSubmit(false)
             }
         },
@@ -150,37 +128,30 @@ function AddNew() {
                                                 value={formik.values.city_name || ''}
                                                 onChange={formik.handleChange}
                                             />
-                                            {/* <select>
-                                                <Dropdown arr={countriesData}/>
-                                            </select> */}
                                         </div>
                                         {formik.errors.city_name ? <div className='text-danger'>{formik.errors.city_name}</div> : null}
-                                        
-                                        {/* <div className="input-group input-group-outline mb-3">
-                                            <input
-                                                type="file"
-                                                id='categoryfile'
-                                                name='categoryfile'
+                                        <div className="input-group input-group-outline mb-3">
+                                            <select
+                                                type="text"
+                                                id='country_id'
+                                                name='country_id'
                                                 className="form-control"
-                                                placeholder='Category Image'
-                                                onChange={(event) => {
-                                                    formik.setFieldValue("categoryfile", event.target.files[0]);
-                                                }}
-                                            />
-                                        </div>
-                                        {formik.errors.categoryfile ? <div className='text-danger'>{formik.errors.categoryfile}</div> : null} */}
-                                        {/* <div className="input-group input-group-outline mb-3">
-                                            <textarea
-                                                className="form-control"
-                                                placeholder='Description'
-                                                id='category_desc'
-                                                name='category_desc'
-                                                value={formik.values.category_desc || ''}
+                                                autoComplete='off'
+                                                value={formik.values.country_id || ''}
                                                 onChange={formik.handleChange}
-                                            />
+                                            >
+                                                <option value="">--select--</option>
+                                                {
+                                                    countriesData && countriesData.map((item) => {
+                                                        return (
+                                                            <option key={item._id} value={item._id}>{item.country_name}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
-                                        {formik.errors.category_desc ? <div className='text-danger'>{formik.errors.category_desc}</div> : null} */}
-                                        
+                                        {formik.errors.country_id ? <div className='text-danger'>{formik.errors.country_id}</div> : null}
+
                                         <div className="text-center">
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
