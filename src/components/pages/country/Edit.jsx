@@ -9,25 +9,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
 LoadingOverlay.propTypes = undefined
 
-function EditNationality() {
+function EditCountry() {
     const { id } = useParams()
     const [disabledSubmit, setDisabledSubmit] = useState(false)
-    // const [nationalityData, setNationalityData] = useState([])
+    // const [countryData, setCountryData] = useState([])
     // const [redirecting, setRedirecting] = useState(false)
     const [loading, setLoading] = useState(false);
     // const [initialValues, setInitialValues] = useState({ id: '', nationality_name: '', category_desc: '', categoryfile: '' });
-    const [initialValues, setInitialValues] = useState({ id: '', nationality_name: '' });
+    const [initialValues, setInitialValues] = useState({ id: '', country_name: '' });
     const navigate = useNavigate()
 
-    const getNationalityDetail = useCallback(async () => {
+    const getCountryDetail = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/nationality?id=${id}`)
+            let res = await axios.get(`admin/country?id=${id}`)
             console.log(res);
-            // setNationalityData(res.data.result)
+            // setCountryData(res.data.result)
             // setInitialValues({ id: res.data.result._id, nationality_name: res.data.result.nationality_name, category_desc: res.data.result.category_desc })
             // setInitialValues({ id: res.data.result._id, nationality_name: res.data.result.nationality_name })
-            setInitialValues({ id: res.data.result._id, nationality_name: res.data.result.nationality_name })
+            setInitialValues({ id: res.data.result._id, country_name: res.data.result.country_name })
             // formik.initialValues.category_name = res.data.result.category_name
             setLoading(false);
         } catch (errors) {
@@ -47,12 +47,12 @@ function EditNationality() {
     const validate = values => {
         const errors = {};
 
-        if (!values.nationality_name) {
-            errors.nationality_name = 'Nationality name is required';
-        } else if (values.nationality_name.length < 3) {
-            errors.nationality_name = 'Nationality name min length is 3 characters';
-        } else if (values.nationality_name.length > 50) {
-            errors.nationality_name = 'Nationality name max length is 50 characters';
+        if (!values.country_name) {
+            errors.country_name = 'Country name is required';
+        } else if (values.country_name.length < 3) {
+            errors.country_name = 'Country name min length is 3 characters';
+        } else if (values.country_name.length > 50) {
+            errors.country_name = 'Country name max length is 50 characters';
         }
         // if (!values.category_desc) {
         //     errors.category_desc = 'Description is required';
@@ -78,9 +78,9 @@ function EditNationality() {
                 // formData.append("category_desc", values.category_desc)
                 // formData.append("categoryfile", values.categoryfile)
 
-                let res = await axios.post(`admin/nationalityupdate`, values)
+                let res = await axios.post(`admin/countryupdate`, values)
 
-                navigate('/nationality', { state: { message: res.data.message } })
+                navigate('/country', { state: { message: res.data.message } })
             } catch (errors) {
                 if (errors.response.data.error) {
                     toast(errors.response.data.error.message, {
@@ -111,12 +111,12 @@ function EditNationality() {
     });
 
     useEffect(() => {
-        getNationalityDetail()
-    }, [getNationalityDetail])
+        getCountryDetail()
+    }, [getCountryDetail])
     return (
         <>
             <Helmet>
-                <title>Edit Nationality</title>
+                <title>Edit Country</title>
             </Helmet>
 
             <LayoutPage>
@@ -130,7 +130,7 @@ function EditNationality() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit Nationality</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Edit Country</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
@@ -139,15 +139,15 @@ function EditNationality() {
                                             <div className="input-group input-group-outline mb-3">
                                                 <input
                                                     type="text"
-                                                    id='nationality_name'
-                                                    name='nationality_name'
+                                                    id='country_name'
+                                                    name='country_name'
                                                     className="form-control"
-                                                    placeholder='nationality Name'
-                                                    value={formik.values.nationality_name}
+                                                    placeholder='country Name'
+                                                    value={formik.values.country_name}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
-                                            {formik.errors.nationality_name ? <div className='text-danger'>{formik.errors.nationality_name}</div> : null}
+                                            {formik.errors.country_name ? <div className='text-danger'>{formik.errors.country_name}</div> : null}
                                             {/* <div className="input-group input-group-outline mb-3">
                                                 <input
                                                     type="file"
@@ -199,4 +199,4 @@ function EditNationality() {
     );
 }
 
-export default EditNationality;
+export default EditCountry;
