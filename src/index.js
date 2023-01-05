@@ -28,6 +28,12 @@ const NationalityList = loadable(() => import('./components/pages/nationality/Li
 const AddNewNationality = loadable(() => import('./components/pages/nationality/AddNew'))
 const EditNationality = loadable(() => import('./components/pages/nationality/Edit'))
 
+// Categories import
+const CountryList = loadable(() => import('./components/pages/country/List'))
+const AddNewCountry = loadable(() => import('./components/pages/country/AddNew'))
+const EditCountry = loadable(() => import('./components/pages/country/Edit'))
+
+
 // Blogs import
 const BlogsList = loadable(() => import('./components/pages/blogs/List'))
 const AddNewBlog = loadable(() => import('./components/pages/blogs/AddNew'))
@@ -86,8 +92,8 @@ const CommunicationList = loadable(() => import('./components/pages/communicatio
 
 let navigate = null
 
-// axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-axios.defaults.baseURL = 'http://localhost:9600/';
+axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
+// axios.defaults.baseURL = 'http://localhost:9600/';
 // axios.defaults.baseURL = 'http://3.211.103.52/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
@@ -151,6 +157,11 @@ root.render(
         <Route path="/nationality" element={<NationalityList />} />
         <Route path="/nationality/addnew" element={<AddNewNationality />} />
         <Route path="/nationality/edit/:id" element={<EditNationality />} />
+
+        {/* nationality Start */}
+        <Route path="/country" element={<CountryList />} />
+        <Route path="/country/addnew" element={<AddNewCountry />} />
+        <Route path="/country/edit/:id" element={<EditCountry />} />
         
         {/* Categories Start */}
         <Route path="/categories" element={<CategoriesList />} />
