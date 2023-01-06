@@ -42,9 +42,9 @@ const EditCity = loadable(() => import('./components/pages/city/Edit'))
 
 
 // SubArea import
-const SubAreaList = loadable(() => import('./components/pages/city/List'))
-const AddNewSubArea = loadable(() => import('./components/pages/city/AddNew'))
-const EditSubArea = loadable(() => import('./components/pages/city/Edit'))
+const SubAreaList = loadable(() => import('./components/pages/subarea/List'))
+const AddNewSubArea = loadable(() => import('./components/pages/subarea/AddNew'))
+const EditSubArea = loadable(() => import('./components/pages/subarea/Edit'))
 
 
 

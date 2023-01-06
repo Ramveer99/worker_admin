@@ -30,29 +30,15 @@ function List() {
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this city?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
-        // {
-        //     name: 'Category Image',
-        //     selector: row => row.category_image,
-        //     cell: row => (
-        //         <img className='img img-circle' height={50} width={50} src={row.category_image} alt={row.category_image} />
-        //     ),
-        //     center: true
-        // },
-        
         {
-            name: 'Country',
-            selector: row => row.country_id.country_name,
+            name: 'City',
+            selector: row => row.city_id.city_name,
         },
         {
-            name: 'city',
-            selector: row => row.city_name,
+            name: 'SubArea',
+            selector: row => row.subarea_name,
             sortable: true,
         },
-        // {
-        //     name: 'Description',
-        //     selector: row => row.category_desc,
-        //     sortable: true,
-        // },
         {
             name: 'Created Date',
             selector: row => row.created_at,
@@ -62,7 +48,7 @@ function List() {
             selector: row => row.id,
             cell: row => (
                 <div>
-                    <Link to={`/city/edit/${row._id}`}>
+                    <Link to={`/subarea/edit/${row._id}`}>
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
                     &nbsp;&nbsp;
@@ -91,7 +77,7 @@ function List() {
         setLoadingDeleteModelConfirmText('Deleting')
         //  activate deactivate user
         try {
-            let res = await axios.delete(`admin/citydel/${idBeingDeleting}`)
+            let res = await axios.delete(`admin/subareadel/${idBeingDeleting}`)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -105,7 +91,7 @@ function List() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getCityList()
+            getSubareaList()
         } catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
@@ -120,7 +106,7 @@ function List() {
             setShowDeleteConfirm(false)
             setLoadingDeleteModel(false)
             setPageNumber(1)
-            getCityList()
+            getSubareaList()
         }
     };
 
@@ -131,7 +117,7 @@ function List() {
             let formData = new FormData()
             setLoading(true)
             formData.append('excel_file', e.target.files[0])
-            let res = await axios.post(`admin/upload_excel_city`, formData)
+            let res = await axios.post(`admin/upload_excel_subarea`, formData)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -145,7 +131,7 @@ function List() {
             let f = document.getElementById('excel_file_uploader')
             f.value = null
             setPageNumber(1)
-            getCityList()
+            getSubareaList()
         } catch (errors) {
             if (errors.response.data.error) {
                 toast(errors.response.data.error.message, {
@@ -173,7 +159,7 @@ function List() {
                     type: 'error'
                 });
                 setPageNumber(1)
-                getCityList()
+                getSubareaList()
             }
         }
     }
@@ -190,7 +176,7 @@ function List() {
     }
 
 
-    // const getCityList = useCallback(async () => {
+    // const getSubareaList = useCallback(async () => {
     //     try {
     //         setLoading(true);
     //         let res = await axios.get(`admin/citylist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
@@ -226,17 +212,11 @@ function List() {
         setperPage(newPerPage)
     };
 
-
-
-
-
-
-
     // get smaple from server
-    const getCityList = useCallback(async () => {
+    const getSubareaList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/citylist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            let res = await axios.get(`admin/subarealist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             console.log(res);
             setCityData(res.data.result.citydata)
             setSamplePdf(res.data.result.sample_pdf)
@@ -270,7 +250,7 @@ function List() {
     }
 
     useEffect(() => {
-        getCityList()
+        getSubareaList()
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
@@ -285,11 +265,11 @@ function List() {
                 type: 'success'
             });
         }
-    }, [getCityList, searchKeyWord, pageNumber, sortField, perPage, location])
+    }, [getSubareaList, searchKeyWord, pageNumber, sortField, perPage, location])
     return (
         <>
             <Helmet>
-                <title>Cities Management</title>
+                <title>Subarea Management</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -298,8 +278,8 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Cities</h6>
-                                    <Link to="/city/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Subareas</h6>
+                                    <Link to="/subarea/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
