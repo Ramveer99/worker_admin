@@ -11,22 +11,19 @@ LoadingOverlay.propTypes = undefined
 
 function EditCity() {
     const { id } = useParams()
-    const [countriesData, setCountriesData] = useState()
+    const [citiesData, setCitiesData] = useState()
     const [disabledSubmit, setDisabledSubmit] = useState(false)
-    // const [cityData, setCityData] = useState([])
-    // const [redirecting, setRedirecting] = useState(false)
     const [loading, setLoading] = useState(false);
-    // const [initialValues, setInitialValues] = useState({ id: '', nationality_name: '', category_desc: '', categoryfile: '' });
-    const [initialValues, setInitialValues] = useState({ id: '', city_name: '', country_id: '' });
+    const [initialValues, setInitialValues] = useState({ id: '', subarea_name: '', city_id: '' });
     const navigate = useNavigate()
 
-    const getCityDetail = useCallback(async () => {
+    const getSubareaDetail = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/city?id=${id}`)
+            let res = await axios.get(`admin/subarea?id=${id}`)
             console.log(res);
-            setInitialValues({ id: res.data.result.city._id, city_name: res.data.result.city.city_name, country_id: res.data.result.city.country_id._id })
-            setCountriesData(res.data.result.countries)
+            setInitialValues({ id: res.data.result.city._id, subarea_name: res.data.result.city.subarea_name, city_id: res.data.result.city.city_id._id })
+            setCitiesData(res.data.result.cities)
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -45,15 +42,15 @@ function EditCity() {
     const validate = values => {
         const errors = {};
 
-        if (!values.city_name) {
-            errors.city_name = 'City name is required';
-        } else if (values.city_name.length < 3) {
-            errors.city_name = 'City name min length is 3 characters';
-        } else if (values.city_name.length > 50) {
-            errors.city_name = 'City name max length is 50 characters';
+        if (!values.subarea_name) {
+            errors.subarea_name = 'Subarea name is required';
+        } else if (values.subarea_name.length < 3) {
+            errors.subarea_name = 'Subarea name min length is 3 characters';
+        } else if (values.subarea_name.length > 50) {
+            errors.subarea_name = 'Subarea name max length is 50 characters';
         }
-        if (!values.country_id) {
-            errors.country_id = 'Please choose a country';
+        if (!values.city_id) {
+            errors.city_id = 'Please choose a city';
         }
         return errors;
     };
@@ -64,9 +61,8 @@ function EditCity() {
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                console.log('=============>',values);
-                let res = await axios.post(`admin/cityupdate`, values)
-                navigate('/city', { state: { message: res.data.message } })
+                let res = await axios.post(`admin/subareaupdate`, values)
+                navigate('/subarea', { state: { message: res.data.message } })
             } catch (errors) {
                 if (errors.response.data.error) {
                     toast(errors.response.data.error.message, {
@@ -97,12 +93,12 @@ function EditCity() {
     });
 
     useEffect(() => {
-        getCityDetail()
-    }, [getCityDetail])
+        getSubareaDetail()
+    }, [getSubareaDetail])
     return (
         <>
             <Helmet>
-                <title>Edit City</title>
+                <title>Edit Subarea</title>
             </Helmet>
 
             <LayoutPage>
@@ -116,7 +112,7 @@ function EditCity() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit City</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Edit Subarea</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
@@ -125,46 +121,44 @@ function EditCity() {
                                             <div className="input-group input-group-outline mb-3">
                                                 <input
                                                     type="text"
-                                                    id='city_name'
-                                                    name='city_name'
+                                                    id='subarea_name'
+                                                    name='subarea_name'
                                                     className="form-control"
-                                                    placeholder='city Name'
-                                                    value={formik.values.city_name}
+                                                    placeholder='Subarea Name'
+                                                    value={formik.values.subarea_name || ''}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
-                                            {formik.errors.city_name ? <div className='text-danger'>{formik.errors.city_name}</div> : null}
+                                            {formik.errors.subarea_name ? <div className='text-danger'>{formik.errors.subarea_name}</div> : null}
 
                                             <div className="input-group input-group-outline mb-3">
                                                 <select
                                                     type="text"
-                                                    id='country_id'
-                                                    name='country_id'
+                                                    id='city_id'
+                                                    name='city_id'
                                                     className="form-control"
                                                     autoComplete='off'
-                                                    value={formik.values.country_id || ''}
+                                                    value={formik.values.city_id || ''}
                                                     onChange={formik.handleChange}
                                                 >
                                                     <option value="">--select--</option>
                                                     {
-                                                        countriesData && countriesData.map((item) => {
+                                                        citiesData && citiesData.map((item) => {
                                                             return (
-                                                                <option key={item._id} value={item._id} >{item.country_name}</option>
+                                                                <option key={item._id} value={item._id} >{item.city_name}</option>
                                                             )
                                                         })
                                                     }
                                                 </select>
                                             </div>
-                                            {formik.errors.country_id ? <div className='text-danger'>{formik.errors.country_id}</div> : null}
+                                            {formik.errors.city_id ? <div className='text-danger'>{formik.errors.city_id}</div> : null}
                                             <div className="text-center">
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit
-                                                            //  || redirecting 
                                                             ? (
                                                                 <div>
                                                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                    {/* <span className="sr-only"></span>  {disabledSubmit && !redirecting ? 'Updating' : 'Redirecting'} */}
                                                                     <span className="sr-only"></span>  {disabledSubmit ? 'Updating' : 'Redirecting'}
                                                                 </div>
                                                             ) : 'Update'
