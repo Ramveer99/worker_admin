@@ -1,0 +1,9 @@
+Add a new window which can be accessed through sidebar
+Name it rating requests
+There will be requester's name, requested on , current Rating, documents , status , action
+status can range from 0 to , 
+	0 - Means no action taken
+	1 - Means request accepted , documents pending
+	2 - Means documents recieved , approval pending
+	3 - Means request has been declined
+	4 - Means document recieved and approved

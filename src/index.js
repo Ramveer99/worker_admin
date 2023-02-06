@@ -91,6 +91,16 @@ const EditPage = loadable(() => import('./components/pages/static_pages/Edit'))
 
 // applied jobs import
 const AppliedJobList = loadable(() => import('./components/pages/applied-jobs/List'))
+
+//Rating Request import
+const RatingRequest = loadable(()=> import('./components/pages/rating-requests/List'))
+
+const RatingResponse = loadable(()=> import('./components/pages/rating-response/List'))
+
+
+//Requested Documents import
+const RequestedDocuments = loadable(()=> import('./components/pages/requested-documents/List'))
+
 // payments import
 const PaymentsList = loadable(() => import('./components/pages/payments/List'))
 const ApprovePayment = loadable(() => import('./components/pages/payments/ApprovePayment'))
@@ -269,6 +279,19 @@ root.render(
         {/* applied jobs Start*/}
         <Route path="/applied-jobs" element={<AppliedJobList />} />
         {/* applied jobs End*/}
+
+
+        {/* rating requests Start */}
+        <Route path='/rating-request' element={<RatingRequest/>}/>
+        {/* rating requests End */}
+
+        {/* requested documents Start */}
+        <Route path='/documents' element={<RequestedDocuments/>}/>
+        {/* requested documents End */}
+
+        {/* rating response Start */}
+        <Route path='/respond-to-rating' element={<RatingResponse/>}/>
+        {/* rating response End */}
 
         {/* payments Start*/}
         <Route path="/payments" element={<PaymentsList />} />

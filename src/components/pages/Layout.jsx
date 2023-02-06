@@ -281,6 +281,22 @@ function LayoutPage(props) {
                             ) : ''
                         }
 
+                        
+                        {
+                            // (userData && userData.subadmin_data && userData.subadmin_data.applied_jobs_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/rating-request' className={`nav-link text-white ${location.pathname.includes('/rating-request') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-check"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Rating Requests</span>
+                                    </Link>
+                                </li>
+                            // ) : ''
+                        }
+
+                        
+
 
                     </ul>
                 </div>
