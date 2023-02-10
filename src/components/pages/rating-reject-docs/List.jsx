@@ -9,17 +9,20 @@ import { Button } from 'react-bootstrap';
 export default function List() {
     let location = useLocation()
     let navigate = useNavigate()
-    let rating = location?.state?.rating
+    let requestedBy = location?.state?.requested_by
     let requestId = location?.state?.request_id
+    let status = location?.state?.status
     let [responseMessage , setResponseMessage] = useState()
 
     async function SendResponse(){
 
         try{
-            let data =  await axios.post('/admin/send-des-message',
+            await axios.post('/admin/finalize-request',
             {
                 request_id:requestId,
-                message:responseMessage,
+                requested_by:requestedBy,
+                status:status,
+                rejection_reason:responseMessage,
             })
 
             navigate('/rating-request')
@@ -44,7 +47,7 @@ export default function List() {
   return (
     <>
             <Helmet>
-                <title>Respond To User</title>
+                <title>Reject Submitted Documents</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -53,13 +56,13 @@ export default function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Send Response To User</h6>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Send Reason To User</h6>
                                     {/* <Link to="/skills/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link> */}
                                 </div>
                             </div>
                             <form style={{margin:'20px 10px', display:'flex', flexDirection:'column'}}>
                               <label className='text-bold' style={{fontSize:'20px'}} for='response'>
-                                Respond with the documents required for upgrading rating from {rating} to {rating+1}
+                                Respond with the reason for rejecting Documents
                                 </label>
                               <textarea name='response' placeholder='Enter a response' aria-multiline style={{marginBottom:'20px'}}
                                 onChange={(e)=>{
@@ -69,7 +72,7 @@ export default function List() {
                               />
                               {/* <p className='text-muted'>Enter a response for the user</p> */}
                             <Button onClick={SendResponse}>
-                              Send Response
+                              Send Reason
                             </Button>
                             </form>
                         </div>

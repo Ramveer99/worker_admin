@@ -1,12 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useState }  from 'react';
 import { Helmet } from 'react-helmet';
 import LayoutPage from '../Layout';
-import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link , useNavigate} from 'react-router-dom';
-import moment from 'moment'
+import {useNavigate} from 'react-router-dom';
 
 
 
@@ -27,7 +25,7 @@ import moment from 'moment'
 
 
 function List() {
-    const [jobData, setJobData] = useState([])
+    const [ratingdata, setRatingData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [sortField, setSortField] = useState(null);
@@ -36,6 +34,7 @@ function List() {
     const [perPage, setperPage] = useState(10);
     const [searchKeyWord, setSearchKeyword] = useState(''); 
     const navigate = useNavigate()
+    const [hideOptions , setHideOptions] = useState(false)
 
 
     const rows = [
@@ -47,7 +46,7 @@ function List() {
     const columns = [
         {
             name: 'Requested By',
-            selector: row => row?.requested_by,
+            selector: row => row?.requested_by?.name,
             sortable: true,
         },
         // {
@@ -63,14 +62,14 @@ function List() {
         },
         {
             name: 'Current Rating',
-            selector: row => row?.current_rating,
+            selector: row => row?.requested_by?.rating,
             // selector: row => moment(row?.created_at).format('DD MMMM, YYYY'),
             sortable: true,
         },
         {
             name: 'Documents',
             cell : row => (
-                row?.documents?<Link to='/documents' style={{color:'blue'}}>Review Documents</Link>
+                (row?.status>=2)?<a href={row?.documents} rel='noreferrer' target='_blank' style={{color:'blue'}}>Review Documents</a>
                 :<span>Has not uploaded documents yet</span>
             ),
             // selector: row => (
@@ -122,7 +121,16 @@ function List() {
             cell : row => (
                 <>
                 {/* if the request has not been interacted with , show approve request button */}
-                {(row?.status <1)?(<i className='fa fa-check' style={{color:'green' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>)
+                {(row?.status <1)?(<i title='accept request' className='fa fa-check' 
+                 onClick={
+                    ()=>{
+                            navigate('/respond-to-rating',{state:{
+                                rating:row?.requested_by?.rating,
+                                request_id:row?._id
+                            }})
+                    }}
+    
+                style={{color:'green' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>)
                 : null    
             }
 
@@ -130,21 +138,35 @@ function List() {
                 else show the reject request icon
             */}
             {
-                (row?.status > 3) ? (<i className="fa fa-arrow-up"  style={{color:'blue' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>)
+                (row?.status != 2) ? (null)
                 : (
                     <>
-                    <i className="fa fa-user-slash"  style={{color:'red' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>
+                    <i title='approve document' hidden={hideOptions} className="fa fa-arrow-up" onClick={()=>{ApproveRatingDocuments(row)}}  style={{color:'blue' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>
+                    <i title='reject document'  hidden={hideOptions}
+                    onClick={
+                        ()=>{
+                                navigate('/reject-rating-docs',{state:{
+                                    requested_by:row?.requested_by?._id,
+                                    request_id:row?._id,
+                                    status:3
+                                }})
+                        }}
+                    className="fa fa-user-slash"  style={{color:'red' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>
                     </>
                 )
             }
+            {
+            }
+
+
             {/* this icon lets us send comments/feedback to the user requesting rating review */}
-            <i className="fa fa-comment" onClick={
+
+            {/* <i className="fa fa-comment" onClick={
                 ()=>{
-                    // navigates to the response page
                         navigate('/respond-to-rating')
                 }
 
-            }  style={{color:'green' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>
+            }  style={{color:'green' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/> */}
                 
                 </>
             ),
@@ -159,58 +181,6 @@ function List() {
             center: true
         },
     ];
-
-    const handleApprove = async (job_id, job_status) => {
-        try {
-            setLoading(true)
-            let res = await axios.post(`employer/approve_job`, { job_id: job_id, status: job_status, admin_approve: true })
-            toast(res.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'success'
-            });
-            getJobsList()
-        } catch (errors) {
-            toast(errors.response.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'error'
-            });
-            setLoading(false)
-        }
-    }
-    const getJobsList = useCallback(async () => {
-        try {
-            setLoading(true);
-            let res = await axios.get(`admin/applied_jobs?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            console.log(res.data);
-            setJobData(res.data.result.length ? res.data.result[0].data : [])
-            // setTotalRows(res.data.result.length ? res.data.result[0].count : 0);
-            setLoading(false);
-        } catch (errors) {
-            toast(errors.response.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'error'
-            });
-        }
-    }, [pageNumber, perPage, sortField, sortDirection, searchKeyWord])
-
 
     const handlePageChange = page => {
         setPageNumber(page)
@@ -236,9 +206,72 @@ function List() {
         }
     }
 
-    useEffect(() => {
-        getJobsList()
-    }, [getJobsList, searchKeyWord, pageNumber, sortField, perPage])
+
+    const ApproveRatingDocuments = async (row) =>{
+        try{
+            let data = await axios.post('/admin/finalize-request',{
+                request_id:row?._id,
+                requested_by:row?.requested_by?._id,
+                status:4,
+            })
+        
+            // console.log(data)
+
+            toast(data?.data?.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+
+            setHideOptions(true)
+
+
+        }
+        catch(errors){
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+        }
+    }
+
+
+    const GetRatingRequestList = async () =>{
+        setLoading(true)
+        try{
+            let data = await axios.get('/admin/rating-requests')
+            console.log(data.data.message)
+            setRatingData(data?.data?.message)
+        }
+        catch(errors){
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+        }
+        setLoading(false)
+    }
+
+    useEffect(()=>{
+        GetRatingRequestList()
+    },[])
 
     return (
         <>
@@ -271,7 +304,7 @@ function List() {
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
-                                        data={rows}
+                                        data={ratingdata}
                                         progressPending={loading}
                                         pagination
                                         paginationServer

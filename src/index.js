@@ -96,6 +96,7 @@ const AppliedJobList = loadable(() => import('./components/pages/applied-jobs/Li
 const RatingRequest = loadable(()=> import('./components/pages/rating-requests/List'))
 
 const RatingResponse = loadable(()=> import('./components/pages/rating-response/List'))
+const RejectRatingRequest = loadable(()=> import('./components/pages/rating-reject-docs/List'))
 
 
 //Requested Documents import
@@ -292,6 +293,10 @@ root.render(
         {/* rating response Start */}
         <Route path='/respond-to-rating' element={<RatingResponse/>}/>
         {/* rating response End */}
+        
+        {/* rating reject Start */}
+        <Route path='/reject-rating-docs' element={<RejectRatingRequest/>}/>
+        {/* rating reject End */}
 
         {/* payments Start*/}
         <Route path="/payments" element={<PaymentsList />} />
