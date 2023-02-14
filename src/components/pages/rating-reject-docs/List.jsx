@@ -13,10 +13,12 @@ export default function List() {
     let requestId = location?.state?.request_id
     let status = location?.state?.status
     let [responseMessage , setResponseMessage] = useState()
+    let [disableSubmit , setDisableSubmit] = useState(false)
 
     async function SendResponse(){
 
         try{
+            setDisableSubmit(true)
             await axios.post('/admin/finalize-request',
             {
                 request_id:requestId,
@@ -39,6 +41,7 @@ export default function List() {
                 progress: undefined,
                 type: 'error'
             });
+            setDisableSubmit(false)
         }
     }
 
@@ -71,7 +74,7 @@ export default function List() {
                                 }}
                               />
                               {/* <p className='text-muted'>Enter a response for the user</p> */}
-                            <Button onClick={SendResponse}>
+                            <Button onClick={SendResponse} disabled={disableSubmit}>
                               Send Reason
                             </Button>
                             </form>
