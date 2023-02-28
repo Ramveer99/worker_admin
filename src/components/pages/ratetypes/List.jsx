@@ -5,91 +5,72 @@ import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import moment from 'moment'
-import { saveAs } from "file-saver";
-import { Link,useLocation } from 'react-router-dom';
+import DeleteConfirmation from '../shared/DeleteConfirmation';
+import { Link, useLocation } from 'react-router-dom';
 
 
 function List() {
     const location = useLocation()
-
-    const [paymentData, setPaymentData] = useState([])
+    const [experienceData, setExperienceData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
+    const [loadingDeleteModel, setLoadingDeleteModel] = useState(false);
+    const [loadingDeleteModelConfirmText, setLoadingDeleteModelConfirmText] = useState('Deleting');
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState(null);
-    const [pageNumber, setPageNumber] = useState(0);
+    const [pageNumber, setPageNumber] = useState(1);
     const [perPage, setperPage] = useState(10);
     const [searchKeyWord, setSearchKeyword] = useState('');
-
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [idBeingDeleting, setIdBeingDeleting] = useState(null);
+    const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
+    const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this rate type?');
+    const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const columns = [
         {
-            name: 'Employer Name',
-            selector: row => row.user_data[0].name,
-            // sortable: true,
-        },
-        {
-            name: 'Invoic Number',
-            selector: row => row.invoice_number,
-            // sortable: true,
-        },
-        {
-            name: 'Amount',
-            selector: row =>  row.amount.toFixed(2),
+            name: 'Title',
+            selector: row => row.title,
             sortable: true,
         },
         {
-            name: 'Invoice Date',
-            selector: row => moment(row.created_at).format('DD MMMM, YYYY'),
-            sortable: true,
-        },
-        {
-            name: 'Invoice File',
-            selector: row => (
-                <Link to={''} onClick={() => {
-                    saveAs(
-                        row.invoice_file,
-                        "Invoice.pdf"
-                    );
-                }}><i className='fa fa-download'></i>&nbsp;Download Invoice</Link>
-            ),
-        },
-        {
-            name: 'Refund Status',
-            selector: row => (
-                row.refund_status === '' ? row.refund_requested ? 'PENDING' : 'REFUND NOT RAISED' : row.refund_status.toUpperCase()
-            ),
-        },
-        {
-            name: 'Approved Status',
-            selector: row => (
-                row.payment_approved ?'APPROVED':'PENDING'
-            ),
+            name: 'Created Date',
+            selector: row => row.created_at,
         },
         {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                !row.payment_approved ?
-                    <Link to={`/payments/approve/${row._id}`}>
-                        <i title='Approve Payment' style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
+                <div>
+                    <Link to={`/rate-types/edit/${row._id}`}>
+                        <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
-                    :
-                    row.refund_requested && row.refund_status === '' ? <div>
-                        <i title='Accept Refund' onClick={() => handleRefund(row._id, "accepted")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
-                        &nbsp;&nbsp;
-                        <i title='Reject Refund' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleRefund(row._id, "rejected")}></i>
-                    </div> : ""
-
+                    &nbsp;&nbsp;
+                    <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                </div>
             ),
             center: true
         },
     ];
 
-    const handleRefund = async (payment_id, payment_status) => {
+
+    // Handle the displaying of the modal based on type and id
+    const showDeleteModal = (type, id) => {
+        alert('show delete modal')
+    };
+
+    // Hide the modal
+    const hideConfirmationModal = () => {
+        setShowDeleteConfirm(false)
+        setIdBeingDeleting(null)
+    };
+
+    // Handle the actual deletion of the item
+    const submitDelete = async () => {
+        setLoadingDeleteModel(true)
+        setLoadingDeleteModelConfirmText('Deleting')
+        //  activate deactivate user
         try {
-            setLoading(true)
-            let res = await axios.post(`admin/refund-payment`, { payment_id: payment_id, status: payment_status })
+            let res = await axios.delete(`admin/ratetypedel/${idBeingDeleting}`)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -100,7 +81,10 @@ function List() {
                 progress: undefined,
                 type: 'success'
             });
-            getPaymentsList()
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getExperienceList()
         } catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
@@ -112,16 +96,29 @@ function List() {
                 progress: undefined,
                 type: 'error'
             });
-            setLoading(false)
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getExperienceList()
         }
+    };
+
+
+
+    const handleDeleteConfirm = (row, type) => {
+        setShowDeleteConfirm(true)
+        setDeleteModelTitle(`Confirm ${type}`)
+        setDeleteModelMessage(`Are you sure want to ${type} this rate type?`)
+        setDeleteModelActionType(type)
+        setIdBeingDeleting(row._id)
     }
-    const getPaymentsList = useCallback(async () => {
+
+    const getExperienceList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/payments_list?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            // console.log(res.data);
-            setPaymentData(res.data.result.length ? res.data.result[0].data : [])
-            setTotalRows(res.data.result.length ? res.data.result[0].count : 0);
+            let res = await axios.get(`admin/ratetypelist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            setExperienceData(res.data.result.ratetype_data)
+            setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -147,7 +144,7 @@ function List() {
         setSortDirection(sortDirection)
     };
     const handlePerRowsChange = async (newPerPage, page) => {
-        setPageNumber(0)
+        setPageNumber(page)
         setperPage(newPerPage)
     };
 
@@ -163,7 +160,7 @@ function List() {
     }
 
     useEffect(() => {
-        getPaymentsList()
+        getExperienceList()
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
@@ -178,12 +175,12 @@ function List() {
                 type: 'success'
             });
         }
-    }, [getPaymentsList, searchKeyWord, pageNumber, sortField, perPage,location])
+    }, [getExperienceList, searchKeyWord, pageNumber, sortField, perPage, location])
 
     return (
         <>
             <Helmet>
-                <title>Payments</title>
+                <title>Rate Type Management</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -192,8 +189,8 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Payments</h6>
-                                    {/* <Link to="/skills/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link> */}
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Rate Types</h6>
+                                    <Link to="/rate-types/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -211,7 +208,7 @@ function List() {
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
-                                        data={paymentData}
+                                        data={experienceData}
                                         progressPending={loading}
                                         pagination
                                         paginationServer
@@ -221,6 +218,21 @@ function List() {
                                         sortServer
                                         onSort={handleSort}
                                     />
+                                    {
+                                        showDeleteConfirm && (
+                                            <DeleteConfirmation
+                                                showModalHandler={showDeleteModal}
+                                                confirmModalHandler={submitDelete}
+                                                hideModalHandler={hideConfirmationModal}
+                                                loadingConfirmButton={loadingDeleteModel}
+                                                loadingConfirmButtonText={loadingDeleteModelConfirmText}
+                                                modelTitle={deleteModelTitle}
+                                                actionButtonClass={'primary'}
+                                                actionType={deleteModelActionType}
+                                                message={deleteModelMessage} />
+                                        )
+                                    }
+
                                 </div>
                             </div>
                         </div>

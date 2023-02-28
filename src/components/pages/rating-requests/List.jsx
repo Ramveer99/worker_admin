@@ -1,10 +1,10 @@
-import React, { useEffect, useState }  from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import LayoutPage from '../Layout';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -32,15 +32,15 @@ function List() {
     const [sortDirection, setSortDirection] = useState(null);
     const [pageNumber, setPageNumber] = useState(0);
     const [perPage, setperPage] = useState(10);
-    const [searchKeyWord, setSearchKeyword] = useState(''); 
+    const [searchKeyWord, setSearchKeyword] = useState('');
     const navigate = useNavigate()
-    const [hideOptions , setHideOptions] = useState(false)
+    const [hideOptions, setHideOptions] = useState(false)
 
 
     const rows = [
-        {requested_by:'Employee1',requested_on:'02/02/2022',current_rating:0,documents:false,status:0},
-        {requested_by:'Employee2',requested_on:'13/01/2021',current_rating:0,documents:false,status:1},
-        {requested_by:'Employee3',requested_on:'11/01/2020',current_rating:0,documents:true,status:4},
+        { requested_by: 'Employee1', requested_on: '02/02/2022', current_rating: 0, documents: false, status: 0 },
+        { requested_by: 'Employee2', requested_on: '13/01/2021', current_rating: 0, documents: false, status: 1 },
+        { requested_by: 'Employee3', requested_on: '11/01/2020', current_rating: 0, documents: true, status: 4 },
     ]
 
     const columns = [
@@ -68,9 +68,9 @@ function List() {
         },
         {
             name: 'Documents',
-            cell : row => (
-                (row?.status>=2)?<a href={row?.documents} rel='noreferrer' target='_blank' style={{color:'blue'}}>Review Documents</a>
-                :<span>Has not uploaded documents yet</span>
+            cell: row => (
+                (row?.status >= 2) ? <a href={row?.documents} rel='noreferrer' target='_blank' style={{ color: 'blue' }}>Review Documents</a>
+                    : <span>Has not uploaded documents yet</span>
             ),
             // selector: row => (
             //     row?.employer_approved !== "0" ? row?.employer_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
@@ -78,13 +78,13 @@ function List() {
         },
         {
             name: 'Status',
-            cell : row => (
-                row?.status == "0" ? <span> No action taken </span> 
-                : row?.status == "1" ? <span>Request Accepted, Documents pending</span>
-                : row?.status == "2" ? <span>Documents Recieved , Approval Pending</span>
-                : row?.status == "3" ? <span>Request Rejected</span>
-                : row?.status == "4" ? <span>Documents Recieved and Approved</span>
-                : <span>Unknown status</span>
+            cell: row => (
+                row?.status == "0" ? <span> No action taken </span>
+                    : row?.status == "1" ? <span>Request Accepted, Documents pending</span>
+                        : row?.status == "2" ? <span>Documents Recieved , Approval Pending</span>
+                            : row?.status == "3" ? <span>Request Rejected</span>
+                                : row?.status == "4" ? <span>Documents Recieved and Approved</span>
+                                    : <span>Unknown status</span>
             ),
             // selector: row => (
             //     row?.admin_approved !== "0" ? row?.admin_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
@@ -118,56 +118,60 @@ function List() {
         {
             name: 'Action',
             selector: row => row?.id,
-            cell : row => (
+            cell: row => (
                 <>
-                {/* if the request has not been interacted with , show approve request button */}
-                {(row?.status <1)?(<i title='accept request' className='fa fa-check' 
-                 onClick={
-                    ()=>{
-                            navigate('/respond-to-rating',{state:{
-                                rating:row?.requested_by?.rating,
-                                request_id:row?._id
-                            }})
-                    }}
-    
-                style={{color:'green' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>)
-                : null    
-            }
+                    {/* if the request has not been interacted with , show approve request button */}
+                    {(row?.status < 1) ? (<i title='accept request' className='fa fa-check'
+                        onClick={
+                            () => {
+                                navigate('/respond-to-rating', {
+                                    state: {
+                                        rating: row?.requested_by?.rating,
+                                        request_id: row?._id
+                                    }
+                                })
+                            }}
 
-            {/* if the requested documents have been apporoved recieved and approved , show below icon 
+                        style={{ color: 'green', marginLeft: '4px', fontSize: '15px', cursor: 'pointer' }} />)
+                        : null
+                    }
+
+                    {/* if the requested documents have been apporoved recieved and approved , show below icon 
                 else show the reject request icon
             */}
-            {
-                (row?.status != 2) ? (null)
-                : (
-                    <>
-                    <i title='approve document' hidden={hideOptions} className="fa fa-arrow-up" onClick={()=>{ApproveRatingDocuments(row)}}  style={{color:'blue' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>
-                    <i title='reject document'  hidden={hideOptions}
-                    onClick={
-                        ()=>{
-                                navigate('/reject-rating-docs',{state:{
-                                    requested_by:row?.requested_by?._id,
-                                    request_id:row?._id,
-                                    status:3
-                                }})
-                        }}
-                    className="fa fa-user-slash"  style={{color:'red' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/>
-                    </>
-                )
-            }
-            {
-            }
+                    {
+                        (row?.status != 2) ? (null)
+                            : (
+                                <>
+                                    <i title='approve document' hidden={hideOptions} className="fa fa-arrow-up" onClick={() => { ApproveRatingDocuments(row) }} style={{ color: 'blue', marginLeft: '4px', fontSize: '15px', cursor: 'pointer' }} />
+                                    <i title='reject document' hidden={hideOptions}
+                                        onClick={
+                                            () => {
+                                                navigate('/reject-rating-docs', {
+                                                    state: {
+                                                        requested_by: row?.requested_by?._id,
+                                                        request_id: row?._id,
+                                                        status: 3
+                                                    }
+                                                })
+                                            }}
+                                        className="fa fa-user-slash" style={{ color: 'red', marginLeft: '4px', fontSize: '15px', cursor: 'pointer' }} />
+                                </>
+                            )
+                    }
+                    {
+                    }
 
 
-            {/* this icon lets us send comments/feedback to the user requesting rating review */}
+                    {/* this icon lets us send comments/feedback to the user requesting rating review */}
 
-            {/* <i className="fa fa-comment" onClick={
+                    {/* <i className="fa fa-comment" onClick={
                 ()=>{
                         navigate('/respond-to-rating')
                 }
 
             }  style={{color:'green' , marginLeft:'4px', fontSize:'15px' ,  cursor: 'pointer' }}/> */}
-                
+
                 </>
             ),
             // cell: row => (
@@ -207,14 +211,14 @@ function List() {
     }
 
 
-    const ApproveRatingDocuments = async (row) =>{
-        try{
-            let data = await axios.post('/admin/finalize-request',{
-                request_id:row?._id,
-                requested_by:row?.requested_by?._id,
-                status:4,
+    const ApproveRatingDocuments = async (row) => {
+        try {
+            let data = await axios.post('/admin/finalize-request', {
+                request_id: row?._id,
+                requested_by: row?.requested_by?._id,
+                status: 4,
             })
-        
+
             // console.log(data)
 
             toast(data?.data?.message, {
@@ -232,7 +236,7 @@ function List() {
 
 
         }
-        catch(errors){
+        catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -247,14 +251,14 @@ function List() {
     }
 
 
-    const GetRatingRequestList = async () =>{
+    const GetRatingRequestList = async () => {
         setLoading(true)
-        try{
+        try {
             let data = await axios.get('/admin/rating-requests')
             console.log(data.data.message)
             setRatingData(data?.data?.message)
         }
-        catch(errors){
+        catch (errors) {
             toast(errors.response.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -269,9 +273,9 @@ function List() {
         setLoading(false)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         GetRatingRequestList()
-    },[])
+    }, [])
 
     return (
         <>

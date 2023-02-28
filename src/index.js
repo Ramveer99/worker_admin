@@ -59,6 +59,11 @@ const ExperienceList = loadable(() => import('./components/pages/experience/List
 const AddNewExperience = loadable(() => import('./components/pages/experience/AddNew'))
 const EditExperience = loadable(() => import('./components/pages/experience/Edit'))
 
+// Rate Type import
+const RateTypeList = loadable(() => import('./components/pages/ratetypes/List'))
+const AddNewRateType = loadable(() => import('./components/pages/ratetypes/AddNew'))
+const EditRateType = loadable(() => import('./components/pages/ratetypes/Edit'))
+
 // Responsibilities import
 const ResponsibilitiesList = loadable(() => import('./components/pages/responsibilities/List'))
 const AddNewResponsibility = loadable(() => import('./components/pages/responsibilities/AddNew'))
@@ -120,7 +125,6 @@ let navigate = null
 
 axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
 // axios.defaults.baseURL = 'http://localhost:9600/';
-// axios.defaults.baseURL = 'http://3.211.103.52/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
   let bearertoken = localStorage.getItem('transact_auth_back')
@@ -238,6 +242,12 @@ root.render(
         <Route path="/experience" element={<ExperienceList />} />
         <Route path="/experience/addnew" element={<AddNewExperience />} />
         <Route path="/experience/edit/:id" element={<EditExperience />} />
+        {/* Experience End */}
+        
+        {/* Experience Start */}
+        <Route path="/rate-types" element={<RateTypeList />} />
+        <Route path="/rate-types/addnew" element={<AddNewRateType />} />
+        <Route path="/rate-types/edit/:id" element={<EditRateType />} />
         {/* Experience End */}
 
         {/* Responsibilities Start */}

@@ -134,6 +134,18 @@ function LayoutPage(props) {
                                 </li>
                             ) : ''
                         }
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.rate_type_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/rate-types' className={`nav-link text-white ${location.pathname.includes('/rate-types') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-dollar"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Rate Type Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
 
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.experience_access) || (userData && !userData.subadmin_data) ? (
