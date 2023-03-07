@@ -17,33 +17,26 @@ LoadingOverlay.propTypes = undefined
 function AddNew() {
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [usersList, setUsersList] = useState([{ label: "Select All", value: "all" }]);
-    const [selectedUsers, setSelectedUsers] = useState([]);
-
+    // const [usersList, setUsersList] = useState([{ label: "Select All", value: "all" }]);
+    const [skillsList, setSkillsList] = useState([]);
+    // const [selectedUsers, setSelectedUsers] = useState([]);
     const navigate = useNavigate()
-
     const validationSchema = Yup.object({
-        emails: Yup.string().required("Please choose users"),
+        skill: Yup.string().required("Please choose a skill"),
         content: Yup.string().required("Content is required").min(10, 'Content must be 10 characters long').max(2000, 'Content must not exceed 2000 characters'),
 
     })
     const formik = useFormik({
         initialValues: {
-            emails: '',
+            skill: '',
             content: ''
         },
         validationSchema,
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                let usersString = ''
-                selectedUsers.map((item) => {
-                    return usersString += ',' + item.label
-                })
-                let res = await axios.post(`admin/addCommunication`, {
-                    emails: usersString.replace(/^,|,$/g,''),
-                    description: values.content
-                })
+                console.log(values);
+                let res = await axios.post(`admin/addCommunication`, values)
                 navigate('/communication', { state: { message: res.data.message } })
             } catch (errors) {
                 toast(errors.response.data.message, {
@@ -64,12 +57,8 @@ function AddNew() {
     const getAllUsers = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/getAllUser`)
-            let usersArr = [{ label: "Select All", value: "all" }]
-            res.data.result.map((item) => {
-                return usersArr.push({ label: item.email, value: item._id })
-            })
-            setUsersList(usersArr)
+            let res = await axios.get(`admin/getAllSkills`)
+            setSkillsList(res.data.result)
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -111,7 +100,7 @@ function AddNew() {
                                     <div className="p-4">
                                         <form onSubmit={formik.handleSubmit}>
                                             <div id='select_holder' className="input-group input-group-outline mb-3">
-                                                <Select
+                                                {/* <Select
                                                     name="Select Users"
                                                     options={usersList}
                                                     
@@ -131,10 +120,21 @@ function AddNew() {
                                                         }
                                                         // console.log(sall);
                                                     }}
-                                                />
+                                                /> */}
+
+                                                <select value={formik.skill} className="form-control" name='skill' onChange={formik.handleChange}>
+                                                    <option value={''}>--choose skill</option>
+                                                    {
+                                                        skillsList && skillsList.map((item, indx) => {
+                                                            return (
+                                                                <option key={indx} value={item._id}>{item.title}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
 
                                             </div>
-                                            {formik.errors.emails ? <div className='text-danger'>{formik.errors.emails}</div> : null}
+                                            {formik.errors.skill ? <div className='text-danger'>{formik.errors.skill}</div> : null}
 
                                             <div className="input-group input-group-outline mb-3">
                                                 <textarea
@@ -147,7 +147,7 @@ function AddNew() {
                                                     onChange={formik.handleChange}
                                                 ></textarea>
 
-                                                {formik.errors.content ? <div style={{marginTop:'5px'}} className='text-danger'>{formik.errors.content}</div> : null}
+                                                {formik.errors.content ? <div style={{ marginTop: '5px' }} className='text-danger'>{formik.errors.content}</div> : null}
                                             </div>
 
                                             <div className="text-center">
