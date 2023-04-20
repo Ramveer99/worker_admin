@@ -108,6 +108,18 @@ function LayoutPage(props) {
                                 </li>
                             ) : ''
                         }
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.advertise_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/advertise' className={`nav-link text-white ${location.pathname.includes('/advertise') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="fas fa-ad"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Advertise</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
 
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.subadmin_access) || (userData && !userData.subadmin_data) ? (
@@ -130,6 +142,18 @@ function LayoutPage(props) {
                                             <i className="fa fa-users"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Users Management</span>
+                                    </Link>
+                                </li>
+                            ) : ''
+                        }
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.custom_messages) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <Link to='/custom-messages' className={`nav-link text-white ${location.pathname.includes('/custom-messages') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="fas fa-envelope-open-text"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Custom Messages</span>
                                     </Link>
                                 </li>
                             ) : ''

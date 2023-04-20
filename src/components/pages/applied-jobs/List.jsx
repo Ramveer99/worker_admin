@@ -1,23 +1,40 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import LayoutPage from '../Layout';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import moment from 'moment'
-
+import { Modal, Button } from "react-bootstrap";
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
 
 function List() {
     const [jobData, setJobData] = useState([])
     const [loading, setLoading] = useState(false);
+    const [loadingCommentModel, setLoadingCommentModel] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState(null);
     const [pageNumber, setPageNumber] = useState(0);
     const [perPage, setperPage] = useState(10);
     const [searchKeyWord, setSearchKeyword] = useState('');
+    const [showCommentModal, setShowCommentModal] = useState(false);
+    const [jobIdBeingRejected, setJobIdBeingRejected] = useState(null);
+    const rejectJobForm = useRef();
+    // Hide the modal
+    const hideCommentModal = () => {
+        setShowCommentModal(false)
+        setJobIdBeingRejected(null)
+    };
+
+    // Handle the actual deletion of the item
+    const submitReject = async () => {
+        rejectJobForm.current.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true })
+          );
+    };
 
     const columns = [
         {
@@ -81,45 +98,92 @@ function List() {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> :row.employer_approved === "Yes"? <div>
+                row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> : row.employer_approved === "Yes" ? <div>
                     <i title='Approve Application' onClick={() => handleApprove(row._id, "Yes")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
                     &nbsp;&nbsp;
                     <i title='Reject Application' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleApprove(row._id, "No")}></i>
-                </div>:"" : ""
+                </div> : "" : ""
 
             ),
             center: true
         },
     ];
 
+    const formik = useFormik({
+        initialValues: {
+            comment: ''
+        },
+        validationSchema: Yup.object({
+            comment: Yup.string().required("Comment is required").min(10, 'Comment must be 10 characters long').max(2000, 'Comment must not exceed 2000 characters'),
+
+        }),
+
+        onSubmit: async (values, { resetForm }) => {
+            try {
+                setLoadingCommentModel(true)
+                let res = await axios.post(`employer/approve_job`, { job_id: jobIdBeingRejected, comment: values.comment, status: 'No', admin_approve: true })
+                toast(res.data.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'success'
+                });
+                setShowCommentModal(false)
+                resetForm();
+                setPageNumber(1)
+                getJobsList()
+            } catch (errors) {
+                toast(errors.response.data.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'error'
+                });
+                resetForm();
+                setPageNumber(1)
+                setLoadingCommentModel(false)
+                setShowCommentModal(false)
+            }
+        },
+    });
     const handleApprove = async (job_id, job_status) => {
-        try {
-            setLoading(true)
-            let res = await axios.post(`employer/approve_job`, { job_id: job_id, status: job_status, admin_approve: true })
-            toast(res.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'success'
-            });
-            getJobsList()
-        } catch (errors) {
-            toast(errors.response.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'error'
-            });
-            setLoading(false)
-        }
+        setShowCommentModal(true)
+        setJobIdBeingRejected(job_id)
+        // try {
+        //     setLoading(true)
+        //     let res = await axios.post(`employer/approve_job`, { job_id: job_id, status: job_status, admin_approve: true })
+        //     toast(res.data.message, {
+        //         position: "top-right",
+        //         autoClose: 2000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         type: 'success'
+        //     });
+        //     getJobsList()
+        // } catch (errors) {
+        //     toast(errors.response.data.message, {
+        //         position: "top-right",
+        //         autoClose: 2000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         type: 'error'
+        //     });
+        //     setLoading(false)
+        // }
     }
     const getJobsList = useCallback(async () => {
         try {
@@ -213,6 +277,49 @@ function List() {
                                         sortServer
                                         onSort={handleSort}
                                     />
+                                    <Modal show={showCommentModal} onHide={hideCommentModal}>
+                                        <Modal.Header closeButton style={{ borderBottom: 'unset' }}>
+                                            <Modal.Title>Comment</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <form ref={rejectJobForm} onSubmit={formik.handleSubmit}>
+                                                <div className="input-group input-group-outline mb-3">
+                                                    <textarea
+                                                        rows={5}
+                                                        type="text"
+                                                        id='comment'
+                                                        name='comment'
+                                                        className="form-control"
+                                                        placeholder='Comment'
+                                                        value={formik.values.comment || ''}
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                </div>
+                                                {formik.errors.comment ? <div className='text-danger'>{formik.errors.comment}</div> : null}
+                                            </form>
+                                        </Modal.Body>
+                                        <Modal.Footer style={{ borderTop: 'unset' }}>
+                                            <Button variant="success" onClick={hideCommentModal}>
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                disabled={loadingCommentModel}
+                                                variant={'primary'}
+                                                onClick={submitReject}
+                                            >
+                                                {loadingCommentModel ? (
+                                                    <>
+                                                        <span
+                                                            className="spinner-border spinner-border-sm"
+                                                            role="status"
+                                                            aria-hidden="true"
+                                                        ></span>
+                                                        <span className="sr-only"></span> {'Rejecting...'}
+                                                    </>
+                                                ) : 'Reject'}
+                                            </Button>
+                                        </Modal.Footer>
+                                    </Modal>
                                 </div>
                             </div>
                         </div>

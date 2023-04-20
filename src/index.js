@@ -23,6 +23,11 @@ const CategoriesList = loadable(() => import('./components/pages/categories/List
 const AddNewCategory = loadable(() => import('./components/pages/categories/AddNew'))
 const EditCategory = loadable(() => import('./components/pages/categories/Edit'))
 
+// Advertise import
+const AdvertiseList = loadable(() => import('./components/pages/advertise/List'))
+const AddNewAdvertise = loadable(() => import('./components/pages/advertise/AddNew'))
+const EditAdvertise = loadable(() => import('./components/pages/advertise/Edit'))
+
 // Categories import
 const NationalityList = loadable(() => import('./components/pages/nationality/List'))
 const AddNewNationality = loadable(() => import('./components/pages/nationality/AddNew'))
@@ -98,14 +103,14 @@ const EditPage = loadable(() => import('./components/pages/static_pages/Edit'))
 const AppliedJobList = loadable(() => import('./components/pages/applied-jobs/List'))
 
 //Rating Request import
-const RatingRequest = loadable(()=> import('./components/pages/rating-requests/List'))
+const RatingRequest = loadable(() => import('./components/pages/rating-requests/List'))
 
-const RatingResponse = loadable(()=> import('./components/pages/rating-response/List'))
-const RejectRatingRequest = loadable(()=> import('./components/pages/rating-reject-docs/List'))
+const RatingResponse = loadable(() => import('./components/pages/rating-response/List'))
+const RejectRatingRequest = loadable(() => import('./components/pages/rating-reject-docs/List'))
 
 
 //Requested Documents import
-const RequestedDocuments = loadable(()=> import('./components/pages/requested-documents/List'))
+const RequestedDocuments = loadable(() => import('./components/pages/requested-documents/List'))
 
 // payments import
 const PaymentsList = loadable(() => import('./components/pages/payments/List'))
@@ -121,10 +126,13 @@ const SendNotification = loadable(() => import('./components/pages/communication
 const CommunicationList = loadable(() => import('./components/pages/communication/List'))
 // const SubadminEdit = loadable(() => import('./components/pages/subadmins/Edit'))
 
+//  custom messsage imports
+const CustomMessages = loadable(() => import('./components/pages/custom-messages/AddNew'))
+
 let navigate = null
 
-// axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-axios.defaults.baseURL = 'http://localhost:9600/';
+axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
+// axios.defaults.baseURL = 'http://localhost:9600/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
   let bearertoken = localStorage.getItem('transact_auth_back')
@@ -193,32 +201,31 @@ root.render(
         <Route path="/country/addnew" element={<AddNewCountry />} />
         <Route path="/country/edit/:id" element={<EditCountry />} />
 
-        
+
         {/* city Start */}
         <Route path="/city" element={<CityList />} />
         <Route path="/city/addnew" element={<AddNewCity />} />
         <Route path="/city/edit/:id" element={<EditCity />} />
 
-        
+
         {/* city Start */}
         <Route path="/subarea" element={<SubAreaList />} />
         <Route path="/subarea/addnew" element={<AddNewSubArea />} />
         <Route path="/subarea/edit/:id" element={<EditSubArea />} />
-        
-        
+
+
         {/* Categories Start */}
         <Route path="/categories" element={<CategoriesList />} />
         <Route path="/categories/addnew" element={<AddNewCategory />} />
         <Route path="/categories/edit/:id" element={<EditCategory />} />
-        
-      
 
-        {/* <Route path="/categories" element={<LayoutPage />} >
-          <Route index element={<CategoriesList />} />
-          <Route path="addnew" element={<AddNewCategory />} />
-          <Route path="edit/:id" element={<EditCategory />} />
-        </Route> */}
-        {/* Categories End */}
+
+        {/* Advertisement Start */}
+        <Route path="/advertise" element={<AdvertiseList />} />
+        <Route path="/advertise/addnew" element={<AddNewAdvertise />} />
+        <Route path="/advertise/edit/:id" element={<EditAdvertise />} />
+        {/* Advertisement End */}
+
 
         {/* Subadmin Start */}
         <Route path="/subadmin" element={<SubadminList />} />
@@ -244,6 +251,10 @@ root.render(
         <Route path="/experience/edit/:id" element={<EditExperience />} />
         {/* Experience End */}
         
+        {/* Custom Messages Start */}
+        <Route path="/custom-messages" element={<CustomMessages />} />
+        {/*  Custom Messages End */}
+
         {/* Experience Start */}
         <Route path="/rate-types" element={<RateTypeList />} />
         <Route path="/rate-types/addnew" element={<AddNewRateType />} />
@@ -293,19 +304,19 @@ root.render(
 
 
         {/* rating requests Start */}
-        <Route path='/rating-request' element={<RatingRequest/>}/>
+        <Route path='/rating-request' element={<RatingRequest />} />
         {/* rating requests End */}
 
         {/* requested documents Start */}
-        <Route path='/documents' element={<RequestedDocuments/>}/>
+        <Route path='/documents' element={<RequestedDocuments />} />
         {/* requested documents End */}
 
         {/* rating response Start */}
-        <Route path='/respond-to-rating' element={<RatingResponse/>}/>
+        <Route path='/respond-to-rating' element={<RatingResponse />} />
         {/* rating response End */}
-        
+
         {/* rating reject Start */}
-        <Route path='/reject-rating-docs' element={<RejectRatingRequest/>}/>
+        <Route path='/reject-rating-docs' element={<RejectRatingRequest />} />
         {/* rating reject End */}
 
         {/* payments Start*/}
