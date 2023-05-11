@@ -45,7 +45,7 @@ function List() {
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
                     &nbsp;&nbsp;
-                    <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                    {/* <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i> */}
                 </div>
             ),
             center: true
@@ -190,7 +190,7 @@ function List() {
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                                     <h6 className="text-white text-capitalize ps-3 custom-card-heading">Content Pages</h6>
-                                    <Link to="/content-pages/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
+                                    {/* <Link to="/content-pages/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link> */}
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">

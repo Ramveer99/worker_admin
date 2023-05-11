@@ -56,6 +56,16 @@ function Users() {
             )
         },
         {
+            name: 'Paid User',
+            selector: row => row.paid_user,
+            sortable: true,
+            cell: row => (
+                row.paid_user ?
+                    <span className='badge badge-sm bg-gradient-success'>Yes</span> :
+                    <span className='badge badge-sm bg-gradient-secondary'>No</span>
+            )
+        },
+        {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
@@ -64,13 +74,32 @@ function Users() {
                         <Link to={`/users/edit/${row._id}`}><i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i></Link>
                         &nbsp;&nbsp;<i title='Deactivate' style={{ cursor: 'pointer' }} className='fa fa-power-off text-danger' onClick={() => handleDeleteConfirm(row, 'Deactivate')}></i>
                         &nbsp;&nbsp;<i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                        {
+                            row.paid_user ?
+                                <>
+                                    <i title='Mark Unpaid' style={{ cursor: 'pointer' }} className='fas fa-file-invoice-dollar text-danger' onClick={() => handlePaidUnpaid(row)}></i>
+                                </> :
+                                <>
+                                    <i title='Mark Paid' style={{ cursor: 'pointer' }} className='fas fa-money-bill text-success' onClick={() => handlePaidUnpaid(row)}></i>
+                                </>
+                        }
                     </>
                     :
                     <>
-                     <Link to={`/users/edit/${row._id}`}><i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i></Link>
+                        <Link to={`/users/edit/${row._id}`}><i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i></Link>
                         &nbsp;&nbsp;<i title='Activate' style={{ cursor: 'pointer' }} className='fa fa-power-off text-success' onClick={() => handleDeleteConfirm(row, 'Activate')}></i>
                         &nbsp;&nbsp;<i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
+                        {
+                            row.paid_user ?
+                                <>
+                                    <i title='Mark Unpaid' style={{ cursor: 'pointer' }} className='fas fa-file-invoice-dollar text-danger' onClick={() => handlePaidUnpaid(row)}></i>
+                                </> :
+                                <>
+                                    <i title='Mark Paid' style={{ cursor: 'pointer' }} className='fas fa-money-bill text-success' onClick={() => handlePaidUnpaid(row)}></i>
+                                </>
+                        }
                     </>
+
             ),
             center: true
         },
@@ -82,6 +111,41 @@ function Users() {
         alert('show delete modal')
     };
 
+    const handlePaidUnpaid = async (user) => {
+        console.log(user);
+        try {
+            setLoading(true)
+            let res = await axios.post(`admin/markpaid`, {
+                user_id: user._id,
+                paid: !user.paid_user,
+            })
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            setPageNumber(1)
+            getUsersList()
+        } catch (errors) {
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+            setPageNumber(1)
+            getUsersList()
+        }
+    }
     // Hide the modal
     const hideConfirmationModal = () => {
         setShowDeleteConfirm(false)
@@ -357,7 +421,7 @@ function Users() {
                                             <input type="file" id='excel_file_uploader' onChange={(e) => handleExcelImport(e)} />
                                         </button>
                                         &nbsp;
-                                    <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
+                                        <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
                                     </div>
                                     {/* </form> */}
                                 </div>

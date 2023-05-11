@@ -55,15 +55,15 @@ function Edit() {
 
     const validationSchema = Yup.object({
         page_content: Yup.string().required("Page content is required").min(50, 'Page content must be 50 characters long').max(2000, 'Page content must not exceed 2000 characters'),
-        page_title: Yup.string().required("Page title is required").min(3, 'Page title must be 3 characters long').max(50, 'Page title must not exceed 50 characters'),
+        page_title: Yup.string().required("Page title is required").min(3, 'Page title must be 3 characters long').max(5000, 'Page title must not exceed 5000 characters'),
     })
 
-   
+
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        validateOnBlur:false,
-        validateOnChange:false,
+        validateOnBlur: false,
+        validateOnChange: false,
         validationSchema,
         onSubmit: async (values) => {
             setDisabledSubmit(true)
@@ -114,6 +114,7 @@ function Edit() {
                                         <form onSubmit={formik.handleSubmit}>
                                             <div className="input-group input-group-outline mb-3">
                                                 <input
+                                                    disabled
                                                     type="text"
                                                     id='page_title'
                                                     name='page_title'
@@ -124,7 +125,7 @@ function Edit() {
                                                 />
                                             </div>
                                             {formik.errors.page_title ? <div className='text-danger'>{formik.errors.page_title}</div> : null}
-                                           
+
                                             <div className="input-group input-group-outline mb-3">
                                                 <CKEditor
                                                     editor={ClassicEditor}
