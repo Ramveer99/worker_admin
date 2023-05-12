@@ -69,7 +69,13 @@ function List() {
         {
             name: 'Documents',
             cell: row => (
-                (row?.status >= 2) ? <a href={row?.documents} rel='noreferrer' target='_blank' style={{ color: 'blue' }}>Review Documents</a>
+                (row?.status >= 2) ? 
+                row.documents && row.documents.map((item)=>{
+                    // console.log('@@@@@',item);
+                return <a href={item}  rel='noreferrer' target='_blank' style={{ color: 'blue' }}>Review Documents</a>
+                })
+                
+
                     : <span>Has not uploaded documents yet</span>
             ),
             // selector: row => (
