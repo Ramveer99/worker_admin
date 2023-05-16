@@ -33,7 +33,7 @@ function List() {
     const submitReject = async () => {
         rejectJobForm.current.dispatchEvent(
             new Event("submit", { cancelable: true, bubbles: true })
-          );
+        );
     };
 
     const columns = [
@@ -155,35 +155,38 @@ function List() {
         },
     });
     const handleApprove = async (job_id, job_status) => {
-        setShowCommentModal(true)
-        setJobIdBeingRejected(job_id)
-        // try {
-        //     setLoading(true)
-        //     let res = await axios.post(`employer/approve_job`, { job_id: job_id, status: job_status, admin_approve: true })
-        //     toast(res.data.message, {
-        //         position: "top-right",
-        //         autoClose: 2000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //         type: 'success'
-        //     });
-        //     getJobsList()
-        // } catch (errors) {
-        //     toast(errors.response.data.message, {
-        //         position: "top-right",
-        //         autoClose: 2000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //         type: 'error'
-        //     });
-        //     setLoading(false)
-        // }
+        if (job_status == "Yes") {
+            try {
+                setLoading(true)
+                let res = await axios.post(`employer/approve_job`, { job_id: job_id, status: job_status, admin_approve: true })
+                toast(res.data.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'success'
+                });
+                getJobsList()
+            } catch (errors) {
+                toast(errors.response.data.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    type: 'error'
+                });
+                setLoading(false)
+            }
+        } else {
+            setShowCommentModal(true)
+            setJobIdBeingRejected(job_id)
+        }
     }
     const getJobsList = useCallback(async () => {
         try {
