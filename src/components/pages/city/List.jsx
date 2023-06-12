@@ -44,7 +44,7 @@ function List() {
             selector: row => row.country_id.country_name,
         },
         {
-            name: 'city',
+            name: 'Province',
             selector: row => row.city_name,
             sortable: true,
         },
@@ -298,7 +298,7 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Cities</h6>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Provinces</h6>
                                     <Link to="/city/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>

@@ -132,7 +132,7 @@ const CustomMessages = loadable(() => import('./components/pages/custom-messages
 let navigate = null
 
 axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-// axios.defaults.baseURL = 'http://172.16.100.130:9600/';
+// axios.defaults.baseURL = 'http://localhost:9700/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
   let bearertoken = localStorage.getItem('transact_auth_back')
@@ -250,7 +250,7 @@ root.render(
         <Route path="/experience/addnew" element={<AddNewExperience />} />
         <Route path="/experience/edit/:id" element={<EditExperience />} />
         {/* Experience End */}
-        
+
         {/* Custom Messages Start */}
         <Route path="/custom-messages" element={<CustomMessages />} />
         {/*  Custom Messages End */}

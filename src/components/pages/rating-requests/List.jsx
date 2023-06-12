@@ -90,6 +90,7 @@ function List() {
                         : row?.status == "2" ? <span>Documents Recieved , Approval Pending</span>
                             : row?.status == "3" ? <span>Request Rejected</span>
                                 : row?.status == "4" ? <span>Documents Recieved and Approved</span>
+                                : row?.status == "5" ? <span>Request Rejected</span>
                                     : <span>Unknown status</span>
             ),
             // selector: row => (

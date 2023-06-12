@@ -23,26 +23,29 @@ function AddNew() {
             errors.title = 'Blog title is required';
         } else if (values.title.length < 3) {
             errors.title = 'Blog title min length is 3 characters';
-        } else if (values.title.length > 50) {
-            errors.title = 'Blog title max length is 50 characters';
-        }
+        } 
+        // else if (values.title.length > 50) {
+        //     errors.title = 'Blog title max length is 50 characters';
+        // }
 
         if (!values.short_description) {
             errors.short_description = 'Short description is required';
         } else if (values.short_description.length < 3) {
             errors.short_description = 'Short description min length is 3 characters';
-        } else if (values.short_description.length > 50) {
-            errors.short_description = 'Short description max length is 50 characters';
-        }
+        } 
+        // else if (values.short_description.length > 50) {
+        //     errors.short_description = 'Short description max length is 50 characters';
+        // }
 
 
         if (!values.long_description) {
             errors.long_description = 'Long description is required';
         } else if (values.long_description.length < 20) {
             errors.long_description = 'Long description min length is 20 characters';
-        } else if (values.long_description.length > 500) {
-            errors.long_description = 'Long description max length is 500 characters';
-        }
+        } 
+        // else if (values.long_description.length > 500) {
+        //     errors.long_description = 'Long description max length is 500 characters';
+        // }
 
         return errors;
     };

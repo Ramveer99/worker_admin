@@ -17,12 +17,13 @@ LoadingOverlay.propTypes = undefined
 function AddNew() {
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     const [loading, setLoading] = useState(false);
-    // const [usersList, setUsersList] = useState([{ label: "Select All", value: "all" }]);
+    const [usersList, setUsersList] = useState([{ label: "Select All", value: "all" }]);
+    const [sendBy, setSendBy] = useState('users');
     const [skillsList, setSkillsList] = useState([]);
-    // const [selectedUsers, setSelectedUsers] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const navigate = useNavigate()
     const validationSchema = Yup.object({
-        skill: Yup.string().required("Please choose a skill"),
+        // skill: Yup.string().required("Please choose a skill"),
         content: Yup.string().required("Content is required").min(10, 'Content must be 10 characters long').max(2000, 'Content must not exceed 2000 characters'),
 
     })
@@ -54,11 +55,16 @@ function AddNew() {
         },
     });
 
+    const handleSendByChange = (e) => {
+        // console.log('================', e.target.value);
+        setSendBy(e.target.value)
+    }
     const getAllUsers = useCallback(async () => {
         try {
             setLoading(true);
             let res = await axios.get(`admin/getAllSkills`)
-            setSkillsList(res.data.result)
+            setSkillsList(res.data.result.skills)
+            setUsersList(res.data.result.users)
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -99,42 +105,59 @@ function AddNew() {
                                 <div className="card-body px-0 pb-2">
                                     <div className="p-4">
                                         <form onSubmit={formik.handleSubmit}>
-                                            <div id='select_holder' className="input-group input-group-outline mb-3">
-                                                {/* <Select
-                                                    name="Select Users"
-                                                    options={usersList}
-                                                    
-                                                    isMulti={true}
-                                                    value={selectedUsers}
-                                                    onChange={selected => {
-                                                        let sall = selected.find(option => option.value === "all")
-                                                        if (sall) {
-                                                            setSelectedUsers(usersList.slice(1))
-                                                        } else {
-                                                            setSelectedUsers(selected)
-                                                        }
-                                                        if (selected.length) {
-                                                            formik.setFieldValue('emails', '123')
-                                                        } else {
-                                                            formik.setFieldValue('emails', '')
-                                                        }
-                                                        // console.log(sall);
-                                                    }}
-                                                /> */}
-
-                                                <select value={formik.skill} className="form-control" name='skill' onChange={formik.handleChange}>
-                                                    <option value={''}>--choose skill</option>
-                                                    {
-                                                        skillsList && skillsList.map((item, indx) => {
-                                                            return (
-                                                                <option key={indx} value={item._id}>{item.title}</option>
-                                                            )
-                                                        })
-                                                    }
+                                            <div className="input-group input-group-outline mb-3">
+                                                <select value={sendBy} className="form-control" name='skill' onChange={(e) => handleSendByChange((e))}>
+                                                    <option value={'skills'}>Send by skills</option>
+                                                    <option value={'users'}>Send by users</option>
                                                 </select>
-
                                             </div>
-                                            {formik.errors.skill ? <div className='text-danger'>{formik.errors.skill}</div> : null}
+                                            {
+                                                sendBy === 'users' && (
+                                                    <div id='select_holder' className="input-group input-group-outline mb-3">
+                                                        <Select
+                                                            name="Select Users"
+                                                            options={usersList}
+
+                                                            isMulti={true}
+                                                            value={selectedUsers}
+                                                            onChange={selected => {
+                                                                let sall = selected.find(option => option.value === "all")
+                                                                if (sall) {
+                                                                    setSelectedUsers(usersList.slice(1))
+                                                                } else {
+                                                                    setSelectedUsers(selected)
+                                                                }
+                                                                if (selected.length) {
+                                                                    formik.setFieldValue('emails', selected)
+                                                                } else {
+                                                                    formik.setFieldValue('emails', '')
+                                                                }
+                                                                // console.log(sall);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                            {/* {formik.errors.skill ? <div className='text-danger'>{formik.errors.skill}</div> : null} */}
+
+
+                                            {
+                                                sendBy === 'skills' && (
+                                                    <div className="input-group input-group-outline mb-3">
+                                                        <select value={formik.skill} className="form-control" name='skill' onChange={formik.handleChange}>
+                                                            <option value={''}>--choose skill</option>
+                                                            {
+                                                                skillsList && skillsList.map((item, indx) => {
+                                                                    return (
+                                                                        <option key={indx} value={item._id}>{item.title}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                )
+                                            }
+
 
                                             <div className="input-group input-group-outline mb-3">
                                                 <textarea

@@ -63,18 +63,20 @@ function EditCategory() {
             errors.short_description = 'Short description is required';
         } else if (values.short_description.length < 3) {
             errors.short_description = 'Short description min length is 3 characters';
-        } else if (values.short_description.length > 50) {
-            errors.short_description = 'Short description max length is 50 characters';
-        }
+        } 
+        // else if (values.short_description.length > 50) {
+        //     errors.short_description = 'Short description max length is 50 characters';
+        // }
 
 
         if (!values.long_description) {
             errors.long_description = 'Long description is required';
         } else if (values.long_description.length < 20) {
             errors.long_description = 'Long description min length is 20 characters';
-        } else if (values.long_description.length > 500) {
-            errors.long_description = 'Long description max length is 500 characters';
-        }
+        } 
+        // else if (values.long_description.length > 5000) {
+        //     errors.long_description = 'Long description max length is 500 characters';
+        // }
 
 
         return errors;
