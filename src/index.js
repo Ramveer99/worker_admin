@@ -18,10 +18,16 @@ const Users = loadable(() => import('./components/pages/users/Users'))
 const EditUser = loadable(() => import('./components/pages/users/Edit'))
 const AddNewUser = loadable(() => import('./components/pages/users/AddNew'))
 const ChangePassword = loadable(() => import('./components/auth/ChangePassword'))
+
 // Categories import
 const CategoriesList = loadable(() => import('./components/pages/categories/List'))
 const AddNewCategory = loadable(() => import('./components/pages/categories/AddNew'))
 const EditCategory = loadable(() => import('./components/pages/categories/Edit'))
+
+// Jobtitle import
+const JobTitleList = loadable(() => import('./components/pages/jobtitles/List'))
+const AddNewJobTitle = loadable(() => import('./components/pages/jobtitles/AddNew'))
+const EditJobTitle = loadable(() => import('./components/pages/jobtitles/Edit'))
 
 // Advertise import
 const AdvertiseList = loadable(() => import('./components/pages/advertise/List'))
@@ -218,6 +224,11 @@ root.render(
         <Route path="/categories" element={<CategoriesList />} />
         <Route path="/categories/addnew" element={<AddNewCategory />} />
         <Route path="/categories/edit/:id" element={<EditCategory />} />
+
+        {/* Job titles */}
+        <Route path="/jobtitle" element={<JobTitleList />} />
+        <Route path="/jobtitle/addnew" element={<AddNewJobTitle />} />
+        <Route path="/jobtitle/edit/:id" element={<EditJobTitle />} />
 
 
         {/* Advertisement Start */}

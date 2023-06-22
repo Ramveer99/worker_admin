@@ -18,6 +18,7 @@ function AddNew() {
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     const [loading, setLoading] = useState(false);
     const [usersList, setUsersList] = useState([{ label: "Select All", value: "all" }]);
+    const [rolesList, setRolesList] = useState([]);
     const [sendBy, setSendBy] = useState('users');
     const [skillsList, setSkillsList] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -36,7 +37,6 @@ function AddNew() {
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                console.log(values);
                 let res = await axios.post(`admin/addCommunication`, values)
                 navigate('/communication', { state: { message: res.data.message } })
             } catch (errors) {
@@ -65,6 +65,7 @@ function AddNew() {
             let res = await axios.get(`admin/getAllSkills`)
             setSkillsList(res.data.result.skills)
             setUsersList(res.data.result.users)
+            setRolesList(res.data.result.job_roles)
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -105,13 +106,39 @@ function AddNew() {
                                 <div className="card-body px-0 pb-2">
                                     <div className="p-4">
                                         <form onSubmit={formik.handleSubmit}>
-                                            <div className="input-group input-group-outline mb-3">
+
+                                            <div id='select_holder' className="input-group input-group-outline mb-3">
+                                                <Select
+                                                    name="Select Users"
+                                                    options={rolesList}
+
+                                                    isMulti={true}
+                                                    value={selectedUsers}
+                                                    onChange={selected => {
+                                                        let sall = selected.find(option => option.value === "all")
+                                                        if (sall) {
+                                                            setSelectedUsers(rolesList.slice(1))
+                                                        } else {
+                                                            setSelectedUsers(selected)
+                                                        }
+                                                        if (selected.length) {
+                                                            formik.setFieldValue('skill', selected)
+                                                        } else {
+                                                            formik.setFieldValue('skill', '')
+                                                        }
+                                                        // console.log(sall);
+                                                    }}
+                                                />
+                                            </div>
+
+
+                                            {/* <div className="input-group input-group-outline mb-3">
                                                 <select value={sendBy} className="form-control" name='skill' onChange={(e) => handleSendByChange((e))}>
                                                     <option value={'skills'}>Send by skills</option>
                                                     <option value={'users'}>Send by users</option>
                                                 </select>
-                                            </div>
-                                            {
+                                            </div> */}
+                                            {/* {
                                                 sendBy === 'users' && (
                                                     <div id='select_holder' className="input-group input-group-outline mb-3">
                                                         <Select
@@ -137,11 +164,11 @@ function AddNew() {
                                                         />
                                                     </div>
                                                 )
-                                            }
+                                            } */}
                                             {/* {formik.errors.skill ? <div className='text-danger'>{formik.errors.skill}</div> : null} */}
 
 
-                                            {
+                                            {/* {
                                                 sendBy === 'skills' && (
                                                     <div className="input-group input-group-outline mb-3">
                                                         <select value={formik.skill} className="form-control" name='skill' onChange={formik.handleChange}>
@@ -156,7 +183,7 @@ function AddNew() {
                                                         </select>
                                                     </div>
                                                 )
-                                            }
+                                            } */}
 
 
                                             <div className="input-group input-group-outline mb-3">
