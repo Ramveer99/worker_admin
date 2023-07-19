@@ -100,7 +100,6 @@ function EditCategory() {
     const handleCountryChange = async (e) => {
         setLoading(true)
         setSelectedCountry(e)
-        // setSelectedSubarea('')
         setSubareasData([])
         let res = await axios.get(`user/getcitiesbycountry?id=${e._id}`)
         formik.setFieldValue('country_id', e._id)
