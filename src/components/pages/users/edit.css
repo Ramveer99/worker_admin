@@ -1,0 +1,7 @@
+.f-col {
+    flex-direction: column !important;
+}
+
+.w100 {
+    width: 100% !important;
+}
