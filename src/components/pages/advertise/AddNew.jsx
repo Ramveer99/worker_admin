@@ -193,7 +193,7 @@ function AddNew() {
                                                         minDateTime={minDateTimeValueEnd}
                                                     />
                                                 </LocalizationProvider>
-                                                {formik.errors.end_date ? <div className='text-danger'>{formik.errors.end_date}</div> : null}
+                                                {formik.errors.end_date ? <div style={{ marginTop: '0px' }} className='text-danger'>{formik.errors.end_date}</div> : null}
                                             </div>
                                             <div className="input-group input-group-outline mb-3" style={{ flexDirection: 'column' }}>
                                                 <label>Banner Image</label>

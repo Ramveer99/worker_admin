@@ -46,6 +46,16 @@ function List() {
             sortable: true,
         },
         {
+            name: 'Start Date',
+            selector: row => moment(row.start_time).format('YYYY-MM-DD HH:MM A'),
+            sortable: true,
+        },
+        {
+            name: 'End Date',
+            selector: row => moment(row.end_time).format('YYYY-MM-DD HH:MM A'),
+            sortable: true,
+        },
+        {
             name: 'Created Date',
             selector: row => moment(row.created_at).format('YYYY-MM-DD HH:MM A'),
             sortable: true,

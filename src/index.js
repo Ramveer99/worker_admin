@@ -141,203 +141,203 @@ axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
 // axios.defaults.baseURL = 'http://localhost:9700/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
-  let bearertoken = localStorage.getItem('transact_auth_back')
-  if (bearertoken !== null) {
-    bearertoken = JSON.parse(bearertoken).token
-  }
-  request.headers['Authorization'] = 'Bearer ' + bearertoken
-  return request
+    let bearertoken = localStorage.getItem('transact_auth_back')
+    if (bearertoken !== null) {
+        bearertoken = JSON.parse(bearertoken).token
+    }
+    request.headers['Authorization'] = 'Bearer ' + bearertoken
+    return request
 })
 //  response interceptor
 axios.interceptors.response.use(response => {
-  return response
+    return response
 }, error => {
-  if (error.response) {
-    if (error.response.status === 401) {
-      localStorage.removeItem('transact_auth_back')
-      navigate('/');
+    if (error.response) {
+        if (error.response.status === 401) {
+            localStorage.removeItem('transact_auth_back')
+            navigate('/');
+        }
     }
-  }
-  return Promise.reject(error);
+    return Promise.reject(error);
 })
 
 const ProtectedRoute = () => {
-  navigate = useNavigate()
-  if (!localStorage.getItem('transact_auth_back')) {
-    return <Navigate to="/" />
-  }
-  return <Outlet />
+    navigate = useNavigate()
+    if (!localStorage.getItem('transact_auth_back')) {
+        return <Navigate to="/" />
+    }
+    return <Outlet />
 }
 
 const PublicRoute = () => {
-  if (localStorage.getItem('transact_auth_back')) {
-    return <Navigate to="/dashboard" />
-  }
-  return <Outlet />
+    if (localStorage.getItem('transact_auth_back')) {
+        return <Navigate to="/dashboard" />
+    }
+    return <Outlet />
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter basename='/admin'>
-    <Routes>
-      <Route element={<PublicRoute />}>
-        <Route path="/" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/forgot-password/otp" element={<VerifyForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-      </Route>
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/change-password" element={<ChangePassword />} />
+    <BrowserRouter basename='/admin'>
+        <Routes>
+            <Route element={<PublicRoute />}>
+                <Route path="/" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/forgot-password/otp" element={<VerifyForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+            </Route>
+            <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/change-password" element={<ChangePassword />} />
 
-        {/* Users start */}
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/edit/:id" element={<EditUser />} />
-        <Route path="/users/addnew" element={<AddNewUser />} />
-        {/* Users ends */}
-
-
-        {/* nationality Start */}
-        <Route path="/nationality" element={<NationalityList />} />
-        <Route path="/nationality/addnew" element={<AddNewNationality />} />
-        <Route path="/nationality/edit/:id" element={<EditNationality />} />
-
-        {/* country Start */}
-        <Route path="/country" element={<CountryList />} />
-        <Route path="/country/addnew" element={<AddNewCountry />} />
-        <Route path="/country/edit/:id" element={<EditCountry />} />
+                {/* Users start */}
+                <Route path="/users" element={<Users />} />
+                <Route path="/users/edit/:id" element={<EditUser />} />
+                <Route path="/users/addnew" element={<AddNewUser />} />
+                {/* Users ends */}
 
 
-        {/* city Start */}
-        <Route path="/city" element={<CityList />} />
-        <Route path="/city/addnew" element={<AddNewCity />} />
-        <Route path="/city/edit/:id" element={<EditCity />} />
+                {/* nationality Start */}
+                <Route path="/nationality" element={<NationalityList />} />
+                <Route path="/nationality/addnew" element={<AddNewNationality />} />
+                <Route path="/nationality/edit/:id" element={<EditNationality />} />
+
+                {/* country Start */}
+                <Route path="/country" element={<CountryList />} />
+                <Route path="/country/addnew" element={<AddNewCountry />} />
+                <Route path="/country/edit/:id" element={<EditCountry />} />
 
 
-        {/* city Start */}
-        <Route path="/subarea" element={<SubAreaList />} />
-        <Route path="/subarea/addnew" element={<AddNewSubArea />} />
-        <Route path="/subarea/edit/:id" element={<EditSubArea />} />
+                {/* city Start */}
+                <Route path="/city" element={<CityList />} />
+                <Route path="/city/addnew" element={<AddNewCity />} />
+                <Route path="/city/edit/:id" element={<EditCity />} />
 
 
-        {/* Categories Start */}
-        <Route path="/categories" element={<CategoriesList />} />
-        <Route path="/categories/addnew" element={<AddNewCategory />} />
-        <Route path="/categories/edit/:id" element={<EditCategory />} />
-
-        {/* Job titles */}
-        <Route path="/jobtitle" element={<JobTitleList />} />
-        <Route path="/jobtitle/addnew" element={<AddNewJobTitle />} />
-        <Route path="/jobtitle/edit/:id" element={<EditJobTitle />} />
+                {/* city Start */}
+                <Route path="/subarea" element={<SubAreaList />} />
+                <Route path="/subarea/addnew" element={<AddNewSubArea />} />
+                <Route path="/subarea/edit/:id" element={<EditSubArea />} />
 
 
-        {/* Advertisement Start */}
-        <Route path="/advertise" element={<AdvertiseList />} />
-        <Route path="/advertise/addnew" element={<AddNewAdvertise />} />
-        <Route path="/advertise/edit/:id" element={<EditAdvertise />} />
-        {/* Advertisement End */}
+                {/* Categories Start */}
+                <Route path="/categories" element={<CategoriesList />} />
+                <Route path="/categories/addnew" element={<AddNewCategory />} />
+                <Route path="/categories/edit/:id" element={<EditCategory />} />
+
+                {/* Job titles */}
+                <Route path="/jobtitle" element={<JobTitleList />} />
+                <Route path="/jobtitle/addnew" element={<AddNewJobTitle />} />
+                <Route path="/jobtitle/edit/:id" element={<EditJobTitle />} />
 
 
-        {/* Subadmin Start */}
-        <Route path="/subadmin" element={<SubadminList />} />
-        <Route path="/subadmin/addnew" element={<SubadminAdd />} />
-        <Route path="/subadmin/edit/:id" element={<SubadminEdit />} />
-        {/* Subadmin End */}
-
-        {/* communication Start */}
-        <Route path="/communication" element={<CommunicationList />} />
-        <Route path="/communication/addnew" element={<SendNotification />} />
-        <Route path="/communication/edit/:id" element={<SubadminEdit />} />
-        {/* communication End */}
-
-        {/* Blogs Start */}
-        <Route path="/blogs" element={<BlogsList />} />
-        <Route path="/blogs/addnew" element={<AddNewBlog />} />
-        <Route path="/blogs/edit/:id" element={<EditBlog />} />
-        {/* Blogs End */}
-
-        {/* Experience Start */}
-        <Route path="/experience" element={<ExperienceList />} />
-        <Route path="/experience/addnew" element={<AddNewExperience />} />
-        <Route path="/experience/edit/:id" element={<EditExperience />} />
-        {/* Experience End */}
-
-        {/* Custom Messages Start */}
-        <Route path="/custom-messages" element={<CustomMessages />} />
-        {/*  Custom Messages End */}
-
-        {/* Experience Start */}
-        <Route path="/rate-types" element={<RateTypeList />} />
-        <Route path="/rate-types/addnew" element={<AddNewRateType />} />
-        <Route path="/rate-types/edit/:id" element={<EditRateType />} />
-        {/* Experience End */}
-
-        {/* Responsibilities Start */}
-        <Route path="/responsibilities" element={<ResponsibilitiesList />} />
-        <Route path="/responsibilities/addnew" element={<AddNewResponsibility />} />
-        <Route path="/responsibilities/edit/:id" element={<EditResponsibility />} />
-        {/* Responsibilities End */}
-
-        {/* Involvements Start */}
-        <Route path="/involvements" element={<InvolvementList />} />
-        <Route path="/involvements/addnew" element={<AddNewInvolvement />} />
-        <Route path="/involvements/edit/:id" element={<EditInvolvement />} />
-        {/* Involvements End */}
-
-        {/* Salary Start*/}
-        <Route path="/salary" element={<SalaryList />} />
-        <Route path="/salary/addnew" element={<AddNewSalary />} />
-        <Route path="/salary/edit/:id" element={<EditSalary />} />
-        {/* salary End*/}
+                {/* Advertisement Start */}
+                <Route path="/advertise" element={<AdvertiseList />} />
+                <Route path="/advertise/addnew" element={<AddNewAdvertise />} />
+                <Route path="/advertise/edit/:id" element={<EditAdvertise />} />
+                {/* Advertisement End */}
 
 
-        {/* Skill Start*/}
-        <Route path="/skills" element={<SkillList />} />
-        <Route path="/skills/addnew" element={<AddNewSkill />} />
-        <Route path="/skills/edit/:id" element={<EditSkill />} />
-        {/* skill End*/}
+                {/* Subadmin Start */}
+                <Route path="/subadmin" element={<SubadminList />} />
+                <Route path="/subadmin/addnew" element={<SubadminAdd />} />
+                <Route path="/subadmin/edit/:id" element={<SubadminEdit />} />
+                {/* Subadmin End */}
 
-        {/* job types Start*/}
-        <Route path="/job-types" element={<JobTypesList />} />
-        <Route path="/job-types/addnew" element={<AddNewJobType />} />
-        <Route path="/job-types/edit/:id" element={<EditJobType />} />
-        {/* job types End*/}
+                {/* communication Start */}
+                <Route path="/communication" element={<CommunicationList />} />
+                <Route path="/communication/addnew" element={<SendNotification />} />
+                <Route path="/communication/edit/:id" element={<SubadminEdit />} />
+                {/* communication End */}
 
-        {/* content pages Start*/}
-        <Route path="/content-pages" element={<PagesList />} />
-        <Route path="/content-pages/addnew" element={<AddNewPage />} />
-        <Route path="/content-pages/edit/:id" element={<EditPage />} />
-        {/* content pages End*/}
+                {/* Blogs Start */}
+                <Route path="/blogs" element={<BlogsList />} />
+                <Route path="/blogs/addnew" element={<AddNewBlog />} />
+                <Route path="/blogs/edit/:id" element={<EditBlog />} />
+                {/* Blogs End */}
 
-        {/* applied jobs Start*/}
-        <Route path="/applied-jobs" element={<AppliedJobList />} />
-        {/* applied jobs End*/}
+                {/* Experience Start */}
+                <Route path="/experience" element={<ExperienceList />} />
+                <Route path="/experience/addnew" element={<AddNewExperience />} />
+                <Route path="/experience/edit/:id" element={<EditExperience />} />
+                {/* Experience End */}
+
+                {/* Custom Messages Start */}
+                <Route path="/custom-messages" element={<CustomMessages />} />
+                {/*  Custom Messages End */}
+
+                {/* Experience Start */}
+                <Route path="/rate-types" element={<RateTypeList />} />
+                <Route path="/rate-types/addnew" element={<AddNewRateType />} />
+                <Route path="/rate-types/edit/:id" element={<EditRateType />} />
+                {/* Experience End */}
+
+                {/* Responsibilities Start */}
+                <Route path="/responsibilities" element={<ResponsibilitiesList />} />
+                <Route path="/responsibilities/addnew" element={<AddNewResponsibility />} />
+                <Route path="/responsibilities/edit/:id" element={<EditResponsibility />} />
+                {/* Responsibilities End */}
+
+                {/* Involvements Start */}
+                <Route path="/involvements" element={<InvolvementList />} />
+                <Route path="/involvements/addnew" element={<AddNewInvolvement />} />
+                <Route path="/involvements/edit/:id" element={<EditInvolvement />} />
+                {/* Involvements End */}
+
+                {/* Salary Start*/}
+                <Route path="/salary" element={<SalaryList />} />
+                <Route path="/salary/addnew" element={<AddNewSalary />} />
+                <Route path="/salary/edit/:id" element={<EditSalary />} />
+                {/* salary End*/}
 
 
-        {/* rating requests Start */}
-        <Route path='/rating-request' element={<RatingRequest />} />
-        {/* rating requests End */}
+                {/* Skill Start*/}
+                <Route path="/skills" element={<SkillList />} />
+                <Route path="/skills/addnew" element={<AddNewSkill />} />
+                <Route path="/skills/edit/:id" element={<EditSkill />} />
+                {/* skill End*/}
 
-        {/* requested documents Start */}
-        <Route path='/documents' element={<RequestedDocuments />} />
-        {/* requested documents End */}
+                {/* job types Start*/}
+                <Route path="/job-types" element={<JobTypesList />} />
+                <Route path="/job-types/addnew" element={<AddNewJobType />} />
+                <Route path="/job-types/edit/:id" element={<EditJobType />} />
+                {/* job types End*/}
 
-        {/* rating response Start */}
-        <Route path='/respond-to-rating' element={<RatingResponse />} />
-        {/* rating response End */}
+                {/* content pages Start*/}
+                <Route path="/content-pages" element={<PagesList />} />
+                <Route path="/content-pages/addnew" element={<AddNewPage />} />
+                <Route path="/content-pages/edit/:id" element={<EditPage />} />
+                {/* content pages End*/}
 
-        {/* rating reject Start */}
-        <Route path='/reject-rating-docs' element={<RejectRatingRequest />} />
-        {/* rating reject End */}
+                {/* applied jobs Start*/}
+                <Route path="/applied-jobs" element={<AppliedJobList />} />
+                {/* applied jobs End*/}
 
-        {/* payments Start*/}
-        <Route path="/payments" element={<PaymentsList />} />
-        <Route path="/payments/approve/:id" element={<ApprovePayment />} />
-        {/* payments End*/}
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
+
+                {/* rating requests Start */}
+                <Route path='/rating-request' element={<RatingRequest />} />
+                {/* rating requests End */}
+
+                {/* requested documents Start */}
+                <Route path='/documents' element={<RequestedDocuments />} />
+                {/* requested documents End */}
+
+                {/* rating response Start */}
+                <Route path='/respond-to-rating' element={<RatingResponse />} />
+                {/* rating response End */}
+
+                {/* rating reject Start */}
+                <Route path='/reject-rating-docs' element={<RejectRatingRequest />} />
+                {/* rating reject End */}
+
+                {/* payments Start*/}
+                <Route path="/payments" element={<PaymentsList />} />
+                <Route path="/payments/approve/:id" element={<ApprovePayment />} />
+                {/* payments End*/}
+            </Route>
+            <Route path="*" element={<NotFound />} />
+        </Routes>
+    </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

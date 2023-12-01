@@ -64,14 +64,14 @@ function LayoutPage(props) {
                                 <span className="nav-link-text ms-1">Profile</span>
                             </Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <Link to='/nationality' className={`nav-link text-white ${location.pathname.includes('/nationality') ? "active bg-gradient-primary" : ""}`}>
                                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                     <i className="fa fa-globe"></i>
                                 </div>
                                 <span className="nav-link-text ms-1">City</span>
                             </Link>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <Link to='/country' className={`nav-link text-white ${location.pathname.includes('/country') ? "active bg-gradient-primary" : ""}`}>
                                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">

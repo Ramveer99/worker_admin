@@ -9,6 +9,8 @@ import moment from 'moment'
 import { Modal, Button } from "react-bootstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
+import { saveAs } from "file-saver";
+
 
 function List() {
     const [jobData, setJobData] = useState([])
@@ -49,7 +51,7 @@ function List() {
         },
         {
             name: 'Applied Position',
-            selector: row => row.result_job[0].jobname,
+            selector: row => row.job_title_info[0].job_title,
             sortable: true,
         },
         {
@@ -69,28 +71,42 @@ function List() {
                 row.admin_approved !== "0" ? row.admin_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
             ),
         },
+        // {
+        //     name: 'Skills Matched',
+        //     selector: row => row.id,
+        //     cell: row => (
+        //         <>
+        //             {(() => {
+        //                 let matchedCount = 0
+        //                 if (row.user_data[0].skills) {
+        //                     let eachMatchIncrementV = 100 / row.result_job[0].skills.length
+        //                     row.result_job[0].skills.map((mapitem) => {
+        //                         if (row.user_data[0].skills.includes(mapitem)) {
+        //                             return matchedCount += eachMatchIncrementV
+        //                         } else {
+        //                             return false
+        //                         }
+        //                     })
+        //                     return `${matchedCount}% Matched`
+        //                 } else {
+        //                     return '0% Matched'
+        //                 }
+        //             })()}
+        //         </>
+        //     ),
+        //     center: true
+        // },
         {
-            name: 'Skills Matched',
+            name: 'Download Resume',
             selector: row => row.id,
             cell: row => (
-                <>
-                    {(() => {
-                        let matchedCount = 0
-                        if (row.user_data[0].skills) {
-                            let eachMatchIncrementV = 100 / row.result_job[0].skills.length
-                            row.result_job[0].skills.map((mapitem) => {
-                                if (row.user_data[0].skills.includes(mapitem)) {
-                                    return matchedCount += eachMatchIncrementV
-                                } else {
-                                    return false
-                                }
-                            })
-                            return `${matchedCount}% Matched`
-                        } else {
-                            return '0% Matched'
-                        }
-                    })()}
-                </>
+                <button className='btn btn-success btn-sm' title='Download Resume' onClick={() => {
+                    console.log(row)
+                    saveAs(
+                        row && row.user_data.length ? row.user_data[0].resume_name : '',
+                        "Resume.pdf"
+                    );
+                }}><i className="fa fa-download"></i></button>
             ),
             center: true
         },
