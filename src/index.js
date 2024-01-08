@@ -121,6 +121,7 @@ const RequestedDocuments = loadable(() => import('./components/pages/requested-d
 // payments import
 const PaymentsList = loadable(() => import('./components/pages/payments/List'))
 const ApprovePayment = loadable(() => import('./components/pages/payments/ApprovePayment'))
+const ApproveRefund = loadable(() => import('./components/pages/payments/ApproveRefund'))
 
 // Subadmin import
 const SubadminAdd = loadable(() => import('./components/pages/subadmins/AddNew'))
@@ -333,6 +334,7 @@ root.render(
                 {/* payments Start*/}
                 <Route path="/payments" element={<PaymentsList />} />
                 <Route path="/payments/approve/:id" element={<ApprovePayment />} />
+                <Route path="/payments/accept-refund/:id" element={<ApproveRefund />} />
                 {/* payments End*/}
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -7,7 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import moment from 'moment'
 import { saveAs } from "file-saver";
-import { Link,useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
 function List() {
@@ -21,7 +21,7 @@ function List() {
     const [pageNumber, setPageNumber] = useState(0);
     const [perPage, setperPage] = useState(10);
     const [searchKeyWord, setSearchKeyword] = useState('');
-
+    const navigate = useNavigate()
     const columns = [
         {
             name: 'Employer Name',
@@ -35,7 +35,7 @@ function List() {
         },
         {
             name: 'Amount',
-            selector: row =>  row.amount.toFixed(2),
+            selector: row => row.amount.toFixed(2),
             sortable: true,
         },
         {
@@ -63,7 +63,7 @@ function List() {
         {
             name: 'Approved Status',
             selector: row => (
-                row.payment_approved ?'APPROVED':'PENDING'
+                row.payment_approved ? 'APPROVED' : 'PENDING'
             ),
         },
         {
@@ -75,11 +75,15 @@ function List() {
                         <i title='Approve Payment' style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
                     </Link>
                     :
-                    row.refund_requested && row.refund_status === '' ? <div>
-                        <i title='Accept Refund' onClick={() => handleRefund(row._id, "accepted")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
-                        &nbsp;&nbsp;
-                        <i title='Reject Refund' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleRefund(row._id, "rejected")}></i>
-                    </div> : ""
+                    row.refund_requested && row.refund_status === '' ?
+                        <div>
+                            {/* <i title='Accept Refund' onClick={() => handleRefund(row._id, "accepted")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
+                        &nbsp;&nbsp; */}
+                            <Link to={`/payments/accept-refund/${row._id}`}>
+                                <i title='Accept Refund' style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
+                            </Link>&nbsp;&nbsp;
+                            <i title='Reject Refund' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleRefund(row._id, "rejected")}></i>
+                        </div> : ""
 
             ),
             center: true
@@ -167,6 +171,7 @@ function List() {
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
+            navigate(location.pathname, { replace: true });
             toast(msg, {
                 position: "top-right",
                 autoClose: 2000,
@@ -178,7 +183,7 @@ function List() {
                 type: 'success'
             });
         }
-    }, [getPaymentsList, searchKeyWord, pageNumber, sortField, perPage,location])
+    }, [getPaymentsList, searchKeyWord, pageNumber, sortField, perPage, location])
 
     return (
         <>

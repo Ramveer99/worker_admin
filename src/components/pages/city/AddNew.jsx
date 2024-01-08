@@ -111,7 +111,7 @@ function AddNew() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Add New City</h6>
+                                    <h6 className="text-white text-capitalize ps-3">Add New Province</h6>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -124,7 +124,7 @@ function AddNew() {
                                                 name='city_name'
                                                 className="form-control"
                                                 autoComplete='off'
-                                                placeholder='city name'
+                                                placeholder='Province Name'
                                                 value={formik.values.city_name || ''}
                                                 onChange={formik.handleChange}
                                             />
@@ -153,6 +153,9 @@ function AddNew() {
                                         {formik.errors.country_id ? <div className='text-danger'>{formik.errors.country_id}</div> : null}
 
                                         <div className="text-center">
+                                            <button type="button" onClick={() => navigate('/city')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                Cancel
+                                            </button>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
                                                     disabledSubmit ? (

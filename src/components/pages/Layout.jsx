@@ -64,71 +64,78 @@ function LayoutPage(props) {
                                 <span className="nav-link-text ms-1">Profile</span>
                             </Link>
                         </li>
-                        {/* <li className="nav-item">
-                            <Link to='/nationality' className={`nav-link text-white ${location.pathname.includes('/nationality') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-globe"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">City</span>
-                            </Link>
-                        </li> */}
-                        <li className="nav-item">
-                            <Link to='/country' className={`nav-link text-white ${location.pathname.includes('/country') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-globe"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Country</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/city' className={`nav-link text-white ${location.pathname.includes('/city') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-globe"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">Provinces</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/subarea' className={`nav-link text-white ${location.pathname.includes('/subarea') ? "active bg-gradient-primary" : ""}`}>
-                                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <i className="fa fa-globe"></i>
-                                </div>
-                                <span className="nav-link-text ms-1">SubArea</span>
-                            </Link>
-                        </li>
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.country_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <a href='/admin/country' className={`nav-link text-white ${location.pathname.includes('/country') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-globe"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Country</span>
+                                    </a>
+                                </li>
+                            ) : ''
+                        }
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.province_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <a href='/admin/city' className={`nav-link text-white ${location.pathname.includes('/city') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-globe"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Provinces</span>
+                                    </a>
+                                </li>
+                            ) : ''
+                        }
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.subarea_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <a href='/admin/subarea' className={`nav-link text-white ${location.pathname.includes('/subarea') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-globe"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">SubArea</span>
+                                    </a>
+                                </li>
+                            ) : ''
+                        }
+
+
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.job_title_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/jobtitle' className={`nav-link text-white ${location.pathname.includes('/jobtitle') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/jobtitle' className={`nav-link text-white ${location.pathname.includes('/jobtitle') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-list"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Job Titles</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.category_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/categories' className={`nav-link text-white ${location.pathname.includes('/categories') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/categories' className={`nav-link text-white ${location.pathname.includes('/categories') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-list"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Categories</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.advertise_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/advertise' className={`nav-link text-white ${location.pathname.includes('/advertise') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/advertise' className={`nav-link text-white ${location.pathname.includes('/advertise') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fas fa-ad"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Advertise</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -136,12 +143,12 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.subadmin_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/subadmin' className={`nav-link text-white ${location.pathname.includes('/subadmin') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/subadmin' className={`nav-link text-white ${location.pathname.includes('/subadmin') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-users"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Subadmins</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -149,36 +156,36 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.user_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/users' className={`nav-link text-white ${location.pathname.includes('/users') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/users' className={`nav-link text-white ${location.pathname.includes('/users') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-users"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Users Management</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
                         {
-                            (userData && userData.subadmin_data && userData.subadmin_data.custom_messages) || (userData && !userData.subadmin_data) ? (
+                            (userData && userData.subadmin_data && userData.subadmin_data.custom_messages_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/custom-messages' className={`nav-link text-white ${location.pathname.includes('/custom-messages') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/custom-messages' className={`nav-link text-white ${location.pathname.includes('/custom-messages') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fas fa-envelope-open-text"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Custom Messages</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.rate_type_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/rate-types' className={`nav-link text-white ${location.pathname.includes('/rate-types') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/rate-types' className={`nav-link text-white ${location.pathname.includes('/rate-types') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-dollar"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Rate Type Management</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -186,12 +193,12 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.experience_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/experience' className={`nav-link text-white ${location.pathname.includes('/experience') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/experience' className={`nav-link text-white ${location.pathname.includes('/experience') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-history"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Experiences</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -199,12 +206,12 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.responsibility_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/responsibilities' className={`nav-link text-white ${location.pathname.includes('/responsibilities') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/responsibilities' className={`nav-link text-white ${location.pathname.includes('/responsibilities') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-history"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Responsibilities</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -212,12 +219,12 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.involvement_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/involvements' className={`nav-link text-white ${location.pathname.includes('/involvements') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/involvements' className={`nav-link text-white ${location.pathname.includes('/involvements') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-history"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Involvements</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -225,25 +232,24 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.blogs_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/blogs' className={`nav-link text-white ${location.pathname.includes('/blogs') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/blogs' className={`nav-link text-white ${location.pathname.includes('/blogs') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fab fa-blogger-b"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Blogs</span>
-                                    </Link>
-                                </li>
+                                    </a>                           </li>
                             ) : ''
                         }
 
                         {
-                            (userData && userData.subadmin_data && userData.subadmin_data.communication_access) || (userData && !userData.communication_access) ? (
+                            (userData && userData.subadmin_data && userData.subadmin_data.communication_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/communication' className={`nav-link text-white ${location.pathname.includes('/communication') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/communication' className={`nav-link text-white ${location.pathname.includes('/communication') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fab fa-blogger-b"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Communication</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -252,12 +258,12 @@ function LayoutPage(props) {
                             (userData && userData.subadmin_data && userData.subadmin_data.salary_access
                             ) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/salary' className={`nav-link text-white ${location.pathname.includes('/salary') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/salary' className={`nav-link text-white ${location.pathname.includes('/salary') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-money"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Salary Management</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -265,12 +271,12 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.skills_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/skills' className={`nav-link text-white ${location.pathname.includes('/skills') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/skills' className={`nav-link text-white ${location.pathname.includes('/skills') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-cogs"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Skills Management</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -279,12 +285,12 @@ function LayoutPage(props) {
                             (userData && userData.subadmin_data && userData.subadmin_data.jobtype_access
                             ) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/job-types' className={`nav-link text-white ${location.pathname.includes('/job-types') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/job-types' className={`nav-link text-white ${location.pathname.includes('/job-types') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-tasks"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Job Types Management</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -293,12 +299,12 @@ function LayoutPage(props) {
                             (userData && userData.subadmin_data && userData.subadmin_data.content_management_access
                             ) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/content-pages' className={`nav-link text-white ${location.pathname.includes('/content-pages') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/content-pages' className={`nav-link text-white ${location.pathname.includes('/content-pages') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-globe"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Content Management</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -306,12 +312,12 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.payments_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/payments' className={`nav-link text-white ${location.pathname.includes('/payments') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/payments' className={`nav-link text-white ${location.pathname.includes('/payments') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-credit-card"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Payments</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
@@ -319,28 +325,28 @@ function LayoutPage(props) {
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.applied_jobs_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
-                                    <Link to='/applied-jobs' className={`nav-link text-white ${location.pathname.includes('/applied-jobs') ? "active bg-gradient-primary" : ""}`}>
+                                    <a href='/admin/applied-jobs' className={`nav-link text-white ${location.pathname.includes('/applied-jobs') ? "active bg-gradient-primary" : ""}`}>
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-cogs"></i>
                                         </div>
                                         <span className="nav-link-text ms-1">Applied Jobs</span>
-                                    </Link>
+                                    </a>
                                 </li>
                             ) : ''
                         }
 
 
                         {
-                            // (userData && userData.subadmin_data && userData.subadmin_data.applied_jobs_access) || (userData && !userData.subadmin_data) ? (
-                            <li className="nav-item">
-                                <Link to='/rating-request' className={`nav-link text-white ${location.pathname.includes('/rating-request') ? "active bg-gradient-primary" : ""}`}>
-                                    <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                        <i className="fa fa-check"></i>
-                                    </div>
-                                    <span className="nav-link-text ms-1">Rating Requests</span>
-                                </Link>
-                            </li>
-                            // ) : ''
+                            (userData && userData.subadmin_data && userData.subadmin_data.rating_request_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <a href='/admin/rating-request' className={`nav-link text-white ${location.pathname.includes('/rating-request') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-check"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Rating Requests</span>
+                                    </a>
+                                </li>
+                            ) : ''
                         }
 
 

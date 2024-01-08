@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
 import Multiselect from "multiselect-react-dropdown";
 import * as Yup from 'yup'
@@ -787,6 +787,9 @@ function EditCategory() {
                                             ) : null}
 
                                             <div className="text-center">
+                                                <Link to={'/users'} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </Link>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (

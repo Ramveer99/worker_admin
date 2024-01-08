@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup'
 
 function AddNew() {
@@ -137,6 +137,9 @@ function AddNew() {
                                         {formik.errors.password ? <div className='text-danger'>{formik.errors.password}</div> : null}
 
                                         <div className="text-center">
+                                            <Link to={'/users'} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                Cancel
+                                            </Link>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
                                                     disabledSubmit ? (

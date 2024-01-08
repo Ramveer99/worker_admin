@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 function List() {
@@ -26,6 +26,7 @@ function List() {
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this advertise?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+    const navigate = useNavigate()
     const columns = [
         {
             name: 'Banner Image',
@@ -145,16 +146,16 @@ function List() {
             setTotalRows(res.data.result.total);
             setLoading(false);
         } catch (errors) {
-            toast(errors.response.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'error'
-            });
+            // toast(errors.response.data.message, {
+            //     position: "top-right",
+            //     autoClose: 2000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     type: 'error'
+            // });
         }
     }, [pageNumber, perPage, sortField, sortDirection, searchKeyWord])
 
@@ -188,6 +189,7 @@ function List() {
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
+            navigate(location.pathname, { replace: true });
             toast(msg, {
                 position: "top-right",
                 autoClose: 2000,

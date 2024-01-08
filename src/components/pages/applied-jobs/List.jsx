@@ -62,40 +62,16 @@ function List() {
         {
             name: 'Employer Status',
             selector: row => (
-                row.employer_approved !== "0" ? row.employer_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
+                row.employer_approved !== "0" ? row.employer_approved === "Yes" ? <span className='text-success'>Approved</span> : <span className='text-danger'>Rejected</span> : "Pending"
             ),
         },
         {
             name: 'Admin Status',
             selector: row => (
-                row.admin_approved !== "0" ? row.admin_approved === "Yes" ? "Approved" : "Rejected" : "Pending"
+                row.admin_approved !== "0" ? row.admin_approved === "Yes" ? <span className='text-success'>Approved</span> : <span className='text-danger'>Rejected</span> : "Pending"
             ),
         },
-        // {
-        //     name: 'Skills Matched',
-        //     selector: row => row.id,
-        //     cell: row => (
-        //         <>
-        //             {(() => {
-        //                 let matchedCount = 0
-        //                 if (row.user_data[0].skills) {
-        //                     let eachMatchIncrementV = 100 / row.result_job[0].skills.length
-        //                     row.result_job[0].skills.map((mapitem) => {
-        //                         if (row.user_data[0].skills.includes(mapitem)) {
-        //                             return matchedCount += eachMatchIncrementV
-        //                         } else {
-        //                             return false
-        //                         }
-        //                     })
-        //                     return `${matchedCount}% Matched`
-        //                 } else {
-        //                     return '0% Matched'
-        //                 }
-        //             })()}
-        //         </>
-        //     ),
-        //     center: true
-        // },
+
         {
             name: 'Download Resume',
             selector: row => row.id,

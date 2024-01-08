@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment'
 import { saveAs } from 'file-saver';
 
@@ -29,7 +29,7 @@ function List() {
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const [selectedRows, setSelectedRows] = useState([]);
     const [samplePdf, setSamplePdf] = useState('');
-
+    const navigate = useNavigate()
     const columns = [
         {
             name: 'Name',
@@ -271,6 +271,7 @@ function List() {
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
+            navigate(location.pathname, { replace: true });
             toast(msg, {
                 position: "top-right",
                 autoClose: 2000,

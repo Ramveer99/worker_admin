@@ -63,7 +63,7 @@ function EditCategory() {
             errors.short_description = 'Short description is required';
         } else if (values.short_description.length < 3) {
             errors.short_description = 'Short description min length is 3 characters';
-        } 
+        }
         // else if (values.short_description.length > 50) {
         //     errors.short_description = 'Short description max length is 50 characters';
         // }
@@ -73,7 +73,7 @@ function EditCategory() {
             errors.long_description = 'Long description is required';
         } else if (values.long_description.length < 20) {
             errors.long_description = 'Long description min length is 20 characters';
-        } 
+        }
         // else if (values.long_description.length > 5000) {
         //     errors.long_description = 'Long description max length is 500 characters';
         // }
@@ -202,6 +202,9 @@ function EditCategory() {
                                             </div>
                                             {formik.errors.long_description ? <div className='text-danger'>{formik.errors.long_description}</div> : null}
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/blogs')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (

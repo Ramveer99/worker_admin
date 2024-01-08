@@ -89,6 +89,9 @@ function AddNew() {
                                         {formik.errors.years ? <div className='text-danger'>{formik.errors.years}</div> : null}
 
                                         <div className="text-center">
+                                            <button type="button" onClick={() => navigate('/experience')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                Cancel
+                                            </button>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
                                                     disabledSubmit ? (

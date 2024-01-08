@@ -153,6 +153,9 @@ function EditCity() {
                                             </div>
                                             {formik.errors.city_id ? <div className='text-danger'>{formik.errors.city_id}</div> : null}
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/subarea')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit

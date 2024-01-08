@@ -6,11 +6,11 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
-import { Link,useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment'
 
 function List() {
-    const location=useLocation()
+    const location = useLocation()
     const [skillData, setSkillData] = useState([])
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
@@ -26,6 +26,7 @@ function List() {
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this jobtype?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+    const navigate = useNavigate()
     const columns = [
         {
             name: 'Title',
@@ -164,18 +165,19 @@ function List() {
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
+            navigate(location.pathname, { replace: true });
             toast(msg, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              type: 'success'
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
             });
-          }
-    }, [getExperienceList, searchKeyWord, pageNumber, sortField, perPage,location])
+        }
+    }, [getExperienceList, searchKeyWord, pageNumber, sortField, perPage, location])
 
     return (
         <>

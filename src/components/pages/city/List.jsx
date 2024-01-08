@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
 
@@ -29,6 +29,8 @@ function List() {
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this city?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+    const navigate = useNavigate()
+
     const columns = [
         // {
         //     name: 'Category Image',
@@ -38,10 +40,10 @@ function List() {
         //     ),
         //     center: true
         // },
-        
+
         {
             name: 'Country',
-            selector: row => row.country_id.country_name,
+            selector: row => row.result_country[0].country_name,
         },
         {
             name: 'Province',
@@ -238,9 +240,9 @@ function List() {
             setLoading(true);
             let res = await axios.get(`admin/citylist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             console.log(res);
-            setCityData(res.data.result.citydata)
+            setCityData(res.data.result.citydata.data)
             setSamplePdf(res.data.result.sample_pdf)
-            setTotalRows(res.data.result.total);
+            setTotalRows(res.data.result.citydata.count);
             setLoading(false);
         } catch (errors) {
             // console.log('======>in catch block',errors);
@@ -274,6 +276,7 @@ function List() {
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
+            navigate(location.pathname, { replace: true });
             toast(msg, {
                 position: "top-right",
                 autoClose: 2000,
@@ -314,12 +317,12 @@ function List() {
                                             name='keyword' />
                                     </div>
                                     <div className="input-group input-group-dynamic">
-                                       
+
                                         &nbsp;<button className='btn btn-info'>&nbsp;Upload Excel&nbsp;
                                             <input type="file" id='excel_file_uploader' onChange={(e) => handleExcelImport(e)} />
                                         </button>
                                         &nbsp;
-                                    <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
+                                        <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
                                     </div>
                                 </div>
                                 <div className="table-responsive p-0">

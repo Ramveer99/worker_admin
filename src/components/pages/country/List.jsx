@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
 
@@ -29,26 +29,15 @@ function List() {
     const [deleteModelTitle, setDeleteModelTitle] = useState('Confirm Delete');
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this country?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [toggleCleared, setToggleCleared] = useState(false);
+    const navigate = useNavigate()
     const columns = [
-        // {
-        //     name: 'Category Image',
-        //     selector: row => row.category_image,
-        //     cell: row => (
-        //         <img className='img img-circle' height={50} width={50} src={row.category_image} alt={row.category_image} />
-        //     ),
-        //     center: true
-        // },
-
         {
             name: 'country',
             selector: row => row.country_name,
             sortable: true,
         },
-        // {
-        //     name: 'Description',
-        //     selector: row => row.category_desc,
-        //     sortable: true,
-        // },
         {
             name: 'Created Date',
             selector: row => row.created_at,
@@ -186,29 +175,6 @@ function List() {
     }
 
 
-    // const getCountryList = useCallback(async () => {
-    //     try {
-    //         setLoading(true);
-    //         let res = await axios.get(`admin/countrylist?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-    //         // console.log(res);
-    //         setCountryData(res.data.result.countrydata)
-    //         setTotalRows(res.data.result.total);
-    //         setLoading(false);
-    //     } catch (errors) {
-    //         toast(errors.response.data.message, {
-    //             position: "top-right",
-    //             autoClose: 2000,
-    //             hideProgressBar: false,
-    //             closeOnClick: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             progress: undefined,
-    //             type: 'error'
-    //         });
-    //     }
-    // }, [pageNumber, perPage, sortField, sortDirection, searchKeyWord])
-
-
     const handlePageChange = page => {
         setPageNumber(page)
     };
@@ -221,7 +187,50 @@ function List() {
         setPageNumber(page)
         setperPage(newPerPage)
     };
-
+    const handleRowChange = ({ selectedRows }) => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>.', selectedRows);
+        setSelectedRows(selectedRows)
+    }
+    const handleSelected = async () => {
+        try {
+            let selectedids = []
+            selectedRows.map((item) => {
+                return selectedids.push(item._id)
+            })
+            let res = await axios.post(`admin/delete_selected_countries`, {
+                selectedCOuntries: selectedids,
+            })
+            toast(res.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'success'
+            });
+            setSelectedRows([])
+            setToggleCleared(!toggleCleared);
+            setPageNumber(1)
+            getCountryList()
+        } catch (errors) {
+            toast(errors.response.data.message, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                type: 'error'
+            });
+            setShowDeleteConfirm(false)
+            setLoadingDeleteModel(false)
+            setPageNumber(1)
+            getCountryList()
+        }
+    }
 
     // get smaple from server
     const getCountryList = useCallback(async () => {
@@ -265,6 +274,7 @@ function List() {
         if (location.state) {
             let msg = location.state.message
             window.history.replaceState({}, document.title)
+            navigate(location.pathname, { replace: true });
             toast(msg, {
                 position: "top-right",
                 autoClose: 2000,
@@ -305,24 +315,33 @@ function List() {
                                             name='keyword' />
                                     </div>
                                     <div className="input-group input-group-dynamic">
-                                       
+                                        {
+                                            selectedRows.length ? (
+                                                <>
+                                                    <button className='btn btn-danger' onClick={() => handleSelected('delete')}>({selectedRows.length})&nbsp;Delete Selected</button>
+                                                </>
+                                            ) : ''
+                                        }
                                         &nbsp;<button className='btn btn-info'>&nbsp;Upload Excel&nbsp;
                                             <input type="file" id='excel_file_uploader' onChange={(e) => handleExcelImport(e)} />
                                         </button>
                                         &nbsp;
-                                    <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
+                                        <button className='btn btn-success' onClick={() => saveAs(samplePdf, 'sample.xlsx')}>View Sample</button>
                                     </div>
                                 </div>
                                 <div className="table-responsive p-0">
                                     <DataTable
                                         columns={columns}
                                         data={countryData}
+                                        selectableRows
                                         progressPending={loading}
                                         pagination
                                         paginationServer
+                                        onSelectedRowsChange={handleRowChange}
                                         paginationTotalRows={totalRows}
                                         onChangeRowsPerPage={handlePerRowsChange}
                                         onChangePage={handlePageChange}
+                                        clearSelectedRows={toggleCleared}
                                         sortServer
                                         onSort={handleSort}
                                     />

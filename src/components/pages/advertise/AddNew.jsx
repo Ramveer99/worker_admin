@@ -4,7 +4,7 @@ import LayoutPage from '../Layout';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup'
 import LoadingOverlay from 'react-loading-overlay';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -211,6 +211,9 @@ function AddNew() {
                                             </div>
                                             {formik.errors.banner_image ? <div className='text-danger'>{formik.errors.banner_image}</div> : null}
                                             <div className="text-center">
+                                                <Link to={'/advertise'} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </Link>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (

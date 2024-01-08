@@ -43,7 +43,7 @@ function AddNew() {
         return errors;
     };
     const formik = useFormik({
-        initialValues: { country_name: ''},
+        initialValues: { country_name: '' },
         validate,
         onSubmit: async (values) => {
             console.log(values);
@@ -141,8 +141,11 @@ function AddNew() {
                                             />
                                         </div>
                                         {formik.errors.category_desc ? <div className='text-danger'>{formik.errors.category_desc}</div> : null} */}
-                                        
+
                                         <div className="text-center">
+                                            <button type="button" onClick={() => navigate('/country')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                Cancel
+                                            </button>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
                                                     disabledSubmit ? (

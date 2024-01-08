@@ -58,12 +58,12 @@ function Edit() {
         page_title: Yup.string().required("Page title is required").min(3, 'Page title must be 3 characters long').max(50, 'Page title must not exceed 50 characters'),
     })
 
-   
+
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        validateOnBlur:false,
-        validateOnChange:false,
+        validateOnBlur: false,
+        validateOnChange: false,
         validationSchema,
         onSubmit: async (values) => {
             setDisabledSubmit(true)
@@ -124,7 +124,7 @@ function Edit() {
                                                 />
                                             </div>
                                             {formik.errors.page_title ? <div className='text-danger'>{formik.errors.page_title}</div> : null}
-                                           
+
                                             <div className="input-group input-group-outline mb-3">
                                                 <CKEditor
                                                     editor={ClassicEditor}
@@ -152,6 +152,9 @@ function Edit() {
                                             </div>
                                             {formik.errors.page_content ? <div className='text-danger'>{formik.errors.page_content}</div> : null}
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/communication')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (

@@ -24,7 +24,7 @@ function AddNew() {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const navigate = useNavigate()
     const validationSchema = Yup.object({
-        // skill: Yup.string().required("Please choose a skill"),
+        skill: Yup.array().nullable().required('Please choose an option'),
         content: Yup.string().required("Content is required").min(10, 'Content must be 10 characters long').max(2000, 'Content must not exceed 2000 characters'),
 
     })
@@ -126,9 +126,9 @@ function AddNew() {
                                                         } else {
                                                             formik.setFieldValue('skill', '')
                                                         }
-                                                        // console.log(sall);
                                                     }}
                                                 />
+                                                {formik.errors.skill ? <div style={{ marginTop: '5px' }} className='text-danger'>{formik.errors.skill}</div> : null}
                                             </div>
 
 
@@ -201,6 +201,9 @@ function AddNew() {
                                             </div>
 
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/communication')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (

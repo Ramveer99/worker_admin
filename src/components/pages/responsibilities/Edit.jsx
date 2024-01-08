@@ -56,8 +56,8 @@ function Edit() {
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                let res = await axios.post(`admin/responsibilityupdate/${values.id}`, {title:values.title})
-                navigate('/responsibilities',{ state:{message:res.data.message}})
+                let res = await axios.post(`admin/responsibilityupdate/${values.id}`, { title: values.title })
+                navigate('/responsibilities', { state: { message: res.data.message } })
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",
@@ -113,12 +113,15 @@ function Edit() {
                                             </div>
                                             {formik.errors.title ? <div className='text-danger'>{formik.errors.title}</div> : null}
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/responsibilities')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
-                                                        disabledSubmit? (
+                                                        disabledSubmit ? (
                                                             <div>
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                <span className="sr-only"></span>  {disabledSubmit? 'Updating' : ''}
+                                                                <span className="sr-only"></span>  {disabledSubmit ? 'Updating' : ''}
                                                             </div>
                                                         ) : 'Update'
                                                     }

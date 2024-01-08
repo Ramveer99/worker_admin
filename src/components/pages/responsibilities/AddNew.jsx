@@ -21,21 +21,21 @@ function AddNew() {
             errors.title = 'Title max legth is 50 characters';
         }
 
-        
+
 
         return errors;
     };
     const formik = useFormik({
         initialValues: {
-            title:''
+            title: ''
         },
         validate,
         onSubmit: async (values) => {
-           
+
             setDisabledSubmit(true)
             try {
-                let res=await axios.post(`admin/responsibilityadd`, values)
-                navigate('/responsibilities',{state:{message:res.data.message}})
+                let res = await axios.post(`admin/responsibilityadd`, values)
+                navigate('/responsibilities', { state: { message: res.data.message } })
             } catch (errors) {
                 toast(errors.response.data.message, {
                     position: "top-right",
@@ -81,8 +81,11 @@ function AddNew() {
                                             />
                                         </div>
                                         {formik.errors.title ? <div className='text-danger'>{formik.errors.title}</div> : null}
-                                        
+
                                         <div className="text-center">
+                                            <button type="button" onClick={() => navigate('/responsibilities')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                Cancel
+                                            </button>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
                                                     disabledSubmit ? (

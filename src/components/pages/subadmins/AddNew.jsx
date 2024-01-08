@@ -142,6 +142,78 @@ function AddNew() {
                                             &nbsp;&nbsp;
                                             <label> <input
                                                 type="checkbox"
+                                                name='role'
+                                                value={'country_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Country Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'province_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Province Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'subarea_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Subarea Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'job_title_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Jobtitle Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'advertise_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Advertise Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'custom_messages_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Custom Messages Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'rate_type_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Rate Type Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'communication_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Communication Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
+                                                name='role'
+                                                value={'rating_request_access'}
+                                                onChange={(e) => handlePermissionChange(e)}
+                                            />&nbsp;Rating Request Access
+                                            </label>
+                                            &nbsp;&nbsp;
+                                            <label> <input
+                                                type="checkbox"
                                                 value={'subadmin_access'}
                                                 onChange={(e) => handlePermissionChange(e)}
                                                 name='role'
@@ -248,6 +320,9 @@ function AddNew() {
                                         </div>
 
                                         <div className="text-center">
+                                            <button type="button" onClick={() => navigate('/subadmin')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                Cancel
+                                            </button>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 {
                                                     disabledSubmit ? (

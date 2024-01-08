@@ -9,79 +9,65 @@ import { useNavigate, useParams } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
 LoadingOverlay.propTypes = undefined
 
-function Edit() {
+function ApproveRefund() {
     const { id } = useParams()
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [initialValues, setInitialValues] = useState({ id: '', title: '', });
+    const [initialValues, setInitialValues] = useState({ id: id, refund_note: '' });
     const navigate = useNavigate()
-
-    const experienceDetail = useCallback(async () => {
-        try {
-            setLoading(true);
-            let res = await axios.get(`admin/ratetype?id=${id}`)
-            setInitialValues({ id: res.data.result._id, title: res.data.result.title })
-            setLoading(false);
-        } catch (errors) {
-            toast(errors.response.data.message, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                type: 'error'
-            });
-        }
-    }, [id])
 
     const validate = values => {
         const errors = {};
 
-        if (!values.title) {
-            errors.title = 'Title is required';
-        } else if (values.title.length < 3) {
-            errors.title = 'Title min legth is 3 characters';
-        } else if (values.title.length > 50) {
-            errors.title = 'Title max legth is 50 characters';
+        if (!values.refund_note) {
+            errors.refund_note = 'Please enter note';
         }
-
         return errors;
     };
     const formik = useFormik({
         initialValues: initialValues,
-        enableReinitialize: true,
         validate,
         onSubmit: async (values) => {
             setDisabledSubmit(true)
             try {
-                let res = await axios.post(`admin/ratetypeupdate/${values.id}`, { title: values.title })
-
-                navigate('/rate-types', { state: { message: res.data.message } })
+                let formData = new FormData()
+                console.log();
+                // formData.append("id", values.id)
+                // formData.append("refund_note", values.refund_note)
+                let res = await axios.post(`admin/approve-refund`, values)
+                navigate('/payments', { state: { message: res.data.message } })
             } catch (errors) {
-                toast(errors.response.data.message, {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    type: 'error'
-                });
+                if (errors.response.data.error) {
+                    toast(errors.response.data.error.message, {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        type: 'error'
+                    });
+                } else {
+                    toast(errors.response.data.message, {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        type: 'error'
+                    });
+                }
                 setDisabledSubmit(false)
             }
         },
     });
-
-    useEffect(() => {
-        experienceDetail()
-    }, [experienceDetail])
     return (
         <>
             <Helmet>
-                <title>Edit Rate Type</title>
+                <title>Approve Payment</title>
             </Helmet>
 
             <LayoutPage>
@@ -95,36 +81,42 @@ function Edit() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit Rate Type</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Approve Payment</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
                                     <div className="p-4">
                                         <form onSubmit={formik.handleSubmit}>
                                             <div className="input-group input-group-outline mb-3">
-                                                <input
-                                                    type="text"
-                                                    id='title'
-                                                    name='title'
+                                                {/* <input
+                                                    type="file"
+                                                    id='categoryfile'
+                                                    name='categoryfile'
                                                     className="form-control"
-                                                    placeholder='Title'
-                                                    value={formik.values.title}
-                                                    onChange={formik.handleChange}
-                                                />
+                                                    placeholder='Category Image'
+                                                    onChange={(event) => {
+                                                        formik.setFieldValue("approval_file", event.target.files[0]);
+                                                    }}
+                                                /> */}
+                                                <textarea
+                                                    id='refund_note'
+                                                    name='refund_note'
+                                                    className="form-control"
+                                                    placeholder='Note'
+                                                    value={formik.values.refund_note || ''}
+                                                    onChange={formik.handleChange} />
                                             </div>
-                                            {formik.errors.title ? <div className='text-danger'>{formik.errors.title}</div> : null}
+                                            {formik.errors.refund_note ? <div className='text-danger'>{formik.errors.refund_note}</div> : null}
+
                                             <div className="text-center">
-                                                <button type="button" onClick={() => navigate('/rate-types')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
-                                                    Cancel
-                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (
                                                             <div>
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                <span className="sr-only"></span>  {disabledSubmit ? 'Updating' : ''}
+                                                                <span className="sr-only"></span>  {disabledSubmit ? 'Approving' : ''}
                                                             </div>
-                                                        ) : 'Update'
+                                                        ) : 'Approve'
                                                     }
                                                 </button>
                                             </div>
@@ -140,4 +132,4 @@ function Edit() {
     );
 }
 
-export default Edit;
+export default ApproveRefund;

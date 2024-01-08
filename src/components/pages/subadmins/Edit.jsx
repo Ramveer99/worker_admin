@@ -27,8 +27,35 @@ function EditCategory() {
             if (res.data.result.category_access === true) {
                 rolesArr.push('category_access')
             }
+            if (res.data.result.country_access === true) {
+                rolesArr.push('country_access')
+            }
+            if (res.data.result.province_access === true) {
+                rolesArr.push('province_access')
+            }
+            if (res.data.result.subarea_access === true) {
+                rolesArr.push('subarea_access')
+            }
+            if (res.data.result.job_title_access === true) {
+                rolesArr.push('job_title_access')
+            }
+            if (res.data.result.advertise_access === true) {
+                rolesArr.push('advertise_access')
+            }
+            if (res.data.result.custom_messages_access === true) {
+                rolesArr.push('custom_messages_access')
+            }
             if (res.data.result.subadmin_access === true) {
                 rolesArr.push('subadmin_access')
+            }
+            if (res.data.result.rate_type_access === true) {
+                rolesArr.push('rate_type_access')
+            }
+            if (res.data.result.communication_access === true) {
+                rolesArr.push('communication_access')
+            }
+            if (res.data.result.rating_request_access === true) {
+                rolesArr.push('rating_request_access')
             }
             if (res.data.result.user_access === true) {
                 rolesArr.push('user_access')
@@ -203,6 +230,87 @@ function EditCategory() {
                                                 &nbsp;&nbsp;
                                                 <label> <input
                                                     type="checkbox"
+                                                    name='role'
+                                                    value={'country_access'}
+                                                    checked={rolesData.indexOf('country_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Country Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'province_access'}
+                                                    checked={rolesData.indexOf('province_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Province Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'subarea_access'}
+                                                    checked={rolesData.indexOf('subarea_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Subarea Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'job_title_access'}
+                                                    checked={rolesData.indexOf('job_title_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Jobtitle Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'advertise_access'}
+                                                    checked={rolesData.indexOf('advertise_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Advertise Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'custom_messages_access'}
+                                                    checked={rolesData.indexOf('custom_messages_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Custom Messages Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'rate_type_access'}
+                                                    checked={rolesData.indexOf('rate_type_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Rate Type Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'communication_access'}
+                                                    checked={rolesData.indexOf('communication_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Communication Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
+                                                    name='role'
+                                                    value={'rating_request_access'}
+                                                    checked={rolesData.indexOf('rating_request_access') !== -1 ? true : false}
+                                                    onChange={(e) => handlePermissionChange(e)}
+                                                />&nbsp;Rating Request Access
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label> <input
+                                                    type="checkbox"
                                                     value={'subadmin_access'}
                                                     checked={rolesData.indexOf('subadmin_access') !== -1 ? true : false}
                                                     onChange={(e) => handlePermissionChange(e)}
@@ -321,6 +429,9 @@ function EditCategory() {
                                             </div>
 
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/subadmin')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (

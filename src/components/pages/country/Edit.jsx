@@ -171,19 +171,22 @@ function EditCountry() {
                                                 />
                                             </div>
                                             {formik.errors.category_desc ? <div className='text-danger'>{formik.errors.category_desc}</div> : null} */}
-                                            
+
                                             <div className="text-center">
+                                                <button type="button" onClick={() => navigate('/country')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                    Cancel
+                                                </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit
-                                                        //  || redirecting 
-                                                         ? (
-                                                            <div>
-                                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                {/* <span className="sr-only"></span>  {disabledSubmit && !redirecting ? 'Updating' : 'Redirecting'} */}
-                                                                <span className="sr-only"></span>  {disabledSubmit ? 'Updating' : 'Redirecting'}
-                                                            </div>
-                                                        ) : 'Update'
+                                                            //  || redirecting 
+                                                            ? (
+                                                                <div>
+                                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    {/* <span className="sr-only"></span>  {disabledSubmit && !redirecting ? 'Updating' : 'Redirecting'} */}
+                                                                    <span className="sr-only"></span>  {disabledSubmit ? 'Updating' : 'Redirecting'}
+                                                                </div>
+                                                            ) : 'Update'
                                                     }
                                                 </button>
                                             </div>

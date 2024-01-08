@@ -4,7 +4,7 @@ import LayoutPage from '../Layout';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup'
 import LoadingOverlay from 'react-loading-overlay';
 LoadingOverlay.propTypes = undefined
@@ -134,6 +134,7 @@ function AddNew() {
                                             {formik.errors.job_reject_message ? <div className='text-danger'>{formik.errors.job_reject_message}</div> : null}
 
                                             <div className="text-center">
+
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     {
                                                         disabledSubmit ? (
