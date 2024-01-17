@@ -37,7 +37,7 @@ function AddNew() {
             errors.subarea_name = 'Subarea name max length is 50 characters';
         }
         if (!values.city_id) {
-            errors.city_id = 'Please choose a city';
+            errors.city_id = 'Please choose a province';
         }
         return errors;
     };

@@ -46,11 +46,11 @@ function EditCity() {
         const errors = {};
 
         if (!values.city_name) {
-            errors.city_name = 'City name is required';
+            errors.city_name = 'Province name is required';
         } else if (values.city_name.length < 3) {
-            errors.city_name = 'City name min length is 3 characters';
+            errors.city_name = 'Province name min length is 3 characters';
         } else if (values.city_name.length > 50) {
-            errors.city_name = 'City name max length is 50 characters';
+            errors.city_name = 'Province name max length is 50 characters';
         }
         if (!values.country_id) {
             errors.country_id = 'Please choose a country';
@@ -102,7 +102,7 @@ function EditCity() {
     return (
         <>
             <Helmet>
-                <title>Edit City</title>
+                <title>Edit Province</title>
             </Helmet>
 
             <LayoutPage>

@@ -292,7 +292,7 @@ function List() {
     return (
         <>
             <Helmet>
-                <title>Cities Management</title>
+                <title>Province Management</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
