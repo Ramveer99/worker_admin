@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 function AddNew() {
     const [disabledSubmit, setDisabledSubmit] = useState(false)
@@ -150,10 +152,12 @@ function AddNew() {
                                                 value={formik.values.short_description || ''}
                                                 onChange={formik.handleChange}
                                             />
+
                                         </div>
+
                                         {formik.errors.short_description ? <div className='text-danger'>{formik.errors.short_description}</div> : null}
                                         <div className="input-group input-group-outline mb-3">
-                                            <textarea
+                                            {/* <textarea
                                                 className="form-control"
                                                 placeholder='Long Description'
                                                 id='long_description'
@@ -161,6 +165,32 @@ function AddNew() {
                                                 rows={10}
                                                 value={formik.values.long_description || ''}
                                                 onChange={formik.handleChange}
+                                            /> */}
+
+                                            <CKEditor
+                                                editor={ClassicEditor}
+                                                data={formik.values.long_description}
+                                                config={{
+                                                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+                                                    placeholder: "Long Description"
+                                                }}
+                                                onReady={(editor) => {
+                                                    editor.editing.view.change((writer) => {
+                                                        writer.setStyle(
+                                                            "height",
+                                                            "200px",
+                                                            editor.editing.view.document.getRoot()
+                                                        );
+                                                    });
+                                                }}
+
+                                                onChange={(event, editor) => {
+                                                    const data = editor.getData();
+                                                    formik.setFieldValue(
+                                                        "long_description",
+                                                        data, true
+                                                    );
+                                                }}
                                             />
                                         </div>
                                         {formik.errors.long_description ? <div className='text-danger'>{formik.errors.long_description}</div> : null}

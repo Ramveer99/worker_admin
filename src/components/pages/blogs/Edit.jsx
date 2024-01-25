@@ -7,6 +7,9 @@ import { useFormik } from 'formik';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as Yup from 'yup'
 LoadingOverlay.propTypes = undefined
 
 function EditCategory() {
@@ -14,11 +17,12 @@ function EditCategory() {
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     // const [categoryData, setBlogData] = useState([])
     const [loading, setLoading] = useState(false);
+    const [longDescription, setlongDescription] = useState('');
     const [initialValues, setInitialValues] = useState({
         id: '',
-        category_name: '',
-        category_desc: '',
-        categoryfile: ''
+        title: '',
+        short_description: '',
+        long_description: ''
     });
     const navigate = useNavigate()
 
@@ -27,12 +31,19 @@ function EditCategory() {
             setLoading(true);
             let res = await axios.get(`admin/blog?id=${id}`)
             // setBlogData(res.data.result)
-            setInitialValues({
+            setInitialValues(prevState => ({
+                ...prevState,
                 id: res.data.result._id,
                 title: res.data.result.title,
                 short_description: res.data.result.short_description,
                 long_description: res.data.result.long_description,
-            })
+            }))
+            // {
+            //     id: res.data.result._id,
+            //     title: res.data.result.title,
+            //     short_description: res.data.result.short_description,
+            //     long_description: res.data.result.long_description,
+            // }
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -48,44 +59,47 @@ function EditCategory() {
         }
     }, [])
 
-    const validate = values => {
-        const errors = {};
+    // const validate = values => {
+    //     const errors = {};
 
-        if (!values.title) {
-            errors.title = 'Blog title is required';
-        } else if (values.title.length < 3) {
-            errors.title = 'Blog title min length is 3 characters';
-        } else if (values.title.length > 50) {
-            errors.title = 'Blog title max length is 50 characters';
-        }
+    //     if (!values.title) {
+    //         errors.title = 'Blog title is required';
+    //     } else if (values.title.length < 3) {
+    //         errors.title = 'Blog title min length is 3 characters';
+    //     } else if (values.title.length > 50) {
+    //         errors.title = 'Blog title max length is 50 characters';
+    //     }
 
-        if (!values.short_description) {
-            errors.short_description = 'Short description is required';
-        } else if (values.short_description.length < 3) {
-            errors.short_description = 'Short description min length is 3 characters';
-        }
-        // else if (values.short_description.length > 50) {
-        //     errors.short_description = 'Short description max length is 50 characters';
-        // }
+    //     if (!values.short_description) {
+    //         errors.short_description = 'Short description is required';
+    //     } else if (values.short_description.length < 3) {
+    //         errors.short_description = 'Short description min length is 3 characters';
+    //     }
 
+    //     if (!values.long_description) {
+    //         errors.long_description = 'Long description is required';
+    //     } else if (values.long_description.length < 20) {
+    //         errors.long_description = 'Long description min length is 20 characters';
+    //     }
 
-        if (!values.long_description) {
-            errors.long_description = 'Long description is required';
-        } else if (values.long_description.length < 20) {
-            errors.long_description = 'Long description min length is 20 characters';
-        }
-        // else if (values.long_description.length > 5000) {
-        //     errors.long_description = 'Long description max length is 500 characters';
-        // }
+    //     return errors;
+    // };
 
-
-        return errors;
-    };
+    const validationSchema = Yup.object({
+        title: Yup.string().required("Blog title is required").min(3, 'Blog title min length is 3 characters').max(50, 'Blog title max length is 50 characters'),
+        short_description: Yup.string().required("Short description is required").min(3, 'Short description min length is 3 characters'),
+        long_description: Yup.string().required("Long description is required").min(20, 'Long description min length is 20 characters')
+    })
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        validate,
+        validationSchema,
+        // validateOnBlur: true,
+        // validateOnChange: false,
         onSubmit: async (values) => {
+            if (longDescription === '' || longDescription.length < 20) {
+                return
+            }
             setDisabledSubmit(true)
             try {
                 let formData = new FormData()
@@ -93,7 +107,7 @@ function EditCategory() {
                 formData.append("categoryfile", values.categoryfile)
                 formData.append("title", values.title)
                 formData.append("short_description", values.short_description)
-                formData.append("long_description", values.long_description)
+                formData.append("long_description", longDescription)
 
                 let res = await axios.post(`admin/blog_update`, formData)
 
@@ -173,7 +187,7 @@ function EditCategory() {
                                                     name='title'
                                                     className="form-control"
                                                     placeholder='Title'
-                                                    value={formik.values.title || ''}
+                                                    value={formik.values.title}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
@@ -189,7 +203,7 @@ function EditCategory() {
                                                 />
                                             </div>
                                             {formik.errors.short_description ? <div className='text-danger'>{formik.errors.short_description}</div> : null}
-                                            <div className="input-group input-group-outline mb-3">
+                                            {/* <div className="input-group input-group-outline mb-3">
                                                 <textarea
                                                     className="form-control"
                                                     placeholder='Long Description'
@@ -199,8 +213,38 @@ function EditCategory() {
                                                     value={formik.values.long_description || ''}
                                                     onChange={formik.handleChange}
                                                 />
+                                            </div> */}
+                                            <div className="input-group input-group-outline mb-3">
+                                                <CKEditor
+                                                    editor={ClassicEditor}
+                                                    data={formik.values.long_description}
+                                                    config={{
+                                                        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+                                                        placeholder: "Long Description"
+                                                    }}
+                                                    onReady={(editor) => {
+                                                        editor.editing.view.change((writer) => {
+                                                            writer.setStyle(
+                                                                "height",
+                                                                "200px",
+                                                                editor.editing.view.document.getRoot()
+                                                            );
+                                                        });
+                                                    }}
+
+                                                    onChange={(event, editor) => {
+                                                        const data = editor.getData();
+                                                        setlongDescription(data)
+                                                        // if (initialValues.id != '' && !loading) {
+                                                        //     formik.setFieldValue(
+                                                        //         "long_description",
+                                                        //         data, true
+                                                        //     );
+                                                        // }
+                                                    }}
+                                                />
                                             </div>
-                                            {formik.errors.long_description ? <div className='text-danger'>{formik.errors.long_description}</div> : null}
+                                            {longDescription === '' ? <div className='text-danger'>Long description is required</div> : longDescription.length < 20 ? <div className='text-danger'>Long description min length is 20 characters</div> : ''}
                                             <div className="text-center">
                                                 <button type="button" onClick={() => navigate('/blogs')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     Cancel

@@ -138,8 +138,8 @@ const CustomMessages = loadable(() => import('./components/pages/custom-messages
 
 let navigate = null
 
-// axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-axios.defaults.baseURL = 'http://localhost:9700/';
+axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
+// axios.defaults.baseURL = 'http://localhost:9700/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
     let bearertoken = localStorage.getItem('transact_auth_back')
