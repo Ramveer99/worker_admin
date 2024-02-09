@@ -39,11 +39,11 @@ function AddNew() {
         const errors = {};
 
         if (!values.city_name) {
-            errors.city_name = 'Province name is required';
+            errors.city_name = 'City name is required';
         } else if (values.city_name.length < 3) {
-            errors.city_name = 'Province name min length is 3 characters';
+            errors.city_name = 'City name min length is 3 characters';
         } else if (values.city_name.length > 50) {
-            errors.city_name = 'Province name max length is 50 characters';
+            errors.city_name = 'City name max length is 50 characters';
         }
         if (!values.country_id) {
             errors.country_id = 'Please choose a country';
@@ -102,7 +102,7 @@ function AddNew() {
     return (
         <>
             <Helmet>
-                <title>Add Province</title>
+                <title>Add City</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -111,7 +111,7 @@ function AddNew() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Add New Province</h6>
+                                    <h6 className="text-white text-capitalize ps-3">Add New City</h6>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -124,7 +124,7 @@ function AddNew() {
                                                 name='city_name'
                                                 className="form-control"
                                                 autoComplete='off'
-                                                placeholder='Province Name'
+                                                placeholder='City Name'
                                                 value={formik.values.city_name || ''}
                                                 onChange={formik.handleChange}
                                             />

@@ -32,28 +32,49 @@ function List() {
             name: 'Category Image',
             selector: row => row.category_image,
             cell: row => (
-                <img className='img img-circle' height={50} width={50} src={row.category_image} alt={row.category_image} />
+                <img className='img img-circle' height={100} width={100} src={row.category_image} alt={row.category_image} />
             ),
-            center: true
+            center: true,
+            width:'200px',
+            
         },
 
         {
             name: 'Category Name',
             selector: row => row.category_name,
             sortable: true,
+            width:'200px',
         },
         {
+            // name: 'Description',
+            // selector: row => row.category_desc,
+            // sortable: true,
+            // width:'200px',
+            // height:'200px',
             name: 'Description',
             selector: row => row.category_desc,
             sortable: true,
+            width: '400px',
+            // renderCell: (params) => (
+            //     <div style={{ maxHeight: '100px', overflow: 'auto' }}>
+            //       {params.row.category_desc}
+            //     </div>
+            //   ),
+            cell: (row) => (
+                <div style={{ maxHeight: '100px', overflow: 'auto' }}>
+                  {row.category_desc}
+                </div>
+              ),
         },
         {
             name: 'Created Date',
             selector: row => row.created_at,
+            width:'200px',
         },
         {
             name: 'Action',
             selector: row => row.id,
+            width:'200px',
             cell: row => (
                 <div>
                     <Link to={`/categories/edit/${row._id}`}>
@@ -232,6 +253,7 @@ function List() {
                                         onChangePage={handlePageChange}
                                         sortServer
                                         onSort={handleSort}
+                                        
                                     />
                                     {
                                         showDeleteConfirm && (

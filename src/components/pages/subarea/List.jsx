@@ -33,11 +33,12 @@ function List() {
     const columns = [
         {
             name: 'City',
-            selector: row => row.result_city[0].city_name,
+            //selector: row => row.result_city[0].city_name,
+             selector: row => row.result_city[0].city_name[0].toUpperCase()+row.result_city[0].city_name.slice(1),
         },
         {
             name: 'SubArea',
-            selector: row => row.subarea_name,
+            selector: row => row.subarea_name[0].toUpperCase()+row.subarea_name.slice(1),
             sortable: true,
         },
         {

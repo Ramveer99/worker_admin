@@ -46,11 +46,11 @@ function EditCity() {
         const errors = {};
 
         if (!values.city_name) {
-            errors.city_name = 'Province name is required';
+            errors.city_name = 'City name is required';
         } else if (values.city_name.length < 3) {
-            errors.city_name = 'Province name min length is 3 characters';
+            errors.city_name = 'City name min length is 3 characters';
         } else if (values.city_name.length > 50) {
-            errors.city_name = 'Province name max length is 50 characters';
+            errors.city_name = 'City name max length is 50 characters';
         }
         if (!values.country_id) {
             errors.country_id = 'Please choose a country';
@@ -102,7 +102,7 @@ function EditCity() {
     return (
         <>
             <Helmet>
-                <title>Edit Province</title>
+                <title>Edit City</title>
             </Helmet>
 
             <LayoutPage>
@@ -116,7 +116,7 @@ function EditCity() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit Province</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Edit City</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
@@ -128,7 +128,7 @@ function EditCity() {
                                                     id='city_name'
                                                     name='city_name'
                                                     className="form-control"
-                                                    placeholder='Province Name'
+                                                    placeholder='City Name'
                                                     value={formik.values.city_name}
                                                     onChange={formik.handleChange}
                                                 />

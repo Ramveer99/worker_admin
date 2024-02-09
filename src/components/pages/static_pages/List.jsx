@@ -46,7 +46,7 @@ function List() {
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
                     &nbsp;&nbsp;
-                    {/* <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i> */}
+                    <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i> 
                 </div>
             ),
             center: true

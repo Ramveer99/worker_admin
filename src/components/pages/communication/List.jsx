@@ -42,9 +42,9 @@ function List() {
             selector: row => row.id,
             cell: row => (
                 <div>
-                    {/* <Link to={`/content-pages/edit/${row._id}`}>
+                    <Link to={`/content-pages/edit/${row._id}`}>
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
-                    </Link> */}
+                    </Link> 
                     &nbsp;&nbsp;
                     <i title='Delete' style={{ cursor: 'pointer' }} className='fa fa-trash text-danger' onClick={() => handleDeleteConfirm(row, 'Delete')}></i>
                 </div>
