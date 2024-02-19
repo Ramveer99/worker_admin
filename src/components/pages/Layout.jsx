@@ -84,7 +84,7 @@ function LayoutPage(props) {
                                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="fa fa-globe"></i>
                                         </div>
-                                        <span className="nav-link-text ms-1">Provinces</span>
+                                        <span className="nav-link-text ms-1">City</span>
                                     </a>
                                 </li>
                             ) : ''
