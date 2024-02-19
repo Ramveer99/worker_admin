@@ -14,6 +14,9 @@ import TextField from '@mui/material/TextField';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import './style.css'
+
+import Autocomplete from '@mui/material/Autocomplete';
+
 LoadingOverlay.propTypes = undefined
 
 function AddNew() {
@@ -121,7 +124,7 @@ function AddNew() {
                                         <form onSubmit={formik.handleSubmit}>
                                             <div className="input-group input-group-outline mb-3" style={{ flexDirection: 'column' }}>
                                                 <label>Choose User</label>
-                                                <select
+                                                {/* <select
                                                     style={{ width: '100%' }}
                                                     type="text"
                                                     id='user_id'
@@ -139,7 +142,35 @@ function AddNew() {
                                                             )
                                                         })
                                                     }
-                                                </select>
+                                                </select>   */}
+
+             <Autocomplete
+                id="user_id"
+                name="user_id"
+                options={usersData || []}
+                getOptionLabel={(option) => option.name || ''}
+                style={{ width: '100%' }}
+                value={usersData.find(item => item._id === formik.values.user_id) || null}
+                onChange={(event, newValue) => {
+                formik.handleChange({
+                    target: {
+                        id: 'user_id',
+                        name: 'user_id',
+                        value: newValue ? newValue._id : '' // Adjust this based on your data structure
+                    }
+                });
+            }}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="--select--"
+                    variant="outlined"
+                    autoComplete="off"
+                />
+            )}
+        /> 
+
+
                                             </div>
                                             {formik.errors.user_id ? <div className='text-danger'>{formik.errors.user_id}</div> : null}
                                             <div className="input-group input-group-outline mb-3">
