@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import './style.css'
-
+import Select from 'react-select';
 import Autocomplete from '@mui/material/Autocomplete';
 
 LoadingOverlay.propTypes = undefined
@@ -35,6 +35,11 @@ function AddNew() {
         setUsersData(res.data.users)
         setLoading(false);
     }, [])
+
+    const options = usersData.map(user => ({
+        value: user._id,
+        label: user.name
+    }));
 
     useEffect(() => {
         getUserList()
@@ -144,7 +149,7 @@ function AddNew() {
                                                     }
                                                 </select>   */}
 
-             <Autocomplete
+             {/* <Autocomplete
                 id="user_id"
                 name="user_id"
                 options={usersData || []}
@@ -160,15 +165,41 @@ function AddNew() {
                     }
                 });
             }}
+            
             renderInput={(params) => (
+                
                 <TextField
                     {...params}
                     label="--select--"
                     variant="outlined"
-                    autoComplete="off"
+                    autoComplete="on"
                 />
             )}
-        /> 
+        />  */}
+
+<Select
+            id="user_id"
+            name="user_id"
+            options={options}
+            styles={{ width: '100%' }}
+            value={options.find(option => option.value === formik.values.user_id) || null}
+            // onChange={handleChange}
+            onChange={(selectedOption) => {
+                formik.handleChange({
+                    target: {
+                        id: 'user_id',
+                        name: 'user_id',
+                        value: selectedOption ? selectedOption.value : ''
+                    }
+                });
+            }}
+            placeholder="--select--"
+            getOptionLabel={(option) => option.label}
+            getOptionValue={(option) => option.value}
+        />
+      
+  
+  
 
 
                                             </div>

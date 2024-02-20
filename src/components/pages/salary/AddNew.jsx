@@ -75,7 +75,7 @@ function AddNew() {
                                                 id='title'
                                                 name='title'
                                                 className="form-control"
-                                                placeholder='Title'
+                                                placeholder='Salary'
                                                 value={formik.values.title || ''}
                                                 onChange={formik.handleChange}
                                             />

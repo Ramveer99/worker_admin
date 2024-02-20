@@ -36,6 +36,7 @@ function List() {
         {
             name: 'Created Date',
             selector: row => moment(row.created_at).format('YYYY-MM-DD hh:mm A'),
+            
         },
         {
             name: 'Action',
