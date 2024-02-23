@@ -41,7 +41,9 @@ function List() {
 
         {
             name: 'Category Name',
-            selector: row => row.category_name,
+            // selector: row => row.category_name,
+            selector: row =>row.category_name[0].toUpperCase()+row.category_name.slice(1),
+
             sortable: true,
             width:'200px',
         },

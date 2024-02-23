@@ -289,6 +289,9 @@ function List() {
             });
         }
     }, [getCityList, searchKeyWord, pageNumber, sortField, perPage, location])
+    
+
+
     return (
         <>
             <Helmet>
