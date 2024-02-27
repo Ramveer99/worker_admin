@@ -66,7 +66,7 @@ function AddNew() {
         initialValues: { city_name: '', country_id: '' },
         validate,
         onSubmit: async (values) => {
-            // console.log('formmmmmmmmmmmmmmmmmmmmmmmm', values);
+            console.log('formmmmmmmmmmmmmmmmmmmmmmmm', values);
             try {
                 setDisabledSubmit(true)
                 let res = await axios.post(`admin/cityadd`, values)

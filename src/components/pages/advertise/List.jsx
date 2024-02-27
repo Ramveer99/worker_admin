@@ -48,17 +48,24 @@ function List() {
         },
         {
             name: 'Start Date',
-            selector: row => moment(row.start_time).format('YYYY-MM-DD HH:MM A'),
+            selector: row => moment(row.start_time).format('YYYY-MM-DD HH:mm A'),
+            //   selector: row => console.log("start date" ,moment(row.start_time).format('YYYY-MM-DD HH:mm ')),
+            // selector: row => {
+            //     // Assuming row.start_time is a string representing a date
+            //     const formattedStartTime = moment(row.start_time).format('YYYY-MM-DD HH:mm:ss');
+              
+            //     return formattedStartTime 
+            // },
             sortable: true,
         },
         {
             name: 'End Date',
-            selector: row => moment(row.end_time).format('YYYY-MM-DD HH:MM A'),
+            selector: row => moment(row.end_time).format('YYYY-MM-DD HH:mm A'),
             sortable: true,
         },
         {
             name: 'Created Date',
-            selector: row => moment(row.created_at).format('YYYY-MM-DD HH:MM A'),
+            selector: row => moment(row.created_at).format('YYYY-MM-DD HH:mm A'),
             sortable: true,
         },
         {
@@ -142,6 +149,10 @@ function List() {
         try {
             setLoading(true);
             let res = await axios.get(`admin/advertisement/list-all?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            
+            let startTime = res.data.result.categorydata[0].start_time;
+            console.log(startTime);
+            console.log(moment.utc(startTime).local().format(),'hhhhjhjjh');            
             setCategoryData(res.data.result.categorydata)
             setTotalRows(res.data.result.total);
             setLoading(false);

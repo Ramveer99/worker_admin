@@ -50,7 +50,11 @@ const CityList = loadable(() => import('./components/pages/city/List'))
 const AddNewCity = loadable(() => import('./components/pages/city/AddNew'))
 const EditCity = loadable(() => import('./components/pages/city/Edit'))
 
+//Ra
 
+const RaList=loadable(()=> import('./components/pages/Rate Percentage/List'))
+const AddRa=loadable(()=>import('./components/pages/Rate Percentage/AddNew'))
+const EditRa=loadable(()=>import('./components/pages/Rate Percentage/Edit'))
 
 // SubArea import
 const SubAreaList = loadable(() => import('./components/pages/subarea/List'))
@@ -139,7 +143,7 @@ const CustomMessages = loadable(() => import('./components/pages/custom-messages
 let navigate = null
 
 axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-// axios.defaults.baseURL = 'http://localhost:9700/';
+// axios.defaults.baseURL = 'http://172.16.100.60:9700/';
 //  Request interceptor
 axios.interceptors.request.use(request => {
     let bearertoken = localStorage.getItem('transact_auth_back')
@@ -213,6 +217,11 @@ root.render(
                 <Route path="/city" element={<CityList />} />
                 <Route path="/city/addnew" element={<AddNewCity />} />
                 <Route path="/city/edit/:id" element={<EditCity />} />
+
+
+                <Route path="/Rate" element={<RaList />} />
+                <Route path="/Rate/addnew" element={<AddRa />} />
+                <Route path="/Rate/edit/:id" element={<EditRa />} />
 
 
                 {/* city Start */}

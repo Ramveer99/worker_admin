@@ -350,6 +350,21 @@ function LayoutPage(props) {
                         }
 
 
+{
+                            (userData && userData.subadmin_data && userData.subadmin_data.rating_request_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <a href='/admin/Rate' className={`nav-link text-white ${location.pathname.includes('/Rate') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="fa fa-sort-amount-desc"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Rate Percentage</span>
+                                    </a>
+                                </li>
+                            ) : ''
+                        }
+
+
+
 
 
                     </ul>
