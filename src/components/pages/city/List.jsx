@@ -143,6 +143,7 @@ function List() {
             let formData = new FormData()
             setLoading(true)
             formData.append('excel_file', e.target.files[0])
+            console.log("form data", formData)
             let res = await axios.post(`admin/upload_excel_city`, formData)
             toast(res.data.message, {
                 position: "top-right",
