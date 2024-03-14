@@ -112,6 +112,10 @@ const JobTypesList = loadable(() => import('./components/pages/jobtypes/List'))
 const AddNewJobType = loadable(() => import('./components/pages/jobtypes/AddNew'))
 const EditJobType = loadable(() => import('./components/pages/jobtypes/Edit'))
 
+//comment
+
+const Commentlist = loadable(()=> import('./components/pages/commentdetail/List'))
+
 // content pages import
 const PagesList = loadable(() => import('./components/pages/static_pages/List'))
 const AddNewPage = loadable(() => import('./components/pages/static_pages/AddNew'))
@@ -152,6 +156,8 @@ let navigate = null
 
 axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
 // axios.defaults.baseURL = 'http://172.16.100.60:9700/';
+axios.defaults.baseURL = 'http://localhost:9700';
+
 //  Request interceptor
 axios.interceptors.request.use(request => {
     let bearertoken = localStorage.getItem('transact_auth_back')
@@ -253,6 +259,10 @@ root.render(
                 <Route path="/jobtitle" element={<JobTitleList />} />
                 <Route path="/jobtitle/addnew" element={<AddNewJobTitle />} />
                 <Route path="/jobtitle/edit/:id" element={<EditJobTitle />} />
+
+                 {/* comment start */}
+
+                 <Route path="/commentes" element={<Commentlist />} />
 
 
                 {/* Advertisement Start */}
