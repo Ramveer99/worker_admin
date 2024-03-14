@@ -42,20 +42,20 @@ function List() {
         // },
 
         {
-            name: 'Province',
+            name: 'Country',
             // selector: row => row.result_country[0].country_name,
             // selector: row => row.result_country[0].country_name.toUpperCase()
             // selector: row => row.result_country[0].country_name.toUpperCase()+row.result_country.slice(1),
-            selector: row => row.result_country[0].province_name[0].toUpperCase()+row.result_country[0].province_name.slice(1),
+            selector: row => row.result_country[0].country_name[0].toUpperCase()+row.result_country[0].country_name.slice(1),
 
 
            
         },
         {
-            name: 'City',
-            selector: row => row.city_name,
+            name: 'Province',
+            selector: row => row.province_name,
             // selector: row => row.subarea_name[0].toUpperCase()+row.subarea_name.slice(1),
-            selector: row => row.city_name[0].toUpperCase()+row.city_name.slice(1),
+            selector: row => row.province_name[0].toUpperCase()+row.province_name.slice(1),
             sortable: true,
         },
         // {
@@ -72,7 +72,7 @@ function List() {
             selector: row => row.id,
             cell: row => (
                 <div>
-                    <Link to={`/city/edit/${row._id}`}>
+                    <Link to={`/Province/edit/${row._id}`}>
                         <i title='Edit' style={{ cursor: 'pointer' }} className='fa fa-pencil text-success'></i>
                     </Link>
                     &nbsp;&nbsp;
@@ -101,7 +101,7 @@ function List() {
         setLoadingDeleteModelConfirmText('Deleting')
         //  activate deactivate user
         try {
-            let res = await axios.delete(`admin/citydel/${idBeingDeleting}`)
+            let res = await axios.delete(`admin/provincedel/${idBeingDeleting}`)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -142,7 +142,7 @@ function List() {
             setLoading(true)
             formData.append('excel_file', e.target.files[0])
             console.log("form data", formData)
-            let res = await axios.post(`admin/upload_excel_city`, formData)
+            let res = await axios.post(`admin/upload_excel_province`, formData)
             toast(res.data.message, {
                 position: "top-right",
                 autoClose: 2000,
@@ -195,7 +195,7 @@ function List() {
         // console.log(row,type);
         setShowDeleteConfirm(true)
         setDeleteModelTitle(`Confirm ${type}`)
-        setDeleteModelMessage(`Are you sure want to ${type} the  ${row?.city_name} City?`)
+        setDeleteModelMessage(`Are you sure want to ${type} the  ${row?.province_name} Province?`)
         setDeleteModelActionType(type)
         setIdBeingDeleting(row._id)
     }
@@ -247,8 +247,8 @@ function List() {
     const getCityList = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/citylist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
-            console.log("kkkk",res.data.result.sample_pdf);
+            let res = await axios.get(`admin/provincelist?page=${pageNumber}&keyword=${searchKeyWord.toLowerCase()}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
+            console.log("province ------->", res.data.result);
             setCityData(res.data.result.citydata.data)
             setSamplePdf(res.data.result.sample_pdf)
             setTotalRows(res.data.result.citydata.count);
@@ -304,7 +304,7 @@ function List() {
     return (
         <>
             <Helmet>
-                <title>City Management</title>
+                <title>Province Management</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -313,8 +313,8 @@ function List() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">City</h6>
-                                    <Link to="/city/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
+                                    <h6 className="text-white text-capitalize ps-3 custom-card-heading">Province</h6>
+                                    <Link to="/Province/addnew" title='Add New' className='btn btn-rounded btn-icon btn-primary custom-add-new-button'><i className='fa fa-plus'></i></Link>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">

@@ -17,15 +17,15 @@ function EditCity() {
     // const [redirecting, setRedirecting] = useState(false)
     const [loading, setLoading] = useState(false);
     // const [initialValues, setInitialValues] = useState({ id: '', nationality_name: '', category_desc: '', categoryfile: '' });
-    const [initialValues, setInitialValues] = useState({ id: '', city_name: '', province_id: '' });
+    const [initialValues, setInitialValues] = useState({ id: '', province_name: '', country_id: '' });
     const navigate = useNavigate()
 
     const getCityDetail = useCallback(async () => {
         try {
             setLoading(true);
-            let res = await axios.get(`admin/city?id=${id}`)
-            console.log("cit --->",res.data.result.city);
-            setInitialValues({ id: res.data.result.city._id, city_name: res.data.result.city.city_name, province_id: res.data.result.city.province_id._id })
+            let res = await axios.get(`admin/province?id=${id}`)
+            console.log(res);
+            setInitialValues({ id: res.data.result.city._id, province_name: res.data.result.city.province_name, country_id: res.data.result.city.country_id._id })
             setCountriesData(res.data.result.countries)
             setLoading(false);
         } catch (errors) {
@@ -45,15 +45,15 @@ function EditCity() {
     const validate = values => {
         const errors = {};
 
-        if (!values.city_name) {
-            errors.city_name = 'City name is required';
-        } else if (values.city_name.length < 3) {
-            errors.city_name = 'City name min length is 3 characters';
-        } else if (values.city_name.length > 50) {
-            errors.city_name = 'City name max length is 50 characters';
+        if (!values.province_name) {
+            errors.city_name = 'Province name is required';
+        } else if (values.province_name.length < 3) {
+            errors.city_name = 'Province name min length is 3 characters';
+        } else if (values.province_name.length > 50) {
+            errors.city_name = 'Province name max length is 50 characters';
         }
-        if (!values.province_id) {
-            errors.province_id = 'Please choose a country';
+        if (!values.country_id) {
+            errors.country_id = 'Please choose a country';
         }
         return errors;
     };
@@ -65,8 +65,8 @@ function EditCity() {
             setDisabledSubmit(true)
             try {
                 console.log('=============>', values);
-                let res = await axios.post(`admin/cityupdate`, values)
-                navigate('/city', { state: { message: res.data.message } })
+                let res = await axios.post(`admin/provinceupdate`, values)
+                navigate('/Province', { state: { message: res.data.message } })
             } catch (errors) {
                 if (errors.response.data.error) {
                     toast(errors.response.data.error.message, {
@@ -102,7 +102,7 @@ function EditCity() {
     return (
         <>
             <Helmet>
-                <title>Edit City</title>
+                <title>Edit Province</title>
             </Helmet>
 
             <LayoutPage>
@@ -116,7 +116,7 @@ function EditCity() {
                             <div className="card my-4">
                                 <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 className="text-white text-capitalize ps-3">Edit City</h6>
+                                        <h6 className="text-white text-capitalize ps-3">Edit Province</h6>
                                     </div>
                                 </div>
                                 <div className="card-body px-0 pb-2">
@@ -125,11 +125,11 @@ function EditCity() {
                                             <div className="input-group input-group-outline mb-3">
                                                 <input
                                                     type="text"
-                                                    id='city_name'
-                                                    name='city_name'
+                                                    id='province_name'
+                                                    name='province_name'
                                                     className="form-control"
-                                                    placeholder='City Name'
-                                                    value={formik.values.city_name}
+                                                    placeholder='Province Name'
+                                                    value={formik.values.province_name}
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
@@ -138,26 +138,26 @@ function EditCity() {
                                             <div className="input-group input-group-outline mb-3">
                                                 <select
                                                     type="text"
-                                                    id='province_id'
-                                                    name='province_id'
+                                                    id='country_id'
+                                                    name='country_id'
                                                     className="form-control"
                                                     autoComplete='off'
-                                                    value={formik.values.province_id || ''}
+                                                    value={formik.values.country_id || ''}
                                                     onChange={formik.handleChange}
                                                 >
                                                     <option value="">--select--</option>
                                                     {
                                                         countriesData && countriesData.map((item) => {
                                                             return (
-                                                                <option key={item._id} value={item._id} >{item.province_name}</option>
+                                                                <option key={item._id} value={item._id} >{item.country_name}</option>
                                                             )
                                                         })
                                                     }
                                                 </select>
                                             </div>
-                                            {formik.errors.province_id ? <div className='text-danger'>{formik.errors.province_id}</div> : null}
+                                            {formik.errors.country_id ? <div className='text-danger'>{formik.errors.country_id}</div> : null}
                                             <div className="text-center">
-                                                <button type="button" onClick={() => navigate('/city')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                                <button type="button" onClick={() => navigate('/Province')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                     Cancel
                                                 </button>&nbsp;&nbsp;
                                                 <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>

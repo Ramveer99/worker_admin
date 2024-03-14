@@ -50,6 +50,14 @@ const CityList = loadable(() => import('./components/pages/city/List'))
 const AddNewCity = loadable(() => import('./components/pages/city/AddNew'))
 const EditCity = loadable(() => import('./components/pages/city/Edit'))
 
+
+// province
+
+const ProvinceList = loadable(() => import('./components/pages/Province/List'))
+const AddNewProvince = loadable(() => import('./components/pages/Province/AddNew'))
+const EditProvince = loadable(() => import('./components/pages/Province/Edit'))
+
+
 //Ra
 
 const RaList=loadable(()=> import('./components/pages/Rate Percentage/List'))
@@ -217,6 +225,12 @@ root.render(
                 <Route path="/city" element={<CityList />} />
                 <Route path="/city/addnew" element={<AddNewCity />} />
                 <Route path="/city/edit/:id" element={<EditCity />} />
+
+                {/* Province */}
+
+                <Route path="/Province" element={<ProvinceList />} />
+                <Route path="/Province/addnew" element={<AddNewProvince />} />
+                <Route path="/Province/edit/:id" element={<EditProvince />} />
 
 
                 <Route path="/Rate" element={<RaList />} />

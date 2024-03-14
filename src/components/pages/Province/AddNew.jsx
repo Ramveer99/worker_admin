@@ -23,9 +23,9 @@ function AddNew() {
 
 
     const getCountriesList = async () => {
-        let res = await axios.get('/admin/getAllProvince')
-        console.warn("city pro ----->",res.data.result)
-        setCountriesData(res.data.result)
+        let res = await axios.get('/admin/getcountries')
+        console.log(res.data.countries);
+        setCountriesData(res.data.countries)
     }
 
 
@@ -38,15 +38,15 @@ function AddNew() {
     const validate = values => {
         const errors = {};
 
-        if (!values.city_name) {
-            errors.city_name = 'City name is required';
-        } else if (values.city_name.length < 3) {
-            errors.city_name = 'City name min length is 3 characters';
-        } else if (values.city_name.length > 50) {
-            errors.city_name = 'City name max length is 50 characters';
+        if (!values.province_name) {
+            errors.province_name = 'Province name is required';
+        } else if (values.province_name.length < 3) {
+            errors.province_name = 'Province name min length is 3 characters';
+        } else if (values.province_name.length > 50) {
+            errors.province_name = 'Province name max length is 50 characters';
         }
-        if (!values.province_id) {
-            errors.province_id = 'Please choose a country';
+        if (!values.country_id) {
+            errors.country_id = 'Please choose a country';
         }
         // if (!values.categoryfile) {
         //     errors.categoryfile = 'Category image is required';
@@ -63,14 +63,14 @@ function AddNew() {
         return errors;
     };
     const formik = useFormik({
-        initialValues: { city_name: '', province_id: '' },
+        initialValues: { province_name: '', country_id: '' },
         validate,
         onSubmit: async (values) => {
             // console.log('formmmmmmmmmmmmmmmmmmmmmmmm', values);
             try {
                 setDisabledSubmit(true)
-                let res = await axios.post(`admin/cityadd`, values)
-                navigate('/city', { state: { message: res.data.message } })
+                let res = await axios.post(`admin/provinceadd`, values)
+                navigate('/Province', { state: { message: res.data.message } })
             } catch (errors) {
                 if (errors.response.data.error) {
                     toast(errors.response.data.error.message, {
@@ -102,7 +102,7 @@ function AddNew() {
     return (
         <>
             <Helmet>
-                <title>Add City</title>
+                <title>Add Province</title>
             </Helmet>
             <LayoutPage>
                 <div className="row">
@@ -111,7 +111,7 @@ function AddNew() {
                         <div className="card my-4">
                             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 className="text-white text-capitalize ps-3">Add New City</h6>
+                                    <h6 className="text-white text-capitalize ps-3">Add New Province</h6>
                                 </div>
                             </div>
                             <div className="card-body px-0 pb-2">
@@ -120,40 +120,40 @@ function AddNew() {
                                         <div className="input-group input-group-outline mb-3">
                                             <input
                                                 type="text"
-                                                id='city_name'
-                                                name='city_name'
+                                                id='province_name'
+                                                name='province_name'
                                                 className="form-control"
                                                 autoComplete='off'
-                                                placeholder='City Name'
-                                                value={formik.values.city_name || ''}
+                                                placeholder='Province Name'
+                                                value={formik.values.province_name || ''}
                                                 onChange={formik.handleChange}
                                             />
                                         </div>
-                                        {formik.errors.city_name ? <div className='text-danger'>{formik.errors.city_name}</div> : null}
+                                        {formik.errors.province_name ? <div className='text-danger'>{formik.errors.province_name}</div> : null}
                                         <div className="input-group input-group-outline mb-3">
                                             <select
                                                 type="text"
-                                                id='province_id'
-                                                name='province_id'
+                                                id='country_id'
+                                                name='country_id'
                                                 className="form-control"
                                                 autoComplete='off'
-                                                value={formik.values.province_id || ''}
+                                                value={formik.values.country_id || ''}
                                                 onChange={formik.handleChange}
                                             >
                                                 <option value="">--select--</option>
                                                 {
                                                     countriesData && countriesData.map((item) => {
                                                         return (
-                                                            <option key={item._id} value={item._id}>{item.province_name}</option>
+                                                            <option key={item._id} value={item._id}>{item.country_name}</option>
                                                         )
                                                     })
                                                 }
                                             </select>
                                         </div>
-                                        {formik.errors.province_id ? <div className='text-danger'>{formik.errors.province_id}</div> : null}
+                                        {formik.errors.country_id ? <div className='text-danger'>{formik.errors.country_id}</div> : null}
 
                                         <div className="text-center">
-                                            <button type="button" onClick={() => navigate('/city')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
+                                            <button type="button" onClick={() => navigate('/Province')} className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
                                                 Cancel
                                             </button>&nbsp;&nbsp;
                                             <button type="submit" className="btn btn-lg bg-gradient-primary btn-lg w-20 mt-4 mb-0" disabled={disabledSubmit}>
