@@ -46,7 +46,7 @@ function AddNew() {
             errors.city_name = 'City name max length is 50 characters';
         }
         if (!values.province_id) {
-            errors.province_id = 'Please choose a country';
+            errors.province_id = 'Please choose a Province';
         }
         // if (!values.categoryfile) {
         //     errors.categoryfile = 'Category image is required';

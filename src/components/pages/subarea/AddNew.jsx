@@ -15,7 +15,9 @@ function AddNew() {
     const navigate = useNavigate()
 
     const getCitiesList = async () => {
+        // let res = await axios.get('/admin/getcities')/admin/citylistforedit
         let res = await axios.get('/admin/getcities')
+        console.log("c in subarea", res)
         setCitiesData(res.data.cities)
     }
 
@@ -37,7 +39,7 @@ function AddNew() {
             errors.subarea_name = 'Subarea name max length is 50 characters';
         }
         if (!values.city_id) {
-            errors.city_id = 'Please choose a province';
+            errors.city_id = 'Please choose a city';
         }
         return errors;
     };

@@ -78,6 +78,20 @@ function LayoutPage(props) {
                                 </li>
                             ) : ''
                         }
+
+                        {
+                            (userData && userData.subadmin_data && userData.subadmin_data.province_access) || (userData && !userData.subadmin_data) ? (
+                                <li className="nav-item">
+                                    <a href='/admin/Province' className={`nav-link text-white ${location.pathname.includes('/Province') ? "active bg-gradient-primary" : ""}`}>
+                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i class="fa fa-shower" aria-hidden="true"></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">Province</span>
+                                    </a>
+                                </li>
+                            ) : ''
+                        }
+
                         {
                             (userData && userData.subadmin_data && userData.subadmin_data.province_access) || (userData && !userData.subadmin_data) ? (
                                 <li className="nav-item">
@@ -91,19 +105,6 @@ function LayoutPage(props) {
                             ) : ''
                         }
 
-
-{
-                            (userData && userData.subadmin_data && userData.subadmin_data.province_access) || (userData && !userData.subadmin_data) ? (
-                                <li className="nav-item">
-                                    <a href='/admin/Province' className={`nav-link text-white ${location.pathname.includes('/Province') ? "active bg-gradient-primary" : ""}`}>
-                                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i class="fa fa-shower" aria-hidden="true"></i>
-                                        </div>
-                                        <span className="nav-link-text ms-1">Province</span>
-                                    </a>
-                                </li>
-                            ) : ''
-                        }
 
 
                         {

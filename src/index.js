@@ -156,7 +156,7 @@ let navigate = null
 
 axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
 // axios.defaults.baseURL = 'http://172.16.100.60:9700/';
-axios.defaults.baseURL = 'http://localhost:9700';
+// axios.defaults.baseURL = 'http://localhost:9700';
 
 //  Request interceptor
 axios.interceptors.request.use(request => {
