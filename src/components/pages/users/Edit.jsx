@@ -19,6 +19,7 @@ function EditCategory() {
     const { id } = useParams()
     const subareaRef = useRef(null);
     const cityRef = useRef(null);
+    const subcityRef = useRef(null);
     const [disabledSubmit, setDisabledSubmit] = useState(false)
     const [rolesData, setRolesData] = useState([])
     const [loading, setLoading] = useState(false);
@@ -27,16 +28,20 @@ function EditCategory() {
     const [selectedSkills, setSelectedSkills] = useState(true);
     const [subareasData, setSubareasData] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState({});
+    const [selectedProvince, setSelectedProvince] = useState({});
+
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedSubarea, setSelectedSubarea] = useState('');
     const [citiesData, setCitiesData] = useState([]);
+    const [provinceData, setProvinceData] = useState([]);
+
     const navigate = useNavigate()
 
     const getCategoryDetail = useCallback(async () => {
         try {
             setLoading(true);
             let res = await axios.get(`admin/user_detail?id=${id}`)
-            console.log(res.data.result);
+            console.log("--------------->",res.data.result);
             let skillArr = [];
             let skillsString = "";
             let locaSkillData = res.data.result.skilldata
@@ -60,6 +65,7 @@ function EditCategory() {
                 vat_number: res.data.result.detail.vat_number,
                 rate_type: res.data.result.detail.rate_type,
                 country_id: res.data.result.detail.country_id,
+                province_id:res.data.result.detail.province_id,
                 city_id: res.data.result.detail.city_id,
                 subarea_id: res.data.result.detail.subarea_id,
                 rate_amount: res.data.result.detail.rate_amount,
@@ -80,9 +86,16 @@ function EditCategory() {
                 contact_ref_num_3: res.data.result.detail.contact_ref_num_3,
                 skills: skillsString,
             })
+            console.log("ididididi", res.data.result.detail.country_id)
             setProfileData(res.data.result)
+            
             if (res.data.result.detail.country_id) {
                 setSelectedCountry({ _id: res.data.result.detail.country_id._id, country_name: res.data.result.detail.country_id.country_name })
+            }
+            if (res.data.result.detail.province_id)
+            {
+                setSelectedProvince({_id:res.data.result.detail.province_id._id, province_name:res.data.result.detail.province_id.province_name})
+                console.log("prov----------",res.data.result.detail.province_id.province_name)
             }
             if (res.data.result.detail.city_id) {
                 setSelectedCity({ _id: res.data.result.detail.city_id._id, city_name: res.data.result.detail.city_id.city_name })
@@ -90,7 +103,10 @@ function EditCategory() {
             if (res.data.result.detail.subarea_id) {
                 setSelectedSubarea({ _id: res.data.result.detail.subarea_id._id, subarea_name: res.data.result.detail.subarea_id.subarea_name })
             }
+            setProvinceData(res.data.result.Province)
+            console.log("province  ====",res.data.result)
             setCitiesData(res.data.result.cities)
+            setSubareasData(res.data.result.subareas)
             setLoading(false);
         } catch (errors) {
             console.log(errors);
@@ -110,15 +126,41 @@ function EditCategory() {
     const handleCountryChange = async (e) => {
         setLoading(true)
         setSelectedCountry(e)
+        setProvinceData([])
+        setCitiesData([])
         setSubareasData([])
+        setSelectedProvince('')
         setSelectedCity('')
         setSelectedSubarea('')
-        let res = await axios.get(`user/getcitiesbycountry?id=${e._id}`)
+        let res = await axios.get(`admin/getprovincebycountry?id=${e._id}`)
+        console.log(";;;;;;;;;;;;;;;",res)
         formik.setFieldValue('country_id', e._id)
         // formik.setFieldValue('city_id', '')
 
-        formik.setFieldValue('subarea_id', '')
+        // formik.setFieldValue('subarea_id', '')
+        formik.setFieldValue('province_id', '')
+        
+        setProvinceData(res.data.result ? res.data.result : [])
+        setCitiesData(res.data.result ? res.data.result : [])
+        setProvinceData(res.data.result ? res.data.result : [] )
+        setSubareasData(res.data.result ? res.data.result : [])
+        setLoading(false)
+    }
 
+    const handleProvinceChange = async (e) => {
+        setLoading(true)
+
+        setSelectedProvince(e)
+        setCitiesData([])
+        setSubareasData([])
+        setSelectedCity('')
+        setSelectedSubarea('')
+        let res = await axios.get(`admin/getcitiesbyprovince?id=${e._id}`)
+        formik.setFieldValue('province_id', e._id)
+        formik.setFieldValue('city_id', '')
+
+        // formik.setFieldValue('subarea_id', '')
+        console.log("setdata-----",res.data.result)
         setCitiesData(res.data.result ? res.data.result : [])
         setLoading(false)
     }
@@ -179,6 +221,8 @@ function EditCategory() {
         enableReinitialize: true,
         validationSchema,
         onSubmit: async (values) => {
+            console.log("value----->",values)
+          
             setDisabledSubmit(true)
             try {
                 // let res = await axios.post(`admin/user_update`, {
@@ -670,20 +714,25 @@ function EditCategory() {
                                                     onChange={(event, newval) => {
                                                         if (newval) {
                                                             formik.setFieldValue('country_id', newval._id)
-                                                            formik.setFieldValue('city_id', '')
+                                                            formik.setFieldValue('province_id', '')
                                                             handleCountryChange(newval)
                                                         } else {
                                                             formik.setFieldValue('subarea_id', '')
                                                             formik.setFieldValue('city_id', '')
                                                             formik.setFieldValue('country_id', '')
+                                                            setProvinceData([])
                                                             setCitiesData([])
                                                             setSubareasData([])
                                                             setSelectedCountry({})
+                                                            setSelectedProvince({})
                                                             setSelectedCity({})
                                                             setSelectedSubarea({})
                                                             // const ele = cityRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
                                                             // if (ele)
                                                             //     ele.click();
+                                                            const ele = cityRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+                                                            if (ele)
+                                                                ele.click();
                                                         }
 
                                                     }}
@@ -691,11 +740,73 @@ function EditCategory() {
                                             </div>
                                             {formik.errors.country_id ? <div className='text-danger'>{formik.errors.country_id}</div> : null}
 
+                                            
+
+                                            {/* Add Province  */}
+ 
+
+                                            <div className="input-group input-group-outline mb-3 f-col">
+                                                <label>Choose Province</label>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    ref={cityRef}
+                                                    className='w-100'
+                                                    id="combo-box-demo"
+                                                    value={selectedProvince}
+                                                    // inputValue={selectedCountry}
+                                                    isOptionEqualToValue={(option, value) => option._id === value._id}
+                                                    // options={provinceData && provinceData.countries ? provinceData.countries : []}
+                                                    options={provinceData.length ? provinceData : []}
+                                                    getOptionLabel={(option) => option.province_name ? option.province_name : ''}
+                                                    renderOption={(props, option) => {
+                                                        return (
+                                                            <li {...props} key={option._id}>
+                                                                {option.province_name}
+                                                            </li>
+                                                        );
+                                                    }}
+                                                    sx={{ width: 300 }}
+                                                    renderInput={(params) => <TextField {...params} label="" />}
+                                                    onChange={(event, newval) => {
+                                                        if (newval) {
+                                                            formik.setFieldValue('province_id', newval._id)
+                                                            // formik.setFieldValue('city_id', '')
+                                                            handleProvinceChange(newval)
+                                                        } else {
+                                                            // formik.setFieldValue('subarea_id', '')
+                                                            // formik.setFieldValue('city_id', '')
+                                                            // formik.setFieldValue('province_id', '')
+                                                            setCitiesData([])
+                                                            setSubareasData([])
+                                                            setSelectedProvince({})
+                                                            setSelectedCity({})
+                                                            setSelectedSubarea({})
+                                                            // const ele = cityRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+                                                            // if (ele)
+                                                            //     ele.click();
+                                                            const ele = subcityRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+                                                            if (ele)
+                                                                ele.click();
+                                                        
+                                                        }
+
+                                                    }}
+                                                />
+                                            </div>
+
+
+
+
+                                             {/* End of Province  */}
+
+
+
                                             <div className="input-group input-group-outline mb-3 f-col">
                                                 <label>Choose City</label>
                                                 <Autocomplete
                                                     disablePortal
-                                                    ref={cityRef}
+                                                    // ref={cityRef}
+                                                    ref={subcityRef}
                                                     id="combo-box-demo"
                                                     className='w100'
                                                     value={selectedCity}
@@ -720,6 +831,12 @@ function EditCategory() {
                                                             setSelectedCity({})
                                                             setSelectedSubarea({})
                                                             // formik.setFieldValue('city_id', '')
+                                                           
+                                                           
+                                                            // const ele = subareaRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+                                                            // if (ele)
+                                                            //     ele.click();
+
                                                             const ele = subareaRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
                                                             if (ele)
                                                                 ele.click();
@@ -736,9 +853,10 @@ function EditCategory() {
                                                     disablePortal
                                                     id="combo-box-demo"
                                                     className='w100'
-                                                    options={subareasData.length ? subareasData : []}
+                                                    
                                                     value={selectedSubarea}
                                                     isOptionEqualToValue={(option, value) => option._id === value._id}
+                                                    options={subareasData.length ? subareasData : []}
                                                     getOptionLabel={(option) => option.subarea_name ? option.subarea_name : ''}
                                                     renderOption={(props, option) => {
                                                         return (
@@ -755,7 +873,7 @@ function EditCategory() {
                                                             formik.setFieldValue('subarea_id', newval._id)
                                                             setSelectedSubarea(newval)
                                                         } else {
-                                                            // formik.setFieldValue('subarea_id', '')
+                                                            formik.setFieldValue('subarea_id', '')
                                                             setSelectedSubarea({})
                                                             // setSubareasData([])
                                                         }
