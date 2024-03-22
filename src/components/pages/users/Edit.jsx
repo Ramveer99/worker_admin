@@ -793,6 +793,8 @@ function EditCategory() {
                                                     }}
                                                 />
                                             </div>
+                                            {/* {formik.errors.province_id ? <div className='text-danger'>{formik.errors.province_id}</div> : null} */}
+
 
 
 

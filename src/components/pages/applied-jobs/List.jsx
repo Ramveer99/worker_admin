@@ -68,8 +68,13 @@ function List() {
         {
             name: 'Admin Status',
             selector: row => (
-                row.admin_approved !== "0" ? row.admin_approved === "Yes" ? <span className='text-success'>Approved</span> : <span className='text-danger'>Rejected</span> : "Pending"
-            ),
+                // row.admin_approved !== "0" ? row.admin_approved === "Yes" ? <span className='text-success'>Approved</span> : <span className='text-danger'>Rejected</span> : "Pending"
+                    // row.user_data[0].paid_user ? <strong className='text-success'>Approved</strong> : row.admin_approved === "0" ? <strong className='text-primary'>Pending</strong> : row.admin_approved === "Yes" ? <strong className='text-success'>Approved</strong> : <strong className='text-danger'>Rejected</strong>
+                    row.user_data[0].paid_user === true ? 'Approved' : row.admin_approved === "0" ? "Pending" : row.admin_approved === "No" ? <span className='text-danger'><strong>Rejected</strong></span> : row.admin_approved 
+                //    <div>
+                //     {console.log("heeeee",row.user_data[0].paid_user)}
+                //    </div>         
+                 ),
         },
 
         {
