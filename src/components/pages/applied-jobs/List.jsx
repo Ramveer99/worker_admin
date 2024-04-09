@@ -55,6 +55,11 @@ function List() {
             sortable: true,
         },
         {
+            name: 'Rate type',
+            selector: row => row.rate_type,
+            sortable: true,
+        },
+        {
             name: 'Applied Date',
             selector: row => moment(row.created_at).format('DD MMMM, YYYY'),
             sortable: true,
@@ -70,32 +75,34 @@ function List() {
             selector: row => (
                 // row.admin_approved !== "0" ? row.admin_approved === "Yes" ? <span className='text-success'>Approved</span> : <span className='text-danger'>Rejected</span> : "Pending"
                     // row.user_data[0].paid_user ? <strong className='text-success'>Approved</strong> : row.admin_approved === "0" ? <strong className='text-primary'>Pending</strong> : row.admin_approved === "Yes" ? <strong className='text-success'>Approved</strong> : <strong className='text-danger'>Rejected</strong>
-                    row.user_data[0].paid_user === true ? 'Approved' : row.admin_approved === "0" ? "Pending" : row.admin_approved === "No" ? <span className='text-danger'><strong>Rejected</strong></span> : row.admin_approved 
+                    // row.user_data[0].paid_user === true ? 'Approved' : row.admin_approved === "0" ? "Pending" : row.admin_approved === "No" ? <span className='text-danger'><strong>Rejected</strong></span> : row.admin_approved 
+                    <div>{row.admin_approve === 'Yes' ? 'Approved' : row.admin_approved === "0" ? "Pending" : row.admin_approved === "No" ? 'Rejected': 'Approved'}</div>
+                    
                 //    <div>
-                //     {console.log("heeeee",row.user_data[0].paid_user)}
+                //     {console.log("heeeee",row.employer_data[0].paid_user)}
                 //    </div>         
                  ),
         },
 
-        {
-            name: 'Download Resume',
-            selector: row => row.id,
-            cell: row => (
-                <button className='btn btn-success btn-sm' title='Download Resume' onClick={() => {
-                    console.log(row)
-                    saveAs(
-                        row && row.user_data.length ? row.user_data[0].resume_name : '',
-                        "Resume.pdf"
-                    );
-                }}><i className="fa fa-download"></i></button>
-            ),
-            center: true
-        },
+        // {
+        //     name: 'Download Resume',
+        //     selector: row => row.id,
+        //     cell: row => (
+        //         <button className='btn btn-success btn-sm' title='Download Resume' onClick={() => {
+        //             console.log(row)
+        //             saveAs(
+        //                 row && row.user_data.length ? row.user_data[0].resume_name : '',
+        //                 "Resume.pdf"
+        //             );
+        //         }}><i className="fa fa-download"></i></button>
+        //     ),
+        //     center: true
+        // },
         {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> : row.employer_approved === "Yes" ? <div>
+                row.employer_data[0].paid_user === true ? '' :row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> : row.employer_approved === "Yes" ? <div>
                     <i title='Approve Application' onClick={() => handleApprove(row._id, "Yes")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
                     &nbsp;&nbsp;
                     <i title='Reject Application' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleApprove(row._id, "No")}></i>
@@ -191,6 +198,7 @@ function List() {
             let res = await axios.get(`admin/applied_jobs?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             console.log(res.data);
             setJobData(res.data.result.length ? res.data.result[0].data : [])
+            // console.log("hhhhhhhhhhhh",res.data.result[0].data)
             setTotalRows(res.data.result.length ? res.data.result[0].count : 0);
             setLoading(false);
         } catch (errors) {

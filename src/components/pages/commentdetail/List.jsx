@@ -152,16 +152,16 @@ function List() {
         setperPage(newPerPage)
     };
 
-    // const handleSearch = (event) => {
-    //     if (event.key === "Enter") {
-    //         console.log(event.target.value);
-    //         if (event.target.value.length >= 3) {
-    //             setSearchKeyword(event.target.value)
-    //         }
-    //     } else if (event.target.value === '') {
-    //         setSearchKeyword('')
-    //     }
-    // }
+    const handleSearch = (event) => {
+        if (event.key === "Enter") {
+            console.log(event.target.value);
+            if (event.target.value.length >= 3) {
+                setSearchKeyword(event.target.value)
+            }
+        } else if (event.target.value === '') {
+            setSearchKeyword('')
+        }
+    }
 
     useEffect(() => {
         getCategoryList()
@@ -199,7 +199,7 @@ function List() {
                             </div>
                             <div className="card-body px-0 pb-2">
                                 <div className="p-4">
-                                    {/* <div className="input-group input-group-dynamic mb-4">
+                                    <div className="input-group input-group-dynamic mb-4">
                                         <input
                                             type="text"
                                             className="form-control"
@@ -207,7 +207,7 @@ function List() {
                                             placeholder='Type keyword and press enter to search'
                                             onKeyUp={handleSearch}
                                             name='keyword' />
-                                    </div> */}
+                                    </div>
                                 </div>
                                 <div className="table-responsive p-0">
                                     <DataTable

@@ -152,10 +152,15 @@ const CommunicationList = loadable(() => import('./components/pages/communicatio
 //  custom messsage imports
 const CustomMessages = loadable(() => import('./components/pages/custom-messages/AddNew'))
 
+// contact import 
+
+// const ContactPagesList = loadable(()=>import('./components/pages/contact/contactList'))
+// const ContactEditPage = loadable(()=> import('./components/pages/contact/contactEdit'))
+
 let navigate = null
 
 axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-// axios.defaults.baseURL = 'http://172.16.100.60:9700/';
+// axios.defaults.baseURL = 'http://172.16.100.150:9700/';
 // axios.defaults.baseURL = 'http://localhost:9700';
 
 //  Request interceptor
@@ -342,6 +347,11 @@ root.render(
                 <Route path="/content-pages/addnew" element={<AddNewPage />} />
                 <Route path="/content-pages/edit/:id" element={<EditPage />} />
                 {/* content pages End*/}
+
+                {/* contact pages start  */}
+                {/* <Route path="/contact-pages" element={<ContactPagesList />} />
+                <Route path="/contact-pages/edit/:id" element={<ContactEditPage />} /> */}
+                {/* contact pages End  */}
 
                 {/* applied jobs Start*/}
                 <Route path="/applied-jobs" element={<AppliedJobList />} />
