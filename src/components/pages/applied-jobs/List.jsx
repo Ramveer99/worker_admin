@@ -102,7 +102,9 @@ function List() {
             name: 'Action',
             selector: row => row.id,
             cell: row => (
-                row.employer_data[0].paid_user === true ? '' :row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> : row.employer_approved === "Yes" ? <div>
+                // row.employer_data[0].paid_user === true ? '' :row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> : row.employer_approved === "Yes" ? <div>
+                row.admin_approved === "0" ? row.employer_approved === "0" ? <span>Waiting Employer approval</span> : row.employer_approved === "Yes" ? <div>
+                  
                     <i title='Approve Application' onClick={() => handleApprove(row._id, "Yes")} style={{ cursor: 'pointer' }} className='fa fa-check text-success'></i>
                     &nbsp;&nbsp;
                     <i title='Reject Application' style={{ cursor: 'pointer' }} className='fa fa-times text-danger' onClick={() => handleApprove(row._id, "No")}></i>
