@@ -47,6 +47,17 @@ function List() {
             sortable: true,
         },
         {
+            name: 'Display Advertisement',
+            selector: row => row.display_ad,
+            sortable: true,
+            width:'200px',
+            cell: row => (
+                row.display_ad ?
+                    <span className='badge badge-sm bg-gradient-success'>Yes</span> :
+                    <span className='badge badge-sm bg-gradient-secondary'>No</span>
+            )
+        },
+        {
             name: 'Start Date',
             selector: row => moment(row.start_time).format('YYYY-MM-DD HH:mm A'),
             //   selector: row => console.log("start date" ,moment(row.start_time).format('YYYY-MM-DD HH:mm ')),
