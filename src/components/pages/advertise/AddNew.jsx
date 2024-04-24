@@ -29,6 +29,10 @@ function AddNew() {
     const [maxDateTimeValueStart, setMaxDateTimeValueStart] = useState(null);
     const [minDateTimeValueEnd, setMinDateTimeValueEnd] = useState(dayjs(moment().format('YYYY-MM-DDTHH:mm')));
 
+
+    
+
+
     const getUserList = useCallback(async () => {
         setLoading(true);
         let res = await axios.get('/admin/getusers')
@@ -127,83 +131,30 @@ function AddNew() {
                                 <div className="card-body px-0 pb-2">
                                     <div className="p-4">
                                         <form onSubmit={formik.handleSubmit}>
-                                            <div className="input-group input-group-outline mb-3" style={{ flexDirection: 'column' }}>
+                                            {/* <div className="input-group input-group-outline mb-3" style={{ flexDirection: 'column' }}>
                                                 <label>Choose User</label>
-                                                {/* <select
-                                                    style={{ width: '100%' }}
-                                                    type="text"
-                                                    id='user_id'
-                                                    name='user_id'
-                                                    className="form-control"
-                                                    autoComplete='off'
-                                                    value={formik.values.user_id || ''}
-                                                    onChange={formik.handleChange}
-                                                >
-                                                    <option value="">--select--</option>
-                                                    {
-                                                        usersData && usersData.map((item) => {
-                                                            return (
-                                                                <option key={item._id} value={item._id}>{item.name}</option>
-                                                            )
-                                                        })
-                                                    }
-                                                </select>   */}
-
-             {/* <Autocomplete
-                id="user_id"
-                name="user_id"
-                options={usersData || []}
-                getOptionLabel={(option) => option.name || ''}
-                style={{ width: '100%' }}
-                value={usersData.find(item => item._id === formik.values.user_id) || null}
-                onChange={(event, newValue) => {
-                formik.handleChange({
-                    target: {
-                        id: 'user_id',
-                        name: 'user_id',
-                        value: newValue ? newValue._id : '' // Adjust this based on your data structure
-                    }
-                });
-            }}
-            
-            renderInput={(params) => (
-                
-                <TextField
-                    {...params}
-                    label="--select--"
-                    variant="outlined"
-                    autoComplete="on"
-                />
-            )}
-        />  */}
-
-<Select
-            id="user_id"
-            name="user_id"
-            options={options}
-            styles={{ width: '100%' }}
-            value={options.find(option => option.value === formik.values.user_id) || null}
-            // onChange={handleChange}
-            onChange={(selectedOption) => {
-                formik.handleChange({
-                    target: {
-                        id: 'user_id',
-                        name: 'user_id',
-                        value: selectedOption ? selectedOption.value : ''
-                    }
-                });
-            }}
-            placeholder="--select--"
-            getOptionLabel={(option) => option.label}
-            getOptionValue={(option) => option.value}
-        />
-      
-  
-  
-
-
+                                                <Select
+                                                          id="user_id"
+                                                          name="user_id"
+                                                          options={options}
+                                                          styles={{ width: '100%' }}
+                                                          value={options.find(option => option.value === formik.values.user_id) || null}
+                                                          // onChange={handleChange}
+                                                          onChange={(selectedOption) => {
+                                                              formik.handleChange({
+                                                                  target: {
+                                                                      id: 'user_id',
+                                                                      name: 'user_id',
+                                                                      value: selectedOption ? selectedOption.value : ''
+                                                                  }
+                                                              });
+                                                          }}
+                                                          placeholder="--select--"
+                                                          getOptionLabel={(option) => option.label}
+                                                          getOptionValue={(option) => option.value}
+                                                      />
                                             </div>
-                                            {formik.errors.user_id ? <div className='text-danger'>{formik.errors.user_id}</div> : null}
+                                            {formik.errors.user_id ? <div className='text-danger'>{formik.errors.user_id}</div> : null} */}
                                             <div className="input-group input-group-outline mb-3">
                                                 <input
                                                     type="text"
@@ -216,6 +167,12 @@ function AddNew() {
                                                 />
                                             </div>
                                             {formik.errors.banner_link ? <div className='text-danger'>{formik.errors.banner_link}</div> : null}
+                                           
+
+                                          
+
+                                           
+                                           
                                             <div className="input-group input-group-outline mb-3 cusfl">
                                                 <label>Start Date</label>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>

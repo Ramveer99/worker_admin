@@ -24,6 +24,7 @@ function List() {
     const [searchKeyWord, setSearchKeyword] = useState('');
     const [showCommentModal, setShowCommentModal] = useState(false);
     const [jobIdBeingRejected, setJobIdBeingRejected] = useState(null);
+    const [jobTotal , setjobTotal] =useState()
     const rejectJobForm = useRef();
     // Hide the modal
     const hideCommentModal = () => {
@@ -57,6 +58,11 @@ function List() {
         {
             name: 'Rate type',
             selector: row => row.rate_type,
+            sortable: true,
+        },
+        {
+            name: 'Rate Amount',
+            selector: row => row.rate_amount,
             sortable: true,
         },
         {
@@ -199,8 +205,9 @@ function List() {
             setLoading(true);
             let res = await axios.get(`admin/applied_jobs?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             console.log(res.data);
-            setJobData(res.data.result.length ? res.data.result[0].data : [])
-            // console.log("hhhhhhhhhhhh",res.data.result[0].data)
+            setJobData(res.data.result.companyprofileData[0] ? res.data.result.companyprofileData[0].data : [])
+            console.log("hhhhhhhhhhhh",res.data.result.totalAmount)
+            setjobTotal(res.data.result.totalAmount)
             setTotalRows(res.data.result.length ? res.data.result[0].count : 0);
             setLoading(false);
         } catch (errors) {
@@ -275,6 +282,7 @@ function List() {
                                     </div>
                                 </div>
                                 <div className="table-responsive p-0">
+                                   <h5>Total Amount: <span>{jobTotal}</span></h5>
                                     <DataTable
                                         columns={columns}
                                         data={jobData}

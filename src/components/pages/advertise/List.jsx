@@ -8,6 +8,11 @@ import { toast } from 'react-toastify';
 import DeleteConfirmation from '../shared/DeleteConfirmation';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+
+
 
 function List() {
     const location = useLocation()
@@ -27,6 +32,65 @@ function List() {
     const [deleteModelMessage, setDeleteModelMessage] = useState('Are you sure want to delete this advertise?');
     const [deleteModelActionType, setDeleteModelActionType] = useState('Delete');
     const navigate = useNavigate()
+    // const [state, setState] = React.useState({
+    //     gilad: true,
+    //     jason: false,
+    //     antoine: true,
+    //   });
+    
+    //   const handleChange = (event) => {
+    //     setState({
+    //       ...state,
+    //       [event.target.name]: event.target.checked,
+    //     });
+    //   };
+
+
+    //   const handleChangevent = (event, row) => {
+       
+    //     const newValue = event.target.checked;
+    //     console.log(`Row ID: ${row._id}, New Display Ad State: ${newValue}`);
+    //     setState((prevState) => ({
+    //         ...prevState,
+    //         rows:prevState.rows?.map((r) =>
+    //             r.id === row.id ? { ...r, display_ad: newValue } : r
+    //         )
+    //     }));
+    // };
+
+
+
+
+    const [rowState, setRowState] = useState({});
+
+    let userInfodata = JSON.parse(localStorage.getItem('transact_auth_back'))
+
+    const headerdata = {
+        "Accept": "application/json",
+        'Authorization': `Bearer ${userInfodata.token}`,
+      }
+
+
+    // Handle change function for the switch
+    const handleSwitchChange = async(rowId, checked) => {
+        // Update the state for the specific row
+        setRowState((prevState) => ({
+            ...prevState,
+            [rowId]: checked,
+        }));
+        
+        // Perform any additional actions based on the row ID and new checked state
+        console.log(`Row ID: ${rowId}, Display Ad: ${checked}`);
+        
+        const res=await axios.get(`admin/advertisement/display-advertisement-update?id=${rowId}&display_ad=${checked}`,{header:headerdata})
+        console.log("upadte data----",res)
+    };
+
+
+
+
+
+
     const columns = [
         {
             name: 'Banner Image',
@@ -51,11 +115,26 @@ function List() {
             selector: row => row.display_ad,
             sortable: true,
             width:'200px',
+            // cell: row => (
+            //     row.display_ad ?
+            //         <span className='badge badge-sm bg-gradient-success'>Yes</span> :
+            //         <span className='badge badge-sm bg-gradient-secondary'>No</span>
+            // )
             cell: row => (
-                row.display_ad ?
-                    <span className='badge badge-sm bg-gradient-success'>Yes</span> :
-                    <span className='badge badge-sm bg-gradient-secondary'>No</span>
-            )
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                id={`switch-${row._id}`}
+                                checked={rowState[row._id] !== undefined ? rowState[row._id] : row.display_ad}
+                                onChange={(event) => handleSwitchChange(row._id, event.target.checked)}
+                                name={`switch-${row._id}`}
+                            />
+                        }
+                        label=""
+                    />
+                </FormGroup>
+            ),
         },
         {
             name: 'Start Date',
@@ -99,6 +178,7 @@ function List() {
     // Handle the displaying of the modal based on type and id
     const showDeleteModal = (type, id) => {
         alert('show delete modal')
+        
     };
 
     // Hide the modal
