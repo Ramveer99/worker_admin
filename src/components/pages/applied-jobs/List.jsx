@@ -206,9 +206,10 @@ function List() {
             let res = await axios.get(`admin/applied_jobs?page=${pageNumber}&keyword=${searchKeyWord}&per_page=${perPage}&sort_by=${sortField}&sort_order=${sortDirection}`)
             console.log(res.data);
             setJobData(res.data.result.companyprofileData[0] ? res.data.result.companyprofileData[0].data : [])
-            console.log("hhhhhhhhhhhh",res.data.result.totalAmount)
+            console.log("hhhhhhhhhhhh",res.data.result.companyprofileData[0].count)
             setjobTotal(res.data.result.totalAmount)
-            setTotalRows(res.data.result.length ? res.data.result[0].count : 0);
+            // setTotalRows(res.data.result.length ? res.data.result[0].count : 0);
+            setTotalRows(res.data.result.companyprofileData[0].count)
             setLoading(false);
         } catch (errors) {
             toast(errors.response.data.message, {
@@ -282,7 +283,7 @@ function List() {
                                     </div>
                                 </div>
                                 <div className="table-responsive p-0">
-                                   <h5>Total Amount: <span>{jobTotal}</span></h5>
+                                   <h5 style={{marginLeft:'15px'}}>Total Amount: <span>{jobTotal}</span></h5>
                                     <DataTable
                                         columns={columns}
                                         data={jobData}

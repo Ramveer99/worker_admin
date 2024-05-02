@@ -157,11 +157,11 @@ const CustomMessages = loadable(() => import('./components/pages/custom-messages
 // const ContactPagesList = loadable(()=>import('./components/pages/contact/contactList'))
 // const ContactEditPage = loadable(()=> import('./components/pages/contact/contactEdit'))
 
-let navigate = null
+      let navigate = null
 
    axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
-// axios.defaults.baseURL = 'http://172.16.100.150:9700/';
-// axios.defaults.baseURL = 'http://localhost:9700';
+    //   axios.defaults.baseURL = 'http://172.16.100.150:9700/';
+//    axios.defaults.baseURL = 'http://localhost:9700';
 
 //  Request interceptor
 axios.interceptors.request.use(request => {
