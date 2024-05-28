@@ -162,6 +162,9 @@ const CustomMessages = loadable(() => import('./components/pages/custom-messages
    axios.defaults.baseURL = 'https://webmobrildemo.com/obediant/';
     //   axios.defaults.baseURL = 'http://172.16.100.150:9700/';
 //    axios.defaults.baseURL = 'http://localhost:9700';
+// axios.defaults.baseURL='http://172.16.100.111:9700/'
+    // axios.defaults.baseURL='http://172.16.100.126:9700/'
+   
 
 //  Request interceptor
 axios.interceptors.request.use(request => {
